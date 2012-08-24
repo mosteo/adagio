@@ -1,0 +1,50 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+    <link rel="stylesheet" type="text/css" href="@_STYLE_@">
+    <title>Library</title>
+  </head>
+  <body>
+    <!--
+      VALUE1  <- Path to file
+      VALUE2  <- Filename
+      VALUE3  <- Filesize
+      VALUE4  <- Uploads today
+      VALUE5  <- Uploads total
+      VALUE6  <- Hits today
+      VALUE7  <- Hits total
+      VALUE8  <- SHA1
+      VALUE9  <- TTH
+      VALUE10 <- ed2k
+    -->
+    <div id="contents">
+      <div id="main">
+         <div class="refresh">[ <a href="@_URI_@">Refresh</a> ]</div>
+         <span id="title">Library</span>
+         <div id="menubar"><a href="library.html">Statistics</a></div>
+            <table summary="G2 current library" border="1" cellspacing="0" class="dataset">
+               <tr class="header">
+                  <td class="header" align="center">#</td>
+                  <td class="header">Name&nbsp;<a href="library.html?orden=2&amp;sentido=true"><img src="up.gif" border="0" alt="Sort descending"></a><a href="library.html?orden=2&amp;sentido=false"><img src="do.gif" border="0" alt="Sort ascending"></a></td>
+                  <td class="header">SHA1&nbsp;<a href="library.html?orden=8&amp;sentido=true"><img src="up.gif" border="0" alt="Sort descending"></a><a href="library.html?orden=8&amp;sentido=false"><img src="do.gif" border="0" alt="Sort ascending"></a></td>
+                  <td class="header">TTH&nbsp;<a href="library.html?orden=9&amp;sentido=true"><img src="up.gif" border="0" alt="Sort descending"></a><a href="library.html?orden=9&amp;sentido=false"><img src="do.gif" border="0" alt="Sort ascending"></a></td>
+                  <td class="header">ed2k&nbsp;<a href="library.html?orden=10&amp;sentido=true"><img src="up.gif" border="0" alt="Sort descending"></a><a href="library.html?orden=10&amp;sentido=false"><img src="do.gif" border="0" alt="Sort ascending"></a></td>
+             </tr>
+             @@TABLE@@
+             <tr valign="middle">						
+                 <td class="contentodd" align="right">@_TABLE_LINE_@</td>                 
+                 <td><a class="linknou" href="file:///@_VALUE1_@@_VALUE2_@">@_VALUE2_@</a></td>
+                 <td class="hash">@_VALUE8_@</td>
+                 <td class="hash">@_VALUE9_@</td>
+                 <td class="hash">@_VALUE10_@</td>
+             </tr>
+             @@END_TABLE@@
+         </table>
+         <p>@_PAGER_@<p>
+      </div>
+      @@INCLUDE@@ footer.html
+    </div>
+  </body>
+</html>
+

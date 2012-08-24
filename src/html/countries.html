@@ -1,0 +1,70 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+    <title>Queries geographical distribution</title>
+	<link rel="stylesheet" type="text/css" href="@_STYLE_@">
+   <meta http-equiv="refresh" content="60">
+</head>
+
+<body>
+         <!-- 
+            parameters:  
+               VALUE1  <- total per country
+               VALUE2  <- country code
+               VALUE3  <- country name
+               VALUE4  <- flag_code
+               VALUE5  <- percent of total
+               VALUE6  <- rounded percent, at least 1
+               VALUE7  <- rounded normalized percents, 1-100
+               
+               SINGLE1 <- Total queries
+         -->
+   <div id="contents">
+      <div id="main">
+         <div class="refresh">[ <a href="@_URI_@">Refresh</a> ]</div>
+         <span id="title">Queries geographical distribution</span>        
+         <div id="menubar"><a href="queries.html">List</a></div>
+         <p>Total number of queries: <b>@_SINGLE1_@</b></p>                                
+         <table summary="Adagio traffic" border="1" cellspacing="0" class="dataset" cellpadding="0" width="99%">           
+		     <tr class="header">
+		        <td class="header" align="center">#</td>
+              <td class="header">Flag</td>
+              <td class="header">Code&nbsp;<a href="countries.html?orden=2&amp;sentido=true"><img src="up.gif" border="0" alt="Sort descending"></a><a href="countries.html?orden=2&amp;sentido=false"><img src="do.gif" border="0" alt="Sort ascending"></a></td>
+		        <td class="header">Country&nbsp;<a href="countries.html?orden=3&amp;sentido=true"><img src="up.gif" border="0" alt="Sort descending"></a><a href="countries.html?orden=3&amp;sentido=false"><img src="do.gif" border="0" alt="Sort ascending"></a></td>
+              <td class="header">Number of queries&nbsp;<a href="countries.html?orden=1&amp;sentido=true"><img src="up.gif" border="0" alt="Sort descending"></a><a href="countries.html?orden=1&amp;sentido=false"><img src="do.gif" border="0" alt="Sort ascending"></a></td>
+           </tr>
+		    @@TABLE@@
+		    <tr>						
+		        <td class="contentodd" align="right">@_TABLE_LINE_@</td>
+              <td class="contentodd" align="center"><img src="zflag_@_LOWER:VALUE4_@.png" alt="@_VALUE2_@" align="middle" width="14" height="14"></td>
+		        <td class="contentodd" align="center" style="font-family:verdana">@_VALUE2_@</td>
+		        <td class="contentodd">@_VALUE3_@</td>
+              <td class="contentodd">
+                 <div align="left">
+                    <table>
+                       <tr>
+                          <td class="percountry" style="width:15ex;font-size:xx-small;text-align:center">
+                             <b>@_VALUE1_@</b>&nbsp;<span style="color:black">(@_VALUE5_@%)</span>
+                          </td>
+                          <td valign="middle">
+                             <table width="600px"> 
+                                <tr>
+                                   <td class="countrygraph" width="@_VALUE7_@%"/><td/>
+                                </tr>
+                             </table>
+                          </td>                          
+                       </tr>
+                    </table>
+                 </div>
+              </td>
+		    </tr>
+		    @@END_TABLE@@
+		   </table>
+         <p>@_PAGER_@<p>
+	</div>
+   @@INCLUDE@@ footer.html   
+   </div> 
+</body>
+</html>

@@ -1,0 +1,53 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+    <link rel="stylesheet" type="text/css" href="@_STYLE_@">
+    <title>Traffic</title>
+  </head>
+  <body>
+    <!--
+      VALUE1  <- Arrival
+      VALUE2  <- Protocol
+      VALUE3  <- Way
+      VALUE4  <- Address
+      VALUE5  <- Name
+      VALUE6  <- Data
+    -->
+    <div id="contents">
+      <div id="main">
+         <div class="refresh">[ <a href="traffic.html">Refresh</a> ]</div>
+         <span id="title">Traffic</span> 
+         <div id="menubar"><a href="command?action=clear&amp;what=traffic">Clear</a></div>                              
+            <table summary="Adagio traffic" border="1" cellspacing="0" class="dataset">
+               <tr class="header">
+                  <td class="header" align="center">#</td>                  
+                  <td class="header">Time&nbsp;<a href="traffic.html?orden=1&amp;sentido=true"><img src="up.gif" border="0" alt="Sort descending"></a><a href="traffic.html?orden=1&amp;sentido=false"><img src="do.gif" border="0" alt="Sort ascending"></a></td>
+                  <td class="header">Protocol&nbsp;<a href="traffic.html?orden=2&amp;sentido=true"><img src="up.gif" border="0" alt="Sort descending"></a><a href="traffic.html?orden=2&amp;sentido=false"><img src="do.gif" border="0" alt="Sort ascending"></a></td>
+                  <td class="header">Way&nbsp;<a href="traffic.html?orden=3&amp;sentido=true"><img src="up.gif" border="0" alt="Sort descending"></a><a href="traffic.html?orden=3&amp;sentido=false"><img src="do.gif" border="0" alt="Sort ascending"></a></td>
+                  <td class="header">Address&nbsp;<a href="traffic.html?orden=4&amp;sentido=true"><img src="up.gif" border="0" alt="Sort descending"></a><a href="traffic.html?orden=4&amp;sentido=false"><img src="do.gif" border="0" alt="Sort ascending"></a></td>
+                  <td class="header">Name&nbsp;<a href="traffic.html?orden=5&amp;sentido=true"><img src="up.gif" border="0" alt="Sort descending"></a><a href="traffic.html?orden=5&amp;sentido=false"><img src="do.gif" border="0" alt="Sort ascending"></a></td>
+                  <td class="header">Data&nbsp;<a href="traffic.html?orden=7&amp;sentido=true"><img src="up.gif" border="0" alt="Sort descending"></a><a href="traffic.html?orden=7&amp;sentido=false"><img src="do.gif" border="0" alt="Sort ascending"></a></td>
+             </tr>
+             @@TABLE@@
+             <tr valign="middle"	
+             @@IF@@ @_VALUE3_@ = Out
+              style="background:#ccffff"
+             @@END_IF@@				
+             >	
+                 <td class="contentodd" align="right">@_TABLE_LINE_@</td>
+                 <td class="contentodd">@_VALUE1_@</td>                 
+                 <td class="contentodd">@_VALUE2_@</td>
+                 <td class="contentodd">@_VALUE3_@</td>
+                 <td class="contentodd">@_VALUE4_@</td>
+                 <td class="contentodd">@_VALUE5_@</td>
+                 <td class="contentodd">@_VALUE6_@</td>                 
+             </tr>
+             @@END_TABLE@@
+         </table>
+      </div>
+      @@INCLUDE@@ footer.html
+    </div>
+  </body>
+</html>
+

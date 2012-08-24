@@ -1,0 +1,54 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html>
+<head>
+   <title>Gnutella2 historical charts</title>
+		<link rel="stylesheet" type="text/css" href="@_STYLE_@">
+</head>
+
+<body>
+   <div id="contents">
+   <div id="main">
+   <center>
+      <p class="title">Gnutella2 historical charts</p>
+      <p>These graphs are updated every night at 6:00 am. All times are GMT+1.
+         See <a href="#explanation">below</a> for some explanations about the graphs.</p>
+      <p><span class="subtitle">LAST 24 HOURS</span><br>
+      <img src="crawl1.png" alt="24 hour"></p>
+      <p><span class="subtitle">LAST 7 DAYS</span><br>
+      <img src="crawl2.png" alt="7 days"></p>
+      <p><span class="subtitle">LAST 30 DAYS</span><br>
+      <img src="crawl3.png" alt="30 days"></p>
+      <p><span class="subtitle">LAST 365 DAYS</span><br>
+      <img src="crawl4.png" alt="365 days"></p>
+      <p><span class="subtitle">FULL HISTORY</span><br>
+      <img src="crawl5.png" alt="Full history"></p>
+   </center>
+      <a name="explanation">
+      <ul>
+         <li>
+         The multipliers/divisors in some of the series are there just to allow
+         fitting of them to the common scale.
+         </li>
+         <li>
+         The series "Hub links per leaf" is meaningless before May 2005. Now
+         it shows the value as collected from the network, previously it was a
+         hardwired value used for estimation purposes.
+         </li>
+         <li>
+         The big growth between January-March 2005 is right for the hub numbers
+         but wrong for the network size, which was being estimated with incorrect
+         assumptions. In fact I'm considering removing that period altogether from
+         the database.
+         </li>
+         <li>
+         Previously to May 2005 the network size was estimated from the hub count.
+         After that date the network size is more accurately obtained from unique
+         identifiers characterizing each hub and leaf in the network.
+         </li>
+      </ul>
+   </div>
+@@INCLUDE@@ footer.html
+</div>
+</body>
+</html>

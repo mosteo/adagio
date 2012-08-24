@@ -1,0 +1,33 @@
+ADALID - Ada Link Into.
+
+Supported platforms: Linux/Windows NT/2000/XP
+
+IMPORTANT: 
+
+CONTENTS
+- Installing Adalid
+- Interface
+- Command line parameters
+
+* Installing Adagio:
+
+In Linux, extract the files to the folder of your choice. 
+In Windows, simply launch the executable installer.
+Prepare a configuration file (see conf_samples).
+Ensure the data folders specified in the configuration file exist (Adalid will
+   not create them unless they are direct children of an existing folder).
+
+* Interface:
+
+Point your browser to http://127.0.0.1:25444
+If you have changed the default port for the GUI (25444) you must change the
+above URL accordingly.
+
+* Command line parameters:
+
+adalid [-f config_file]
+
+If -f is not specified, a default adalid.xml will be searched in the 
+   current directory. If not present, default values will apply.
+
+Please address any comments to adagio@mosteo.com      

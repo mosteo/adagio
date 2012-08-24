@@ -1,0 +1,64 @@
+
+                                  ADAGIO                                  
+                                                                          
+                            Copyright (C) 2003                            
+                                 A. Mosteo.                               
+                                                                          
+  Autor: A. Mosteo. (adagio@mosteo.com)                                 
+                                                                          
+  Para cualquier cuestión acerca de este programa diríjase a la direc-
+  ción anterior.
+                                                                          
+  Este programa es software libre; usted puede distribuirlo o modificarlo
+  bajo los términos de la licencia GNU GPL, publicada por la Free Software
+  Foundation; ya sea la versión 2 de la licencia o (a su elección) una
+  versión posterior.
+                                                                          
+  Este programa se distribuye esperando que sea util, pero SIN NINGUNA
+  GARANTÍA; sin siquiera la implícita garantía de COMERCIABILIDAD o 
+  ADECUACIÓN A ALGÚN PROPÓSITO CONCRETO. Vea la licencia GNU GPL para
+  más detalles.
+                                                                          
+  Con este paquete debería haber recibido una copia de la licencia GNU
+  GPL; en caso contrario, escriba a la Free Software Foundation,
+  Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.          
+                                                                          
+  Como una especial excepción, si otros documentos usan instancias de 
+  paquetes genéricos cuyo nombre no comience con el del proyecto (Adagio),
+  o si usted enlaza dichas instancias con otros documentos para producir
+  un ejecutable, dichos documentos/ejecutable no están afectados por la
+  licencia GNU GPL. Esta excepción, no obstante, no invalida ninguna otra
+  razón por la que el ejecutable pudiera estar cubierto por la licencia
+  GNU GPL.
+
+  Usted no puede emplear ninguna parte del código de Adagio para desarro-
+  llar una herramienta cuyos resultado vayan a ser usados para perseguir
+  legalmente a otros usuarios de las redes a las que Adagio se conecta.
+  Del mismo modo, no se puede emplear Adagio ni ninguna parte del código
+  fuente de Adagio para obtener datos que se vayan a hacer públicos o em-
+  plear en la persecución legal de dichos usuarios.
+                                                                          
+Todo el código original de Adagio se halla bajo la carpeta /src. Se inclu-
+yen bibliotecas anexas, disponibles en Internet, pero que han sido modifica-
+das para corregir bugs y proporcionar funciones específicas necesarias para
+Adagio. Se ha eliminado documentación, tutoriales, test suites, etc pero no
+la licencia original que acompaña a dichas bibliotecas. Los cambios están
+indicados y anotados con comentarios.
+
+NOTE QUE SI QUIERE HACER USO DE DICHAS BIBLIOTECAS DEBERÍA OBTENERLAS EN
+SU VERSIÓN MÁS RECIENTE Y COMPLETA DE SUS AUTORES ORIGINALES. Se incluyen
+con adagio por las razones expuestas y para simplificar el proceso de com-
+pilación, pero no con ánimo de ser redistribuidas u otra razón.
+
+AWS Ada Web Server: http://libre.act-europe.fr/aws/main.html
+Charles           : http://home.earthlink.net/~matthewjheaney/charles/
+Flag icons        : http://awstats.sourceforge.net/
+Geoip database    : http://www.maxmind.com
+NanoXML           : http://nanoxml.n3.net/
+PragmARC          : http://home.earthlink.net/~jrcarter010/pragmarc.htm
+Security files    : David John Allison (CrashUK) 
+                  : http://forums.shareaza.com/forumdisplay.php?s=&forumid=9
+Spheon-JSOAP      : http://spheon-jsoap.sourceforge.net/
+Xml/Ada           : http://libre.act-europe.fr/xmlada/
+ZLib-Ada          : http://zlib-ada.sourceforge.net/
+ZLib              : http://www.gzip.org/zlib/

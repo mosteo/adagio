@@ -1,0 +1,178 @@
+------------------------------------------------------------------------------
+--                         ADAGIO - ADALID - AENEA.                         --
+--                                                                          --
+--                            Copyright (C) 2003                            --
+--                                 A. Mosteo.                               --
+--                                                                          --
+--  Authors: A. Mosteo. (adagio@mosteo.com)                                 --
+--                                                                          --
+--  If you have any questions in regard to this software, please address    --
+--  them to the above email.                                                --
+--                                                                          --
+--  This program is free software; you can redistribute it and/or modify    --
+--  it under the terms of the GNU General Public License as published by    --
+--  the Free Software Foundation; either version 2 of the License, or (at   --
+--  your option) any later version.                                         --
+--                                                                          --
+--  This program is distributed in the hope that it will be useful, but     --
+--  WITHOUT ANY WARRANTY; without even the implied warranty of              --
+--  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU       --
+--  General Public License for more details.                                --
+--                                                                          --
+--  You should have received a copy of the GNU General Public License       --
+--  along with this library; if not, write to the Free Software Foundation, --
+--  Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.          --
+--                                                                          --
+--  You are not allowed to use any part of this code to develop a program   --
+--  whose output would be used to harass or prosecute other users of the    --
+--  networks Adagio connects with. All data collected with Adagio or a tool --
+--  containing Adagio code about other network users must remain            --
+--  confidential and cannot be made public by any mean, nor be used to      --
+--  harass or legally prosecute these users.                                --
+------------------------------------------------------------------------------
+--  $Id: aenea-db.adq,v 1.6 2004/01/21 21:05:24 Jano Exp $
+
+with Aenea.Net;
+with Aenea.Trace;
+
+with Pragmarc.Date_Handler;
+
+with Ada.Calendar;
+
+with Sql_standard; use Sql_standard;
+with Gnu.Db.Esql_Support; use Gnu.Db.Esql_Support;
+
+package body Aenea.Db is
+
+   -- Database
+   EXEC SQL DECLARE DB DATABASE;
+
+   function To_String (T : in Ada.Calendar.Time) return String is
+      use Ada.Calendar;
+      use Pragmarc.Date_Handler;
+      Y : Year_Number;
+      M : Month_Number;
+      D : Day_Number;
+      H : Hour_Number;
+      Mm: Minute_Number;
+      S : Minute_Duration;
+   begin
+      Split (T, Y, M, D, H, Mm, S);
+      return 
+         Year_Image_Long (Y) &"/"&
+         Month_Image_Numeric (M) &"/"&
+         Day_Image (D) &" "&
+         Hour_Image_24 (H) &":"&
+         Minute_Image (Mm) &":"&
+         Seconds_Image (S);
+   end To_String;
+
+   ------------------------------------------------------------------------
+   -- Get_Timestamp                                                      --
+   ------------------------------------------------------------------------
+   function Get_Timestamp return String is
+   begin
+      return To_String (Ada.Calendar.Clock);
+   end Get_Timestamp;
+
+   ------------------------------------------------------------------------
+   -- Init                                                               --
+   ------------------------------------------------------------------------
+   procedure Init is
+   begin
+      
+      -- Connect
+      EXEC SQL 
+      CONNECT BY DB TO "quraqua";
+
+      EXEC SQL WHENEVER SQLERROR RAISE DB_Error;
+
+      Trace.Log ("Connection with database successful.", Trace.Informative);
+   end Init;
+
+   ------------------------------------------------------------------------
+   -- Insert_row                                                         --
+   ------------------------------------------------------------------------
+   procedure Insert_row (Hubs, Leaves, Total, Tracked : in Natural) is
+      EXEC SQL BEGIN DECLARE SECTION;
+      Hubss, Leavess, Totall, Trackedd : INT;
+      EXEC SQL END   DECLARE SECTION;
+   begin
+      Hubss    := INT (Hubs);
+      Leavess  := INT (Leaves);
+      Totall   := INT (Total);
+      Trackedd := INT (Tracked);
+
+      EXEC SQL CONNECT BY DB TO "quraqua";
+
+      EXEC SQL AT DB 
+         insert into g2crawl (hubs, leaves, estimated_size, tracked, fecha)
+         values (:Hubss, :Leavess, :Totall, :Trackedd, current_timestamp);
+
+--      Trace.Log ("Insertion: " & SqlState, Trace.Always);
+
+      if SqlState /= "00000" then
+         Trace.Log ("Database error [crawl]: " & SqlState & SqlCode'Img, Trace.Error);
+      else
+         EXEC SQL AT DB COMMIT;
+      end if;
+
+      EXEC SQL DISCONNECT DB;
+
+   exception
+      when E : DB_Error =>
+         Trace.Log ("Database insertion failed [crawl]: " & Trace.Report (E),
+            Trace.Error);
+      when E : others =>
+         Trace.Log ("Database insertion failed [crawl]: " & Trace.Report (E),
+            Trace.Error);
+   end Insert_row;
+
+   ------------------------------------------------------------------------
+   -- Insert_row                                                         --
+   ------------------------------------------------------------------------
+   procedure Insert_row (Vendor : in String; Amount, Total : in Natural; Timestamp : in String) is
+      EXEC SQL BEGIN DECLARE SECTION;
+      Sql_Vendor : Gnade.VARCHAR(4);
+      Sql_Amount : INT;
+      Sql_Total  : INT;
+      Sql_Time   : Gnade.VARCHAR(20);   
+      Sql_Pct    : DOUBLE_PRECISION;
+      EXEC SQL END   DECLARE SECTION;
+
+      Epoch : Calendar.Time := Calendar.Time_Of (1976, 9, 6);
+      use type Calendar.Time;
+   begin
+      To_VARCHAR (Vendor, Sql_Vendor);
+      Sql_Amount := INT (Amount);
+      Sql_Total  := INT (Total);
+      To_VARCHAR (Timestamp, Sql_Time);
+      Sql_Pct    := DOUBLE_PRECISION (Float (Amount) / Float (Total));
+
+      EXEC SQL CONNECT BY DB TO "quraqua";
+   
+      EXEC SQL AT DB 
+         insert into g2vendors
+         values (:Sql_Vendor, :Sql_Amount, :Sql_Total, :Sql_Time);
+
+      if SqlState /= "00000" then
+         Trace.Log ("Database error [vendor]: " & SqlState & SqlCode'Img, Trace.Error);
+      else
+         EXEC SQL AT DB COMMIT;
+      end if;
+
+      EXEC SQL DISCONNECT DB;
+
+   exception
+      when E : DB_Error =>
+         Trace.Log ("Database insertion failed [vendor]: " & Trace.Report (E),
+            Trace.Error);
+      when E : others =>
+         Trace.Log ("Database insertion failed [vendor]: " & Trace.Report (E),
+            Trace.Error);
+   end Insert_row;
+   
+begin
+   null;
+--   Init;
+end Aenea.Db;

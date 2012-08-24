@@ -1,0 +1,41 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+    <link rel="stylesheet" type="text/css" href="@_STYLE_@">
+    <title>Download</title>
+  </head>
+  <body>
+    <!--
+         SINGLE1   <- base64 encoded magnet for unsafe download
+         SINGLE2   <- base64 encoded magnet for safe download (freenet)
+         SINGLE3   <- Filename
+         SINGLE4   <- Beautified filesize
+    -->
+    <div id="contents">
+      <div id="main">
+        <div id="title">Download</div>
+        <div id="menubar">&nbsp;<a href="searches.html">Back to searches</a></div>
+        <blockquote>
+           <p>
+           <b><span class="enfasis">@_WEB_ESCAPE:SINGLE3_@</span><br></b>
+           <b><span class="enfasis">@_SINGLE4_@</span></b>
+           </p>
+           <p>
+           @@IF@@ @_SINGLE1_@ /= "" 
+           <a href="/command?action=download&magnet=@_SINGLE1_@&secure=false">Download from unsecure sources</a>
+           @@END_IF@@
+           @@IF@@ @_SINGLE2_@ /= "" 
+           <a href="/command?action=download&magnet=@_SINGLE2_@&secure=true">Download from secure sources</a>
+           @@END_IF@@
+           </p>
+           <p>
+           When you download from unsecure sources, you're exposed to unknown parties knowing what you download.
+           </p>
+        </blockquote>
+      </div>
+      @@INCLUDE@@ footer.html
+    </div>
+  </body>
+</html>
+

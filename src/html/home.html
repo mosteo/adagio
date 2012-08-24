@@ -1,0 +1,135 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+    <link rel="stylesheet" type="text/css" href="@_STYLE_@">
+    <title>
+    </title>
+  </head>
+  <body>
+    <!--
+        SINGLE1   <- Connected hubs
+        SINGLE2   <- Shared files
+        SINGLE3   <- Hashing files
+        SINGLE4   <- Uploading clients
+        SINGLE5   <- Waiting clients
+        SINGLE6   <- Uploaded data
+        SINGLE7   <- Mean upload speed
+        SINGLE8   <- BW usage (%)
+        SINGLE9   <- Hits
+        SINGLE10  <- Hits per hour
+        SINGLE11  <- Sent packets
+        SINGLE12  <- Received packets 
+        SINGLE13  <- Pending events
+        SINGLE14  <- Webcaches
+        SINGLE15  <- Hubs
+        SINGLE16  <- Completed uploads
+        SINGLE17  <- Uptime
+        SINGLE18  <- Packets per second
+        SINGLE19  <- Active searches
+        SINGLE20  <- Paused searches
+        SINGLE21  <- New hits
+    -->
+    <div id="contents">
+      <div id="main">
+        Welcome to @_VERSION_@!
+        <p>
+        <img src="neighbors.ico" width="16" height="16">&nbsp;
+          @@IF@@ @_SINGLE1_@ > 0
+          Adagio is <a href="hubs.html" class="enfasis">connected</a> to
+          <span class="stat">@_SINGLE1_@</span> hubs.
+          @@ELSE@@
+          Adagio is <a href="hubs.html" class="enfasis">trying</a> to connect to 
+          Gnutella2.
+          @@END_IF@@
+        </p>
+        <p>
+        <img src="library.ico" width="16" height="16">&nbsp;
+          There are <span class="stat">@_SINGLE2_@</span> files
+          being <a href="library.html" class="enfasis">shared</a>. 
+          @@IF@@ @_SINGLE3_@ > 0
+          There are <span class="stat">@_SINGLE3_@</span> files being <a href="stats.html"
+          class="enfasis">hashed</a>.
+          @@END_IF@@
+        </p>
+        <p>
+        <img src="uploads.ico" width="16" height="16">&nbsp;
+          @@IF@@ (@_SINGLE4_@ = 0) and (@_SINGLE5_@ = 0) 
+          There are <a href="uploads.html" class="enfasis">no uploads</a> at this
+          moment. 
+          @@ELSE@@ 
+          There are <span class="stat">@_SINGLE4_@</span> clients <a href="uploads.html" 
+          class="enfasis">uploading</a> right now, and <span class=
+          "stat">@_SINGLE5_@</span> are <a href="uploads.html" class="enfasis">waiting</a> queued. 
+          @@END_IF@@ 
+          Adagio has <a href="ufinished.html" class="enfasis">completed</a> 
+          <span class="stat">@_SINGLE16_@</span>
+          uploads, and has uploaded <span class=
+          "stat">@_SINGLE6_@</span> of data in this session,
+          which gives a <span class="stat">@_SINGLE7_@</span>
+          mean usage of your bandwidth, or a <span class=
+          "stat">@_SINGLE8_@</span>% usage of your configured
+          limit.
+        </p>
+        @@IF@@ (@_SINGLE19_@ > 0) or (@_SINGLE20_@ > 0) or (@_SINGLE21_@ > 0)
+        <p>
+          <img src="hit.ico" width="16" height="16">&nbsp;
+          @@IF@@ @_SINGLE19_@ > 0
+          There are <span class="stat">@_SINGLE19_@</span> <a href="searches.html" class="enfasis">
+             searches</a> running. 
+          @@END_IF@@
+          @@IF@@ @_SINGLE20_@ > 0
+          <span class="stat">@_SINGLE20_@</span> <a href="searches.html"
+             class="enfasis">searches</a> 
+          are paused. 
+          @@END_IF@@
+          @@IF@@ @_SINGLE21_@ > 0 
+          You have <span class="stat">@_SINGLE21_@</span> new <a href="searches.html" class="enfasis">hits</a> 
+          to review.
+          @@END_IF@@
+        </p>
+        @@END_IF@@
+        <p>
+        <img src="searchfolder.ico" width="16" height="16">&nbsp;
+          Adagio has reported <span class=
+          "stat">@_SINGLE9_@</span> query <a href="queries.html" class=
+          "enfasis">hits</a>, averaging <span class=
+          "stat">@_SINGLE10_@</span> hits per hour.
+        </p>
+        <p>
+        <img src="packets.ico" width="16" height="16">&nbsp;
+          Adagio has sent <span class="stat">@_SINGLE11_@</span>
+          G2 <a href="traffic.html" class="enfasis">packets</a>, and received
+          <span class="stat">@_SINGLE12_@</span>. This amounts to
+          a mean of <span class="stat">@_SINGLE18_@</span>
+          packets per second. 
+        </p>
+        @@IF@@ @_SINGLE13_@ > 0
+        <p>
+        <img src="clipboard.ico" width="16" height="16">&nbsp;
+          There are <span class="stat">@_SINGLE13_@</span> new
+          <a href="events.html" class="enfasis">events</a> since your last
+          check.
+        </p>
+        @@END_IF@@
+        <p>
+        <img src="hostcache.ico" width="16" height="16">&nbsp;
+          Adagio is <a class="enfasis" href="cache.html">caching</a> <span class=
+          "stat">@_SINGLE14_@</span> webcaches and <span class=
+          "stat">@_SINGLE15_@</span> G2 hubs for future
+          necessities.
+        </p>
+        <p>
+        <img src="executable.ico" width="16" height="16">&nbsp;
+          Adagio has been <a class="enfasis" href="stats.html">running</a> for <span class=
+          "stat">@_SINGLE17_@</span>.
+        </p>
+        <div class="refresh">
+          [ <a href="home.html">Refresh</a> ]
+        </div>
+      </div>
+      @@INCLUDE@@ footer.html
+    </div>
+  </body>
+</html>
+

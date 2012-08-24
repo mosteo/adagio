@@ -1,0 +1,410 @@
+<html>
+<head>
+<title>C:\temp\adagio-src\adagio\src\conf_samples\adagio.xml.html</title>
+<meta name="Generator" content="Vim/6.1">
+</head>
+<body bgcolor="#ffffff" text="#000000">
+<pre>
+<font color="#0000ff">&lt;?</font><font color="#2e8b57"><b>xml</b></font><font color="#2e8b57"><b> </b></font><font color="#2e8b57"><b>version</b></font>=<font color="#ff00ff">&quot;1.0&quot;</font><font color="#2e8b57"><b> </b></font><font color="#2e8b57"><b>encoding</b></font>=<font color="#ff00ff">&quot;ISO-8859-1&quot;</font><font color="#2e8b57"><b> </b></font><font color="#0000ff">?&gt;</font>
+<font color="#008080">&lt;</font><font color="#008080">adagio</font><font color="#008080">&gt;</font>
+
+   <font color="#0000ff">&lt;!</font><font color="#0000ff">-- Normal profile. See in conf_samples for a simpler example and for</font>
+<font color="#0000ff">         the full options available. --</font><font color="#0000ff">&gt;</font>
+
+   <font color="#0000ff">&lt;!</font><font color="#0000ff">-- General considerations </font>
+<font color="#0000ff">         All time values can be specified with their unit following.</font>
+<font color="#0000ff">         Allowed units are: d, h, m, s, ms. </font>
+<font color="#0000ff">         Omiting the units will be interpreted as seconds. </font>
+<font color="#0000ff">         Don't leave spaces between the quantities and their units.</font>
+
+<font color="#0000ff">         Sizes use b for bit, B for byte,</font>
+<font color="#0000ff">         k for 1024 bytes, m for 1024*1024 bytes, g for 1024*1024*1024 bytes.</font>
+<font color="#0000ff">         k, m and g are case insensitive.</font>
+<font color="#0000ff">         Quantities in bits are rounded towards bytes.</font>
+
+<font color="#0000ff">         Speeds are a size plus &quot;/s&quot;, which is the only unit allowed.</font>
+<font color="#0000ff">         A special speed is &quot;unlimited&quot;.</font>
+
+<font color="#0000ff">         Times can contain decimal part (dot is separator).</font>
+
+<font color="#0000ff">         Sizes/speeds can't have decimal part.</font>
+
+<font color="#0000ff">         Paths should be specified with forward slashes &quot;/&quot; in </font>
+<font color="#0000ff">         both windows and unix.</font>
+<font color="#0000ff">         </font>
+<font color="#0000ff">         All elements/attributes names are case sensitive! </font>
+<font color="#0000ff">   --</font><font color="#0000ff">&gt;</font>
+
+   <font color="#0000ff">&lt;!</font><font color="#0000ff">-- GLOBALS </font>
+<font color="#0000ff">        This section contains global application parameters --</font><font color="#0000ff">&gt;</font>
+   <font color="#008080">&lt;</font><font color="#008080">globals</font><font color="#008080">&gt;</font>
+      <font color="#0000ff">&lt;!</font><font color="#0000ff">-- Data directory for all persistent information across runs --</font><font color="#0000ff">&gt;</font>
+      <font color="#008080">&lt;</font><font color="#008080">DataFolder</font><font color="#008080"> </font><font color="#2e8b57"><b>path</b></font>=<font color="#ff00ff">&quot;data&quot;</font><font color="#008080"> </font><font color="#008080">/&gt;</font>
+   <font color="#008080">&lt;/globals&gt;</font>
+
+   <font color="#0000ff">&lt;!</font><font color="#0000ff">-- GUI </font>
+<font color="#0000ff">         Adagio hasn't a GUI. Instead, it provides a SOAP interface to</font>
+<font color="#0000ff">         acquire/provide data. That interface could allow the building</font>
+<font color="#0000ff">         of a stand-alone GUI application. --</font><font color="#0000ff">&gt;</font>
+   <font color="#008080">&lt;</font><font color="#008080">gui</font><font color="#008080">&gt;</font>
+      <font color="#0000ff">&lt;!</font><font color="#0000ff">-- We can specify if the SOAP interface is running --</font><font color="#0000ff">&gt;</font>
+      <font color="#008080">&lt;</font><font color="#008080">active</font><font color="#008080">&gt;</font>yes<font color="#008080">&lt;/active&gt;</font>
+      <font color="#0000ff">&lt;!</font><font color="#0000ff">-- In which interface we must listen. 0.0.0.0 means any and</font>
+<font color="#0000ff">            127.0.0.1 localhost. Please set an username and password if you're</font>
+<font color="#0000ff">            listening outside 127.0.0.1 --</font><font color="#0000ff">&gt;</font>
+      <font color="#008080">&lt;</font><font color="#008080">address</font><font color="#008080">&gt;</font>127.0.0.1<font color="#008080">&lt;/address&gt;</font>
+      <font color="#0000ff">&lt;!</font><font color="#0000ff">-- Port for the Web/SOAP interfaces --</font><font color="#0000ff">&gt;</font>
+      <font color="#008080">&lt;</font><font color="#008080">port</font><font color="#008080">&gt;</font>24444<font color="#008080">&lt;/port&gt;</font>
+
+      <font color="#0000ff">&lt;!</font><font color="#0000ff">-- This user/password combination would allow access from remote</font>
+<font color="#0000ff">            computers --</font><font color="#0000ff">&gt;</font>
+      <font color="#008080">&lt;</font><font color="#008080">user</font><font color="#008080">&gt;</font>name<font color="#008080">&lt;/user&gt;</font>
+      <font color="#008080">&lt;</font><font color="#008080">pass</font><font color="#008080">&gt;</font>word<font color="#008080">&lt;/pass&gt;</font>
+   <font color="#008080">&lt;/gui&gt;</font>
+
+   <font color="#0000ff">&lt;!</font><font color="#0000ff">-- LIBRARY. --</font><font color="#0000ff">&gt;</font>
+   <font color="#008080">&lt;</font><font color="#008080">library</font><font color="#008080">&gt;</font>
+      <font color="#0000ff">&lt;!</font><font color="#0000ff">-- Allow browsing of our shared files --</font><font color="#0000ff">&gt;</font>
+      <font color="#008080">&lt;</font><font color="#008080">AllowBrowse</font><font color="#008080">&gt;</font>yes<font color="#008080">&lt;/AllowBrowse&gt;</font>
+
+      <font color="#0000ff">&lt;!</font><font color="#0000ff">-- Max cpu usage while hashing/adding folders --</font><font color="#0000ff">&gt;</font>
+      <font color="#008080">&lt;</font><font color="#008080">HashingCPUusage</font><font color="#008080"> </font><font color="#2e8b57"><b>units</b></font>=<font color="#ff00ff">&quot;%&quot;</font><font color="#008080">&gt;</font>85<font color="#008080">&lt;/HashingCPUusage&gt;</font>
+
+      <font color="#0000ff">&lt;!</font><font color="#0000ff">-- Hashing speed.</font>
+<font color="#0000ff">            fast   : files will be hashed at top speed, without throttling,</font>
+<font color="#0000ff">               but also they can't be moved or renamed while are being read.</font>
+<font color="#0000ff">            normal : files will be hashed at good speed, but without pre-</font>
+<font color="#0000ff">               venting renaming/moving/editing (that will trigger rehash of</font>
+<font color="#0000ff">               the affected files).</font>
+<font color="#0000ff">            slow   : cpu throttling is on and hashing will be slower. --</font><font color="#0000ff">&gt;</font>
+      <font color="#008080">&lt;</font><font color="#008080">HashSpeed</font><font color="#008080">&gt;</font>slow<font color="#008080">&lt;/HashSpeed&gt;</font>
+
+      <font color="#0000ff">&lt;!</font><font color="#0000ff">-- Shared folders. This element can be specified as many times as</font>
+<font color="#0000ff">            folders we want to share. All subfolders of a given shared folder</font>
+<font color="#0000ff">            will also be shared. </font>
+<font color="#0000ff">            Folders will be re-scanned for changes as specified. Rescan</font>
+<font color="#0000ff">            periods can be not less than 5m. All folders are re-scanned on</font>
+<font color="#0000ff">            startup regardeless of this period. --</font><font color="#0000ff">&gt;</font>
+      <font color="#008080">&lt;</font><font color="#008080">shared</font><font color="#008080"> </font><font color="#2e8b57"><b>path</b></font>=<font color="#ff00ff">&quot;c:/movies&quot;</font><font color="#008080">  </font><font color="#2e8b57"><b>RescanPeriod</b></font>=<font color="#ff00ff">&quot;24h&quot;</font><font color="#008080"> </font><font color="#008080">/&gt;</font>
+      <font color="#008080">&lt;</font><font color="#008080">shared</font><font color="#008080"> </font><font color="#2e8b57"><b>path</b></font>=<font color="#ff00ff">&quot;c:/music&quot;</font><font color="#008080">   </font><font color="#2e8b57"><b>RescanPeriod</b></font>=<font color="#ff00ff">&quot;6h&quot;</font><font color="#008080"> </font><font color="#008080">/&gt;</font>
+      <font color="#0000ff">&lt;!</font><font color="#0000ff">-- Unshared folders can be used to disallow sharing of specific </font>
+<font color="#0000ff">            subfolders. This facilitates specifying entire branchs for sharing</font>
+<font color="#0000ff">            and removing only selected, unshared folders under them. --</font><font color="#0000ff">&gt;</font>
+      <font color="#008080">&lt;</font><font color="#008080">unshared</font><font color="#008080"> </font><font color="#2e8b57"><b>path</b></font>=<font color="#ff00ff">&quot;c:/music/own/unfinished&quot;</font><font color="#008080"> </font><font color="#008080">/&gt;</font>
+   <font color="#008080">&lt;/library&gt;</font>
+
+   <font color="#0000ff">&lt;!</font><font color="#0000ff">-- USER PROFILE.</font>
+<font color="#0000ff">         The user profile is specified via the conformant schema of Shareaza.</font>
+<font color="#0000ff">         The following subtree must be that XML profile. --</font><font color="#0000ff">&gt;</font>
+   <font color="#008080">&lt;</font><font color="#008080">gProfile</font><font color="#008080"> </font><font color="#2e8b57"><b>xmlns</b></font>=<font color="#ff00ff">&quot;http://www.shareaza.com/schemas/GProfile.xsd&quot;</font><font color="#008080">&gt;</font>
+      <font color="#008080">&lt;</font><font color="#008080">gnutella</font><font color="#008080">/&gt;</font> <font color="#0000ff">&lt;!</font><font color="#0000ff">-- This element is necessary. Don't remove it --</font><font color="#0000ff">&gt;</font>
+      <font color="#008080">&lt;</font><font color="#008080">identity</font><font color="#008080">&gt;</font>
+         <font color="#0000ff">&lt;!</font><font color="#0000ff">-- Replace Anonymous with your nickname here --</font><font color="#0000ff">&gt;</font>
+         <font color="#008080">&lt;</font><font color="#008080">handle</font><font color="#008080"> </font><font color="#2e8b57"><b>primary</b></font>=<font color="#ff00ff">&quot;Anonymous&quot;</font><font color="#008080">/&gt;</font>
+      <font color="#008080">&lt;/identity&gt;</font>
+   <font color="#008080">&lt;/gProfile&gt;</font>
+
+   <font color="#0000ff">&lt;!</font><font color="#0000ff">-- UPLOAD SUBSYSTEM --</font><font color="#0000ff">&gt;</font>
+   <font color="#008080">&lt;</font><font color="#008080">uploads</font><font color="#008080">&gt;</font>
+      <font color="#0000ff">&lt;!</font><font color="#0000ff">-- Maximum simultaneous uploads allowed per client --</font><font color="#0000ff">&gt;</font>
+      <font color="#0000ff">&lt;!</font><font color="#0000ff">-- Uploads will be queued in every matching queue that many times.</font>
+<font color="#0000ff">            There is no problem if a request matches two queues' criteria. </font>
+<font color="#0000ff">            RATIONALE: since you can't know in which queue you'll arrive to</font>
+<font color="#0000ff">            head sooner, Adagio takes the safest approach: clients wait in</font>
+<font color="#0000ff">            every queue as many times as total uploads they are allowed. That</font>
+<font color="#0000ff">            means that if there are 3 queues and 2 uploads per client, one can</font>
+<font color="#0000ff">            be queued in 6 slots. However, each time a client reaches a head,</font>
+<font color="#0000ff">            their active uploads are checked. If a client is uploading the </font>
+<font color="#0000ff">            maximum allowed, their queued slots will be dropped. That ensures</font>
+<font color="#0000ff">            respecting the maximum uploads per client and at the same time </font>
+<font color="#0000ff">            prevents that clients don't get a file which belongs to a queue </font>
+<font color="#0000ff">            because they're queued in another, slower, one. </font>
+<font color="#0000ff">            Similarly, when a request reaches a head, it is removed from any</font>
+<font color="#0000ff">            other queue. --</font><font color="#0000ff">&gt;</font>
+      <font color="#008080">&lt;</font><font color="#008080">MaxPerClient</font><font color="#008080">&gt;</font>2<font color="#008080">&lt;/MaxPerClient&gt;</font>
+      <font color="#0000ff">&lt;!</font><font color="#0000ff">-- Maximum allowed bandwidth for all uploads. --</font><font color="#0000ff">&gt;</font>
+      <font color="#008080">&lt;</font><font color="#008080">bandwidth</font><font color="#008080">&gt;</font>16kB/s<font color="#008080">&lt;/bandwidth&gt;</font>
+      <font color="#0000ff">&lt;!</font><font color="#0000ff">-- Clients are remembered by Adagio between runs or drops. The next</font>
+<font color="#0000ff">            parameter indicates for how many time a client can come back and</font>
+<font color="#0000ff">            continue at his former queue position. </font>
+<font color="#0000ff">            If you make this period longer, your queues will get filled</font>
+<font color="#0000ff">            more quickly. Never missing clients will defer ready ones.</font>
+<font color="#0000ff">            --</font><font color="#0000ff">&gt;</font>
+      <font color="#008080">&lt;</font><font color="#008080">RememberClientPeriod</font><font color="#008080">&gt;</font>1h<font color="#008080">&lt;/RememberClientPeriod&gt;</font>
+
+      <font color="#0000ff">&lt;!</font><font color="#0000ff">-- Queues. We can have as many of these as we want. --</font><font color="#0000ff">&gt;</font>
+      <font color="#0000ff">&lt;!</font><font color="#0000ff">-- The queue name must be unique. It's employed for queue data saving,</font>
+<font color="#0000ff">            so it must be a valid OS filename. --</font><font color="#0000ff">&gt;</font>
+      <font color="#0000ff">&lt;!</font><font color="#0000ff">-- The queue name also prioritizes a queue over another, if</font>
+<font color="#0000ff">            several are free when a new client arrives and it's valid for</font>
+<font color="#0000ff">            more than one. You may want to name them with some numbering </font>
+<font color="#0000ff">            or alphabetical order. --</font><font color="#0000ff">&gt;</font>
+      <font color="#008080">&lt;</font><font color="#008080">queue</font><font color="#008080"> </font><font color="#2e8b57"><b>name</b></font>=<font color="#ff00ff">&quot;example queue&quot;</font><font color="#008080">&gt;</font>
+         <font color="#0000ff">&lt;!</font><font color="#0000ff">-- Inactive queues will not be used on next run. --</font><font color="#0000ff">&gt;</font>
+         <font color="#008080">&lt;</font><font color="#008080">active</font><font color="#008080">&gt;</font>no<font color="#008080">&lt;/active&gt;</font>
+         <font color="#0000ff">&lt;!</font><font color="#0000ff">-- Maximum length of the queue. It's convenient to make these</font>
+<font color="#0000ff">               as long as possible given your resources. --</font><font color="#0000ff">&gt;</font>
+         <font color="#008080">&lt;</font><font color="#008080">length</font><font color="#008080">&gt;</font>256<font color="#008080">&lt;/length&gt;</font>
+         <font color="#0000ff">&lt;!</font><font color="#0000ff">-- Priority. It acts as a ratio. All queues' priorities will be</font>
+<font color="#0000ff">               added up. This priority divided by the total gives the upload</font>
+<font color="#0000ff">               bandwidth ratio guaranteed for this queue. Note that wasted </font>
+<font color="#0000ff">               bandwidth in empty queues or slower clients will be reallocated</font>
+<font color="#0000ff">               proportionally to other queues if bandwidth sharing is enabled.</font>
+<font color="#0000ff">               Total doesn't need to sum 100. --</font><font color="#0000ff">&gt;</font>
+         <font color="#008080">&lt;</font><font color="#008080">priority</font><font color="#008080">&gt;</font>30<font color="#008080">&lt;/priority&gt;</font>
+         <font color="#0000ff">&lt;!</font><font color="#0000ff">-- Number of slots with actively uploading clients --</font><font color="#0000ff">&gt;</font>
+         <font color="#008080">&lt;</font><font color="#008080">ActiveClients</font><font color="#008080">&gt;</font>2<font color="#008080">&lt;/ActiveClients&gt;</font>
+         <font color="#0000ff">&lt;!</font><font color="#0000ff">-- Minimum average bandwidth a client must consume to not be</font>
+<font color="#0000ff">               dropped. It is calculated over the period specified later.</font>
+<font color="#0000ff">               Take care to not set contradictory values given the queue</font>
+<font color="#0000ff">               priority, active clients and total upload capacity. --</font><font color="#0000ff">&gt;</font>
+         <font color="#008080">&lt;</font><font color="#008080">MinimumClientSpeed</font><font color="#008080">&gt;</font>1kB/s<font color="#008080">&lt;/MinimumClientSpeed&gt;</font>
+         <font color="#0000ff">&lt;!</font><font color="#0000ff">-- Period used to average the client speed. Don't be too res-</font>
+<font color="#0000ff">               trictive here or short periods of starvation can cause the</font>
+<font color="#0000ff">               drop of valid connections --</font><font color="#0000ff">&gt;</font>
+         <font color="#008080">&lt;</font><font color="#008080">AveragePeriod</font><font color="#008080">&gt;</font>30s<font color="#008080">&lt;/AveragePeriod&gt;</font>
+         <font color="#0000ff">&lt;!</font><font color="#0000ff">-- Entry criteria for the queue.</font>
+<font color="#0000ff">               Existing ones:</font>
+<font color="#0000ff">                  Greater_than            Size greater OR EQUAL than </font>
+<font color="#0000ff">                  Smaller_than            Size smaller than </font>
+<font color="#0000ff">                  Is_in                   File is in a certain folder branch.</font>
+<font color="#0000ff">                           Paths must be specified between '|'</font>
+<font color="#0000ff">                           Must be absolute paths.</font>
+<font color="#0000ff">                           Any path starting like this will match (subfolders)</font>
+<font color="#0000ff">                           I.e: &quot;Is_in |c:/shared files/release/|&quot;</font>
+<font color="#0000ff">                  Extension_is            Extension comparison (with dot)</font>
+<font color="#0000ff">                           I.e: &quot;Extension_is .mp3&quot;</font>
+<font color="#0000ff">                  Additionally we have: 'and' 'or' 'true' 'false'</font>
+<font color="#0000ff">                     evaluated always left to righ</font>
+
+<font color="#0000ff">                  Examples:</font>
+<font color="#0000ff">                  Smaller_than 1024kB or Is_in c:/test or Extension_is .mp3</font>
+<font color="#0000ff">                  Greater_than 1024kB and Smaller_than 10240kB --</font><font color="#0000ff">&gt;</font>
+         <font color="#008080">&lt;</font><font color="#008080">criteria</font><font color="#008080"> </font><font color="#2e8b57"><b>is</b></font>=<font color="#ff00ff">&quot;true&quot;</font><font color="#008080">/&gt;</font> <font color="#0000ff">&lt;!</font><font color="#0000ff">-- Queue for everybody --</font><font color="#0000ff">&gt;</font>
+         <font color="#0000ff">&lt;!</font><font color="#0000ff">-- Rotating queues. You can enable here preemption after some</font>
+<font color="#0000ff">               time of upload or bytes transferred. At least one of these</font>
+<font color="#0000ff">               two conditions must be provided if enabled. Both can be </font>
+<font color="#0000ff">               supplied and the first to occur will cause the preemption.  --</font><font color="#0000ff">&gt;</font>
+         <font color="#008080">&lt;</font><font color="#008080">preemption</font><font color="#008080"> </font><font color="#2e8b57"><b>active</b></font>=<font color="#ff00ff">&quot;yes&quot;</font><font color="#008080"> </font><font color="#2e8b57"><b>time</b></font>=<font color="#ff00ff">&quot;15m&quot;</font><font color="#008080"> </font><font color="#2e8b57"><b>size</b></font>=<font color="#ff00ff">&quot;10mB&quot;</font><font color="#008080">/&gt;</font>
+         <font color="#0000ff">&lt;!</font><font color="#0000ff">-- Queues can be &quot;fifo&quot; or &quot;rated&quot;. In rating-based queues, </font>
+<font color="#0000ff">               each client rating is computed when another client is done.</font>
+<font color="#0000ff">               The higher the rating, the near to head of the queue.</font>
+<font color="#0000ff">               For two clients with same rating, FIFO policy is applied.</font>
+<font color="#0000ff">               The expression doesn't apply for fifo queues but it's in</font>
+<font color="#0000ff">               this example for documentation purposes.</font>
+<font color="#0000ff">               Rating expressions can use the following operators:</font>
+<font color="#0000ff">                  sin, cos, tan, log, ln, exp, cot, sqrt, !, </font>
+<font color="#0000ff">                  trigonometric hyperbolic (same with trailing h), </font>
+<font color="#0000ff">                  trigonometric inverse (same with leading arc)</font>
+<font color="#0000ff">                  + - * / ^ ( ) with usual precedence. They act on numerals</font>
+<font color="#0000ff">               and the following predefined variables:</font>
+<font color="#0000ff">                  Uploads   : number of started uploads of the requested file.</font>
+<font color="#0000ff">                  Bytes_sent: number of bytes sent to some uploader. </font>
+<font color="#0000ff">                  File_size : size in bytes of the requested file.</font>
+<font color="#0000ff">                  Waited    : seconds elapsed since arrival (starts at 1.0) </font>
+<font color="#0000ff">               These variables are of course persistent across sessions. --</font><font color="#0000ff">&gt;</font>
+         <font color="#008080">&lt;</font><font color="#008080">type</font><font color="#008080"> </font><font color="#2e8b57"><b>expression</b></font>=<font color="#ff00ff">&quot;waited&quot;</font><font color="#008080">&gt;</font>rated<font color="#008080">&lt;/type&gt;</font> <font color="#0000ff">&lt;!</font><font color="#0000ff">-- FIFO emulation --</font><font color="#0000ff">&gt;</font>
+      <font color="#008080">&lt;/queue&gt;</font>
+
+      <font color="#0000ff">&lt;!</font><font color="#0000ff">-- MORE EXAMPLE QUEUES ARE IN THE FULL CONFIGURATION EXAMPLE --</font><font color="#0000ff">&gt;</font>
+
+      <font color="#0000ff">&lt;!</font><font color="#0000ff">-- DEFAULT QUEUES --</font><font color="#0000ff">&gt;</font>
+      <font color="#0000ff">&lt;!</font><font color="#0000ff">-- These are the default queues supplied with this installation.</font>
+<font color="#0000ff">            You can change the queuing system at will. --</font><font color="#0000ff">&gt;</font>
+
+      <font color="#008080">&lt;</font><font color="#008080">queue</font><font color="#008080"> </font><font color="#2e8b57"><b>name</b></font>=<font color="#ff00ff">&quot;smaller first&quot;</font><font color="#008080">&gt;</font>
+         <font color="#008080">&lt;</font><font color="#008080">active</font><font color="#008080">&gt;</font>yes<font color="#008080">&lt;/active&gt;</font>
+         <font color="#008080">&lt;</font><font color="#008080">length</font><font color="#008080">&gt;</font>512<font color="#008080">&lt;/length&gt;</font>
+         <font color="#008080">&lt;</font><font color="#008080">priority</font><font color="#008080">&gt;</font>10<font color="#008080">&lt;/priority&gt;</font>
+         <font color="#008080">&lt;</font><font color="#008080">ActiveClients</font><font color="#008080">&gt;</font>1<font color="#008080">&lt;/ActiveClients&gt;</font>
+         <font color="#008080">&lt;</font><font color="#008080">MinimumClientSpeed</font><font color="#008080">&gt;</font>1kB/s<font color="#008080">&lt;/MinimumClientSpeed&gt;</font>
+         <font color="#008080">&lt;</font><font color="#008080">AveragePeriod</font><font color="#008080">&gt;</font>30s<font color="#008080">&lt;/AveragePeriod&gt;</font>
+         <font color="#008080">&lt;</font><font color="#008080">criteria</font><font color="#008080"> </font><font color="#2e8b57"><b>is</b></font>=<font color="#ff00ff">&quot;true&quot;</font><font color="#008080">/&gt;</font>
+         <font color="#008080">&lt;</font><font color="#008080">preemption</font><font color="#008080"> </font><font color="#2e8b57"><b>active</b></font>=<font color="#ff00ff">&quot;yes&quot;</font><font color="#008080"> </font><font color="#2e8b57"><b>time</b></font>=<font color="#ff00ff">&quot;10m&quot;</font><font color="#008080"> </font><font color="#2e8b57"><b>size</b></font>=<font color="#ff00ff">&quot;10mB&quot;</font><font color="#008080">/&gt;</font>
+         <font color="#008080">&lt;</font><font color="#008080">type</font><font color="#008080"> </font><font color="#2e8b57"><b>expression</b></font>=<font color="#ff00ff">&quot;-File_size&quot;</font><font color="#008080">&gt;</font>rated<font color="#008080">&lt;/type&gt;</font>
+      <font color="#008080">&lt;/queue&gt;</font>
+
+      <font color="#008080">&lt;</font><font color="#008080">queue</font><font color="#008080"> </font><font color="#2e8b57"><b>name</b></font>=<font color="#ff00ff">&quot;rare first&quot;</font><font color="#008080">&gt;</font>
+         <font color="#008080">&lt;</font><font color="#008080">active</font><font color="#008080">&gt;</font>yes<font color="#008080">&lt;/active&gt;</font>
+         <font color="#008080">&lt;</font><font color="#008080">length</font><font color="#008080">&gt;</font>512<font color="#008080">&lt;/length&gt;</font>
+         <font color="#008080">&lt;</font><font color="#008080">priority</font><font color="#008080">&gt;</font>10<font color="#008080">&lt;/priority&gt;</font>
+         <font color="#008080">&lt;</font><font color="#008080">ActiveClients</font><font color="#008080">&gt;</font>1<font color="#008080">&lt;/ActiveClients&gt;</font>
+         <font color="#008080">&lt;</font><font color="#008080">MinimumClientSpeed</font><font color="#008080">&gt;</font>1kB/s<font color="#008080">&lt;/MinimumClientSpeed&gt;</font>
+         <font color="#008080">&lt;</font><font color="#008080">AveragePeriod</font><font color="#008080">&gt;</font>30s<font color="#008080">&lt;/AveragePeriod&gt;</font>
+         <font color="#008080">&lt;</font><font color="#008080">criteria</font><font color="#008080"> </font><font color="#2e8b57"><b>is</b></font>=<font color="#ff00ff">&quot;true&quot;</font><font color="#008080">/&gt;</font>
+         <font color="#008080">&lt;</font><font color="#008080">preemption</font><font color="#008080"> </font><font color="#2e8b57"><b>active</b></font>=<font color="#ff00ff">&quot;yes&quot;</font><font color="#008080"> </font><font color="#2e8b57"><b>time</b></font>=<font color="#ff00ff">&quot;10m&quot;</font><font color="#008080"> </font><font color="#2e8b57"><b>size</b></font>=<font color="#ff00ff">&quot;10mB&quot;</font><font color="#008080">/&gt;</font>
+         <font color="#008080">&lt;</font><font color="#008080">type</font><font color="#008080"> </font><font color="#2e8b57"><b>expression</b></font>=<font color="#ff00ff">&quot;-Uploads&quot;</font><font color="#008080">&gt;</font>rated<font color="#008080">&lt;/type&gt;</font>
+      <font color="#008080">&lt;/queue&gt;</font>
+
+      <font color="#008080">&lt;</font><font color="#008080">queue</font><font color="#008080"> </font><font color="#2e8b57"><b>name</b></font>=<font color="#ff00ff">&quot;small files&quot;</font><font color="#008080">&gt;</font>
+         <font color="#008080">&lt;</font><font color="#008080">active</font><font color="#008080">&gt;</font>yes<font color="#008080">&lt;/active&gt;</font>
+         <font color="#008080">&lt;</font><font color="#008080">length</font><font color="#008080">&gt;</font>512<font color="#008080">&lt;/length&gt;</font>
+         <font color="#008080">&lt;</font><font color="#008080">priority</font><font color="#008080">&gt;</font>10<font color="#008080">&lt;/priority&gt;</font>
+         <font color="#008080">&lt;</font><font color="#008080">ActiveClients</font><font color="#008080">&gt;</font>1<font color="#008080">&lt;/ActiveClients&gt;</font>
+         <font color="#008080">&lt;</font><font color="#008080">MinimumClientSpeed</font><font color="#008080">&gt;</font>1kB/s<font color="#008080">&lt;/MinimumClientSpeed&gt;</font>
+         <font color="#008080">&lt;</font><font color="#008080">AveragePeriod</font><font color="#008080">&gt;</font>30s<font color="#008080">&lt;/AveragePeriod&gt;</font>
+         <font color="#008080">&lt;</font><font color="#008080">criteria</font><font color="#008080"> </font><font color="#2e8b57"><b>is</b></font>=<font color="#ff00ff">&quot;Smaller_than 1mB&quot;</font><font color="#008080">/&gt;</font>
+         <font color="#008080">&lt;</font><font color="#008080">preemption</font><font color="#008080"> </font><font color="#2e8b57"><b>active</b></font>=<font color="#ff00ff">&quot;no&quot;</font><font color="#008080"> </font><font color="#008080">/&gt;</font>
+         <font color="#008080">&lt;</font><font color="#008080">type</font><font color="#008080"> </font><font color="#2e8b57"><b>expression</b></font>=<font color="#ff00ff">&quot;-Bytes_sent&quot;</font><font color="#008080">&gt;</font>rated<font color="#008080">&lt;/type&gt;</font>
+      <font color="#008080">&lt;/queue&gt;</font>
+
+      <font color="#008080">&lt;</font><font color="#008080">queue</font><font color="#008080"> </font><font color="#2e8b57"><b>name</b></font>=<font color="#ff00ff">&quot;fifo&quot;</font><font color="#008080">&gt;</font>
+         <font color="#008080">&lt;</font><font color="#008080">active</font><font color="#008080">&gt;</font>yes<font color="#008080">&lt;/active&gt;</font>
+         <font color="#008080">&lt;</font><font color="#008080">length</font><font color="#008080">&gt;</font>512<font color="#008080">&lt;/length&gt;</font>
+         <font color="#008080">&lt;</font><font color="#008080">priority</font><font color="#008080">&gt;</font>10<font color="#008080">&lt;/priority&gt;</font>
+         <font color="#008080">&lt;</font><font color="#008080">ActiveClients</font><font color="#008080">&gt;</font>1<font color="#008080">&lt;/ActiveClients&gt;</font>
+         <font color="#008080">&lt;</font><font color="#008080">MinimumClientSpeed</font><font color="#008080">&gt;</font>1kB/s<font color="#008080">&lt;/MinimumClientSpeed&gt;</font>
+         <font color="#008080">&lt;</font><font color="#008080">AveragePeriod</font><font color="#008080">&gt;</font>30s<font color="#008080">&lt;/AveragePeriod&gt;</font>
+         <font color="#008080">&lt;</font><font color="#008080">criteria</font><font color="#008080"> </font><font color="#2e8b57"><b>is</b></font>=<font color="#ff00ff">&quot;true&quot;</font><font color="#008080">/&gt;</font>
+         <font color="#008080">&lt;</font><font color="#008080">preemption</font><font color="#008080"> </font><font color="#2e8b57"><b>active</b></font>=<font color="#ff00ff">&quot;yes&quot;</font><font color="#008080"> </font><font color="#2e8b57"><b>time</b></font>=<font color="#ff00ff">&quot;10m&quot;</font><font color="#008080"> </font><font color="#2e8b57"><b>size</b></font>=<font color="#ff00ff">&quot;10mB&quot;</font><font color="#008080">/&gt;</font>
+         <font color="#008080">&lt;</font><font color="#008080">type</font><font color="#008080">&gt;</font>fifo<font color="#008080">&lt;/type&gt;</font>
+      <font color="#008080">&lt;/queue&gt;</font>
+      <font color="#0000ff">&lt;!</font><font color="#0000ff">-- End of default queues --</font><font color="#0000ff">&gt;</font>
+   <font color="#008080">&lt;/uploads&gt;</font>
+
+   <font color="#0000ff">&lt;!</font><font color="#0000ff">-- NETWORKS.</font>
+<font color="#0000ff">         At current only G2 is supported, and GWebCache2 for discovery.</font>
+<font color="#0000ff">         There are global setting and network specific settings.  </font>
+
+<font color="#0000ff">         proxy: If you use a proxy for HTTP, specify it here. The format is  </font>
+<font color="#0000ff">            [user[:pass]@]host:port </font>
+<font color="#0000ff">         InternetRoute: direct/NAT/none. </font>
+<font color="#0000ff">            Use direct if you have a public IP.</font>
+<font color="#0000ff">            Use NAT if you are behing a transparent NAT router. </font>
+<font color="#0000ff">            Use none if you're stuck in a LAN without direct external access.</font>
+<font color="#0000ff">         ValidAddresses: public/private/all</font>
+<font color="#0000ff">            Use public to discard private addresses.</font>
+<font color="#0000ff">            Use private if you want a LAN network.</font>
+<font color="#0000ff">            Use all if you are in a mixed environment.</font>
+<font color="#0000ff">            Note that for local testing you must allow private addresses.</font>
+<font color="#0000ff">      --</font><font color="#0000ff">&gt;</font>
+   <font color="#008080">&lt;</font><font color="#008080">network</font>
+<font color="#008080">      </font><font color="#2e8b57"><b>proxy</b></font>=<font color="#ff00ff">&quot;&quot;</font>
+<font color="#008080">      </font><font color="#2e8b57"><b>InternetRoute</b></font>=<font color="#ff00ff">&quot;direct&quot;</font>
+<font color="#008080">      </font><font color="#2e8b57"><b>ValidAddresses</b></font>=<font color="#ff00ff">&quot;public&quot;</font><font color="#008080">&gt;</font>
+
+      <font color="#0000ff">&lt;!</font><font color="#0000ff">-- Gnutella2 --</font><font color="#0000ff">&gt;</font>
+      <font color="#008080">&lt;</font><font color="#008080">Gnutella2</font><font color="#008080">&gt;</font>
+         <font color="#0000ff">&lt;!</font><font color="#0000ff">-- Listening TCP/UDP port. --</font><font color="#0000ff">&gt;</font>
+         <font color="#008080">&lt;</font><font color="#008080">port</font><font color="#008080">&gt;</font>24610<font color="#008080">&lt;/port&gt;</font>
+
+         <font color="#0000ff">&lt;!</font><font color="#0000ff">-- Servers to remember in our cache --</font><font color="#0000ff">&gt;</font>
+         <font color="#008080">&lt;</font><font color="#008080">CachedServers</font><font color="#008080">&gt;</font>1000<font color="#008080">&lt;/CachedServers&gt;</font>
+
+         <font color="#0000ff">&lt;!</font><font color="#0000ff">-- Number of servers we want to be simultaneously connected --</font><font color="#0000ff">&gt;</font>
+         <font color="#008080">&lt;</font><font color="#008080">ActiveServers</font><font color="#008080">&gt;</font>2<font color="#008080">&lt;/ActiveServers&gt;</font>
+
+         <font color="#0000ff">&lt;!</font><font color="#0000ff">-- Number of servers we want to try until full connectivity --</font><font color="#0000ff">&gt;</font>
+         <font color="#008080">&lt;</font><font color="#008080">TryServers</font><font color="#008080">&gt;</font>30<font color="#008080">&lt;/TryServers&gt;</font>
+
+         <font color="#0000ff">&lt;!</font><font color="#0000ff">-- Maximum bandwidth usage in server links. --</font><font color="#0000ff">&gt;</font>
+         <font color="#008080">&lt;</font><font color="#008080">LinkBandwidth</font><font color="#008080">&gt;</font>4kB/s<font color="#008080">&lt;/LinkBandwidth&gt;</font>
+
+         <font color="#0000ff">&lt;!</font><font color="#0000ff">-- Attempt compressed connections to servers? --</font><font color="#0000ff">&gt;</font>
+         <font color="#008080">&lt;</font><font color="#008080">CompressedLink</font><font color="#008080">&gt;</font>yes<font color="#008080">&lt;/CompressedLink&gt;</font>
+
+         <font color="#0000ff">&lt;!</font><font color="#0000ff">-- Root servers. Use a rating of 0 to not use them.</font>
+<font color="#0000ff">               Higher ratings mean higher preference to use them.</font>
+<font color="#0000ff">               These servers are never dropped so you can specify here</font>
+<font color="#0000ff">               static IP servers you know and prefer.</font>
+<font color="#0000ff">               For comparison, new servers are rated like that:</font>
+<font color="#0000ff">               * From GWebCache2: 300</font>
+<font color="#0000ff">               * From /KHL/NH:    250</font>
+<font color="#0000ff">               * From /KHL/CH:    200 --</font><font color="#0000ff">&gt;</font>
+         <font color="#008080">&lt;</font><font color="#008080">root</font><font color="#008080"> </font><font color="#2e8b57"><b>address</b></font>=<font color="#ff00ff">&quot;127.0.0.1:36765&quot;</font><font color="#008080"> </font><font color="#2e8b57"><b>rating</b></font>=<font color="#ff00ff">&quot;0&quot;</font><font color="#008080">/&gt;</font>
+      <font color="#008080">&lt;/Gnutella2&gt;</font>
+
+      <font color="#0000ff">&lt;!</font><font color="#0000ff">-- GWCache2 --</font><font color="#0000ff">&gt;</font>
+      <font color="#008080">&lt;</font><font color="#008080">GWebCache2</font><font color="#008080">&gt;</font>
+         <font color="#0000ff">&lt;!</font><font color="#0000ff">-- Some root (non discardable) GWCaches --</font><font color="#0000ff">&gt;</font>
+         <font color="#008080">&lt;</font><font color="#008080">root</font><font color="#008080"> </font><font color="#2e8b57"><b>url</b></font>=<font color="#ff00ff">&quot;http://www.gwc2.ip3.com/cgi-bin/gwc2/gcache.cgi&quot;</font><font color="#008080">/&gt;</font>
+         <font color="#008080">&lt;</font><font color="#008080">root</font><font color="#008080"> </font><font color="#2e8b57"><b>url</b></font>=<font color="#ff00ff">&quot;http://gwc.isuldor.com/g2only/cache.asp&quot;</font><font color="#008080">/&gt;</font>
+         <font color="#008080">&lt;</font><font color="#008080">root</font><font color="#008080"> </font><font color="#2e8b57"><b>url</b></font>=<font color="#ff00ff">&quot;http://gwebcache2.jonatkins.com/cgi-bin/gwebcache.cgi&quot;</font><font color="#008080">/&gt;</font>
+         <font color="#008080">&lt;</font><font color="#008080">root</font><font color="#008080"> </font><font color="#2e8b57"><b>url</b></font>=<font color="#ff00ff">&quot;http://g2cache.theg2.net/gwcache/lynnx.asp&quot;</font><font color="#008080">/&gt;</font>
+         <font color="#008080">&lt;</font><font color="#008080">root</font><font color="#008080"> </font><font color="#2e8b57"><b>url</b></font>=<font color="#ff00ff">&quot;http://cache.shareaza.com/cache.aspx&quot;</font><font color="#008080">/&gt;</font>
+         <font color="#008080">&lt;</font><font color="#008080">root</font><font color="#008080"> </font><font color="#2e8b57"><b>url</b></font>=<font color="#ff00ff">&quot;http://g2.instantnetworks.net/g2/bazooka.php&quot;</font><font color="#008080">/&gt;</font>
+         <font color="#008080">&lt;</font><font color="#008080">root</font><font color="#008080"> </font><font color="#2e8b57"><b>url</b></font>=<font color="#ff00ff">&quot;http://bazooka1.servehttp.com/g2/bazooka.php&quot;</font><font color="#008080">/&gt;</font>
+      <font color="#008080">&lt;/GWebCache2&gt;</font>
+   <font color="#008080">&lt;/network&gt;</font>
+
+   <font color="#0000ff">&lt;!</font><font color="#0000ff">-- SECURITY</font>
+<font color="#0000ff">         Host banning. That's made through additional xml files conforming</font>
+<font color="#0000ff">         to Shareaza schema for security rules. </font>
+<font color="#0000ff">         There is no limit in the number of files you can specify here.  --</font><font color="#0000ff">&gt;</font>
+   <font color="#008080">&lt;</font><font color="#008080">security</font><font color="#008080">&gt;</font>
+      <font color="#0000ff">&lt;!</font><font color="#0000ff">-- Default banning policy. If you set it to &quot;no&quot;, no connections</font>
+<font color="#0000ff">            will be allowed except to selected countries (see below). --</font><font color="#0000ff">&gt;</font>
+      <font color="#008080">&lt;</font><font color="#008080">policy</font><font color="#008080"> </font><font color="#2e8b57"><b>allow</b></font>=<font color="#ff00ff">&quot;yes&quot;</font><font color="#008080">/&gt;</font>
+
+      <font color="#0000ff">&lt;!</font><font color="#0000ff">-- File with security rules. They can be disabled if desired.</font>
+<font color="#0000ff">            Only &quot;address&quot; type rules will be processed. --</font><font color="#0000ff">&gt;</font>
+      <font color="#008080">&lt;</font><font color="#008080">file</font><font color="#008080"> </font><font color="#2e8b57"><b>path</b></font>=<font color="#ff00ff">&quot;./security 2.5.xml&quot;</font><font color="#008080"> </font><font color="#2e8b57"><b>active</b></font>=<font color="#ff00ff">&quot;yes&quot;</font><font color="#008080"> </font><font color="#008080">/&gt;</font>
+      <font color="#008080">&lt;</font><font color="#008080">file</font><font color="#008080"> </font><font color="#2e8b57"><b>path</b></font>=<font color="#ff00ff">&quot;./security 2.6.xml&quot;</font><font color="#008080"> </font><font color="#2e8b57"><b>active</b></font>=<font color="#ff00ff">&quot;yes&quot;</font><font color="#008080"> </font><font color="#008080">/&gt;</font>
+      <font color="#008080">&lt;</font><font color="#008080">file</font><font color="#008080"> </font><font color="#2e8b57"><b>path</b></font>=<font color="#ff00ff">&quot;./security 2.7.xml&quot;</font><font color="#008080"> </font><font color="#2e8b57"><b>active</b></font>=<font color="#ff00ff">&quot;yes&quot;</font><font color="#008080"> </font><font color="#008080">/&gt;</font>
+      <font color="#008080">&lt;</font><font color="#008080">file</font><font color="#008080"> </font><font color="#2e8b57"><b>path</b></font>=<font color="#ff00ff">&quot;./security 2.7.5.xml&quot;</font><font color="#008080"> </font><font color="#2e8b57"><b>active</b></font>=<font color="#ff00ff">&quot;yes&quot;</font><font color="#008080"> </font><font color="#008080">/&gt;</font>
+      <font color="#008080">&lt;</font><font color="#008080">file</font><font color="#008080"> </font><font color="#2e8b57"><b>path</b></font>=<font color="#ff00ff">&quot;./security pg 1.0.xml&quot;</font><font color="#008080"> </font><font color="#2e8b57"><b>active</b></font>=<font color="#ff00ff">&quot;yes&quot;</font><font color="#008080"> </font><font color="#008080">/&gt;</font>
+
+      <font color="#0000ff">&lt;!</font><font color="#0000ff">-- Specific User-Agent bannings are specified here (multiple allowed).</font>
+<font color="#0000ff">            Two kind of banning strings are allowed (both case-insensitive):</font>
+<font color="#0000ff">               * substring: any user agent containing this substring</font>
+<font color="#0000ff">                  will be banned</font>
+<font color="#0000ff">               * regexp: file-like regular expressions.</font>
+<font color="#0000ff">                  Must match the whole user agent</font>
+<font color="#0000ff">                     --</font><font color="#0000ff">&gt;</font>
+      <font color="#008080">&lt;</font><font color="#008080">ban</font><font color="#008080"> </font><font color="#2e8b57"><b>client</b></font>=<font color="#ff00ff">&quot;bearshare&quot;</font><font color="#008080"> </font><font color="#2e8b57"><b>type</b></font>=<font color="#ff00ff">&quot;substring&quot;</font><font color="#008080"> </font><font color="#2e8b57"><b>active</b></font>=<font color="#ff00ff">&quot;no&quot;</font><font color="#008080"> </font><font color="#008080">/&gt;</font>
+      <font color="#008080">&lt;</font><font color="#008080">ban</font><font color="#008080"> </font><font color="#2e8b57"><b>client</b></font>=<font color="#ff00ff">&quot;bear*4.2.3*&quot;</font><font color="#008080"> </font><font color="#2e8b57"><b>type</b></font>=<font color="#ff00ff">&quot;regexp&quot;</font><font color="#008080"> </font><font color="#2e8b57"><b>active</b></font>=<font color="#ff00ff">&quot;no&quot;</font><font color="#008080"> </font><font color="#008080">/&gt;</font>
+
+      <font color="#0000ff">&lt;!</font><font color="#0000ff">-- Country bannings. You can ban countries or allow them against the</font>
+<font color="#0000ff">            general policy. Note that the country detection can't be 100%</font>
+<font color="#0000ff">            accurate, use it at your own risk! </font>
+<font color="#0000ff">           Use the code &quot;??&quot; to refer to unknown locations. </font>
+<font color="#0000ff">           Private addresses will not be checked.  --</font><font color="#0000ff">&gt;</font>
+      <font color="#008080">&lt;</font><font color="#008080">country</font><font color="#008080"> </font><font color="#2e8b57"><b>code</b></font>=<font color="#ff00ff">&quot;es&quot;</font><font color="#008080"> </font><font color="#2e8b57"><b>allow</b></font>=<font color="#ff00ff">&quot;yes&quot;</font><font color="#008080">/&gt;</font>
+      <font color="#0000ff">&lt;!</font><font color="#0000ff">-- Example of hypotetical banned country: --</font><font color="#0000ff">&gt;</font>
+      <font color="#008080">&lt;</font><font color="#008080">country</font><font color="#008080"> </font><font color="#2e8b57"><b>code</b></font>=<font color="#ff00ff">&quot;zz&quot;</font><font color="#008080"> </font><font color="#2e8b57"><b>allow</b></font>=<font color="#ff00ff">&quot;no&quot;</font><font color="#008080">/&gt;</font>
+   <font color="#008080">&lt;/security&gt;</font>
+
+   <font color="#0000ff">&lt;!</font><font color="#0000ff">-- CHAT --</font><font color="#0000ff">&gt;</font>
+   <font color="#008080">&lt;</font><font color="#008080">chat</font><font color="#008080"> </font><font color="#2e8b57"><b>logfile</b></font>=<font color="#ff00ff">&quot;log/chat.log&quot;</font><font color="#008080"> </font><font color="#2e8b57"><b>log</b></font>=<font color="#ff00ff">&quot;yes&quot;</font><font color="#008080">&gt;</font>
+      <font color="#0000ff">&lt;!</font><font color="#0000ff">-- Enable or disable it here --</font><font color="#0000ff">&gt;</font>
+      <font color="#0000ff">&lt;!</font><font color="#0000ff">-- Currently only chat for G2 is implemented --</font><font color="#0000ff">&gt;</font>
+      <font color="#008080">&lt;</font><font color="#008080">enabled</font><font color="#008080">&gt;</font>yes<font color="#008080">&lt;/enabled&gt;</font>
+      <font color="#0000ff">&lt;!</font><font color="#0000ff">-- Answering machine. You can select one of these:</font>
+<font color="#0000ff">            Away   : the standard away message below will be sent.</font>
+<font color="#0000ff">            Eliza  : a classic Eliza bot will chat with the requester.</font>
+<font color="#0000ff">            Random : one of the previous will be chosen randomly. --</font><font color="#0000ff">&gt;</font>
+      <font color="#008080">&lt;</font><font color="#008080">answer</font><font color="#008080">&gt;</font>Away<font color="#008080">&lt;/answer&gt;</font>
+      <font color="#008080">&lt;</font><font color="#008080">AwayMessage</font><font color="#008080">&gt;</font>Hello. This is an away bot, nobody here. My master is using Adagio server, you can check it at http://agio.sourceforge.net<font color="#008080">&lt;/AwayMessage&gt;</font>
+   <font color="#008080">&lt;/chat&gt;</font>
+
+   <font color="#0000ff">&lt;!</font><font color="#0000ff">-- DEBUG.</font>
+<font color="#0000ff">         active: enabled or not</font>
+<font color="#0000ff">         logfile: file to keep the log. Unbounded size.</font>
+<font color="#0000ff">         netlogfile: file to keep network related log.</font>
+<font color="#0000ff">         loglevel: Level of tracing: debug, informative, warning, error.</font>
+<font color="#0000ff">            Below warning level, messages are not relevant to the developer.</font>
+<font color="#0000ff">         ConsoleEcho: echoes traces in console. </font>
+<font color="#0000ff">            NOTE: You need a console-based platform (i.e. linux). In windows</font>
+<font color="#0000ff">               that will cause undefined (probably faultly) behavior.</font>
+<font color="#0000ff">         DebugStatistics: shows statistics about internal status.</font>
+<font color="#0000ff">         PurgeOnStartup: logfiles will be deleted in each run.</font>
+<font color="#0000ff">         MemoryPeriod: lap between memory usage counting</font>
+<font color="#0000ff">         CrawlerAllowed: Adagio will answer to crawler requests (this reveals</font>
+<font color="#0000ff">            your IP but not your Gnutella GUID).</font>
+<font color="#0000ff">   --</font><font color="#0000ff">&gt;</font>
+   <font color="#008080">&lt;</font><font color="#008080">debug</font><font color="#008080"> </font>
+<font color="#008080">      </font><font color="#2e8b57"><b>active</b></font>=<font color="#ff00ff">&quot;yes&quot;</font>
+<font color="#008080">      </font><font color="#2e8b57"><b>logfile</b></font>=<font color="#ff00ff">&quot;log/adagio.log&quot;</font><font color="#008080"> </font>
+<font color="#008080">      </font><font color="#2e8b57"><b>netlogfile</b></font>=<font color="#ff00ff">&quot;log/adagio.log&quot;</font>
+<font color="#008080">      </font><font color="#2e8b57"><b>loglevel</b></font>=<font color="#ff00ff">&quot;informative&quot;</font>
+<font color="#008080">      </font><font color="#2e8b57"><b>ConsoleEcho</b></font>=<font color="#ff00ff">&quot;no&quot;</font>
+<font color="#008080">      </font><font color="#2e8b57"><b>DebugStatistics</b></font>=<font color="#ff00ff">&quot;no&quot;</font>
+<font color="#008080">      </font><font color="#2e8b57"><b>PurgeOnStartup</b></font>=<font color="#ff00ff">&quot;yes&quot;</font>
+<font color="#008080">      </font><font color="#2e8b57"><b>heartbeat</b></font>=<font color="#ff00ff">&quot;1s&quot;</font>
+<font color="#008080">      </font><font color="#2e8b57"><b>MemoryPeriod</b></font>=<font color="#ff00ff">&quot;1m&quot;</font>
+<font color="#008080">      </font><font color="#2e8b57"><b>CrawlerAllowed</b></font>=<font color="#ff00ff">&quot;yes&quot;</font>
+<font color="#008080">   </font><font color="#008080">/&gt;</font>
+<font color="#008080">&lt;/adagio&gt;</font>
+</pre>
+</body>
+</html>

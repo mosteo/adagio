@@ -1,0 +1,83 @@
+<html>
+<head>
+   <title>Aenea Raw Statistics</title>
+	 <link rel="stylesheet" type="text/css" href="@_STYLE_@" />
+</head>
+<body bgcolor="#ffffff" text="#000000">
+<pre class="report">
+Aenea raw statistics
+====================
+
+Current hubs          : @_hubs_@
+Current leaves        : @_leaves_@
+Current unique nodes  : @_uniquenodes_@
+<!--Estimated network size: @_netsize_@-->
+Avg leaves per hub    : @_leavesperhub_@
+Avg leaf-to-hub links : @_hubsperleaf_@
+
+Tracked hosts         : @_tracked_@
+Last purge (hubs)     : @_purged_@
+Last purge (unique)   : @_purgedunique_@
+
+Pending inbound       : @_inpackets_@
+Pending outbound      : @_packets_@
+
+Planned events        : @_events_@
+Next event deadline   : @_nextevent_@
+Last overtimed task   : @_overtimedtask_@
+Overtimed cycle dur.  : @_overtime_@
+<!--
+Last check time       : @_checkerlast_@
+Last event kind       : @_eventkind_@
+Longest event duration: @_eventmax_@
+-->
+@@IF@@ @_memory_@ = "0.00 B"
+Memory usage          : Unknown
+Memory usage peak     : Unknown
+@@ELSE@@
+Memory usage          : @_memory_@
+Memory usage peak     : @_memorypeak_@
+@@END_IF@@
+Uptime                : @_uptime_@
+Time to reboot        : @_reboot_@
+
+
+Explanation
+===========
+Current hubs          : Number of alive hubs detected by the crawler.
+Current leaves        : Sum of the leaves reported by each hub. Thus every leaf
+                        is counted as many times as hubs it's connected to.
+Current unique nodes  : Unique nodes detected participating in the network,
+                        including both hubs and leaves. This is the most accurate
+                        value known for the network size. The size shown in the
+                        frontpage is the last 15 minutes average of this value.
+Avg leaves per hub    : Current leaves / Current hubs
+Avg leaf-to-hub links : Current leaves / (Current unique nodes - Current hubs) =
+                        Current leaves / Current unique leaves
+                        This is the mean of hubs used by each leaf.
+Tracked hosts         : The crawler tracks for some time hubs that have ceased
+                        to answer, for the case it is a transitory problem. This
+                        number represents the totality of hubs that are tracked.
+Last purge (hubs)     : Silent hubs that have been removed from tracking in the
+                        last purge operation.
+Last purge (unique)   : Removed nodes from the "unique node" list in the last purge.
+Pending inbound       : Incoming UDP packets not yet processed.
+Pending outbound      : Outgoing UDP packets waiting to be sent.
+Planned events        : The crawler uses a event-driven mechanism. This number
+                        says how many events are planned for the future. It should
+                        match the number of tracked hosts.
+Next event deadline   : Seconds until next event will fire.
+Last check time       : Seconds since some event/packet arrival/packet departure.
+Last event kind       : Last function called.
+Longest event duration: Time used in the longest event processing.
+Last overtimed task   : A cyclic task whose period has been unduely exceeded.
+Memory usage          : Current heap memory used.
+Memory usage peak     : Maximum memory usage happened.
+Uptime                : Time since crawler launch.
+Time to reboot        : The crawler can be scheduled to be rebooted. This value
+                        says the remaining time for this to happen.
+</pre>
+<p>
+@@INCLUDE@@ footer.html
+</body>
+</html>

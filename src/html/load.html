@@ -1,0 +1,153 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+    <link rel="stylesheet" type="text/css" href="@_STYLE_@">
+    <title>Server Load</title>
+    <meta http-equiv="refresh" content="15">
+  </head>
+  <body>
+    <!--
+        SINGLE1   <- TCP in usage avg 1 mins descr
+        SINGLE2   <- TCP in usage avg 1 mins %
+        SINGLE14  <- TCP out usage avg 1 mins descr
+        SINGLE15  <- TCP out usage avg 1 mins %
+        SINGLE3   <- UDP in usage avg 1 mins descr
+        SINGLE4   <- UDP in usage avg 1 mins %
+        SINGLE5   <- UDP out usage avg 1 mins descr
+        SINGLE6   <- UDP out usage avg 1 mins %
+        SINGLE7   <- UDP in pending packets
+        SINGLE8   <- UDP %
+        SINGLE9   <- UDP out pending packets
+        SINGLE10   <- UDP out %
+        SINGLE11   <- UDP out throttled
+        SINGLE12   <- Queued slots
+        SINGLE13   <- Memory usage
+        SINGLE16   <- Rounded to MBs
+        SINGLE17   <- Concurrent searches
+        SINGLE18   <- Concurrent searches %
+        SINGLE19   <- Seconds to empty pending outbound UDP queue
+        SINGLE20   <- Seconds of remote latency
+        SINGLE21   <- Beautified string of remote latency
+    -->
+    <div id="contents">
+      <div id="main">
+        <div id="title">Server load</div>
+        <div class="refresh">[ <a href="load.html">Refresh</a> ]</div>
+        <div id="menubar">&nbsp;</div>
+        <table border="0">
+           <tr>
+              <td>TCP inbound bandwidth usage (1min avg)</td>
+              <td>
+                 <table><tr>
+                       <td width="@_SINGLE2_@" bgcolor="red"></td> 
+                       <td>@_SINGLE1_@/s (@_SINGLE2_@%)</td>
+                 </tr></table>
+              </td>
+           </tr>
+           <tr>
+              <td>TCP outbound bandwidth usage (1min avg)</td>
+              <td>
+                 <table><tr>
+                       <td width="@_SINGLE15_@" bgcolor="red"></td> 
+                       <td>@_SINGLE14_@/s (@_SINGLE15_@%)</td>
+                 </tr></table>
+              </td>
+           </tr>
+           <tr>
+              <td>UDP inbound bandwidth usage (1min avg)</td>
+              <td>
+                 <table><tr>
+                       <td width="@_SINGLE4_@" bgcolor="red"></td> 
+                       <td>@_SINGLE3_@/s (@_SINGLE4_@%)</td>
+                 </tr></table>
+              </td>
+           </tr>
+           <tr>
+              <td>UDP outbound bandwidth usage (1min avg)</td>
+              <td>
+                 <table><tr>
+                       <td width="@_SINGLE6_@" bgcolor="red"></td> 
+                       <td>@_SINGLE5_@/s (@_SINGLE6_@%)</td>
+                 </tr></table>
+              </td>
+           </tr>
+           <tr>
+              <td>UDP inbound incomplete packets</td>
+              <td>
+                 <table><tr>
+                       <td width="@_SINGLE8_@" bgcolor="red"></td> 
+                       <td>@_SINGLE7_@ (@_SINGLE8_@%)</td>
+                 </tr></table>
+              </td>
+           </tr>
+           <tr>
+              <td>UDP outbound unacknowledged packets</td>
+              <td>
+                 <table><tr>
+                       <td width="@_SINGLE10_@" bgcolor="red"></td> 
+                       <td>@_SINGLE9_@ (@_SINGLE10_@%)</td>
+                 </tr></table>
+              </td>
+           </tr>
+           <tr>
+              <td>UDP outbound waiting packets</td>
+              <td>
+                 <table><tr>
+                       <td width="@_SINGLE11_@" bgcolor="red"></td> 
+                       <td>@_SINGLE11_@</td>
+                 </tr></table>
+              </td>
+           </tr>
+           <tr>
+              <td>UDP outbound latency</td>
+              <td>
+                 <table><tr>
+                       <td width="@_SINGLE19_@" bgcolor="red"></td> 
+                       <td>@_SINGLE19_@s</td>
+                 </tr></table>
+              </td>
+           </tr>
+           <tr>
+              <td>Queue slots in use</td>
+              <td>
+                 <table><tr>
+                       <td width="@_SINGLE12_@" bgcolor="red"></td> 
+                       <td>@_SINGLE12_@</td>
+                 </tr></table>
+              </td>
+           </tr>
+           <tr>
+              <td>Concurrent queries</td>
+              <td>
+                 <table><tr>
+                       <td width="@_SINGLE18_@" bgcolor="red"></td> 
+                       <td>@_SINGLE17_@ (@_SINGLE18_@%)</td>
+                 </tr></table>
+              </td>
+           </tr>
+           <tr>
+              <td>Remote searching latency</td>
+              <td>
+                 <table><tr>
+                       <td width="@_"/"(3):SINGLE20_@" bgcolor="red"></td> 
+                       <td>@_SINGLE21_@ (@_SINGLE20_@s)</td>
+                 </tr></table>
+              </td>
+           </tr>
+           <tr>
+              <td>Memory usage</td>
+              <td>
+                 <table><tr>
+                       <td width="@_"*"(2):SINGLE16_@" bgcolor="red"></td> 
+                       <td>@_SINGLE13_@</td>
+                 </tr></table>
+              </td>
+           </tr>
+        </table>
+      </div>
+      @@INCLUDE@@ footer.html
+    </div>
+  </body>
+</html>
+

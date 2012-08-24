@@ -1,0 +1,106 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html>
+<head>
+		<title>Gnutella2 current hubs</title>
+		<link rel="stylesheet" type="text/css" href="@_STYLE_@">
+</head>
+
+<body>   
+   <div id="contents">
+   <div id="main">
+   <center><p class="title">Gnutella2 hub list</p>
+   <p>This page is updated every twelve hours, starting at 02:45am GMT+1</p>
+    <table summary="G2 current hubs" border="1" cellspacing="1">
+       <!-- Current last parameter is VALUE14 -->
+		    <tr class="header">
+		        <td class="header">#</td>
+              <td class="header">&nbsp;Location&nbsp;</td>
+		        <td class="header">&nbsp;Address&nbsp;</td>
+		        <td class="header">&nbsp;Leaves&nbsp;</td>
+		        <td class="header">&nbsp;Vendor&nbsp;</td>
+		        <td class="header">&nbsp;Version&nbsp;</td>
+		        <td class="header">&nbsp;Queries&nbsp;</td>
+		        <td class="header">&nbsp;Answers&nbsp;</td>
+		        <td class="header">&nbsp;In a row&nbsp;</td>
+		        <td class="header">&nbsp;Failures&nbsp;</td>
+		        <td class="header">&nbsp;First seen&nbsp;</td>
+		        <td class="header">&nbsp;Last seen&nbsp;</td>
+		        <td class="header">&nbsp;Answer pending&nbsp;</td>
+		        <td class="header">&nbsp;Scheduled&nbsp;</td>
+		    </tr>
+		    @@TABLE@@
+		    <tr>						
+		        <td class="contentodd">@_TABLE_LINE_@</td>
+              <td class="contentodd">
+                 <div align="left">
+                    <img src="zflag_@_LOWER:VALUE12_@.png" alt="@_VALUE12_@" align="absmiddle" width="14" height="14">&nbsp;@_VALUE11_@</td></div>
+		        <td class="contentodd">@_WEB_ESCAPE:VALUE1_@</td>
+		        <td class="contentodd">@_VALUE13_@</td>
+		        <td class="contentodd">@_TRIM:WEB_ESCAPE:VALUE14_@</td>
+		        <td class="contentodd">@_TRIM:VALUE2_@</td>
+		        <td class="contentodd">@_TRIM:VALUE3_@</td>
+		        <td class="contentodd">@_TRIM:VALUE4_@</td>
+		        <td class="contentodd">@_TRIM:VALUE5_@</td>
+		        <td class="contentodd">@_TRIM:VALUE10_@</td>
+		        <td class="contentodd">@_VALUE6_@</td>
+		        <td class="contentodd">@_VALUE7_@</td>
+		        <td class="contentodd">
+		            @@IF@@ @_YES_NO:LOWER:VALUE8_@ = yes
+		            <div class="yes">
+		            @@ELSE@@
+		            <div class="no">
+		            @@END_IF@@
+		            @_LOWER:VALUE8_@</div>
+		        </td>
+		        <td class="contentodd">
+		            @@IF@@ @_YES_NO:LOWER:VALUE9_@ = yes
+		            <div class="yes">
+		            @@ELSE@@
+		            <div class="no">
+		            @@END_IF@@
+		            @_LOWER:VALUE9_@</div>
+		        </td>
+		    </tr>
+		    @@SECTION@@
+		    <tr>
+		        <td class="contenteven">@_TABLE_LINE_@</td>
+              <td class="contenteven">
+                 <div align="left">
+                    <img src="zflag_@_LOWER:VALUE12_@.png" alt="@_VALUE12_@" valign="absmiddle" width="14" height="14">&nbsp;@_VALUE11_@</td></div>
+		        <td class="contenteven">@_WEB_ESCAPE:VALUE1_@</td>
+		        <td class="contenteven">@_VALUE13_@</td>
+		        <td class="contenteven">@_TRIM:WEB_ESCAPE:VALUE14_@</td>
+		        <td class="contenteven">@_TRIM:VALUE2_@</td>
+		        <td class="contenteven">@_TRIM:VALUE3_@</td>
+		        <td class="contenteven">@_TRIM:VALUE4_@</td>
+		        <td class="contenteven">@_TRIM:VALUE5_@</td>
+              <td class="contenteven">@_TRIM:VALUE10_@</td>
+		        <td class="contenteven">@_VALUE6_@</td>
+		        <td class="contenteven">@_VALUE7_@</td>
+		        <td class="contenteven">
+		            @@IF@@ @_YES_NO:LOWER:VALUE8_@ = yes
+		            <div class="yes">
+		            @@ELSE@@
+		            <div class="no">
+		            @@END_IF@@
+		            @_LOWER:VALUE8_@</div>
+		        </td>
+		        <td class="contenteven">
+		            @@IF@@ @_YES_NO:LOWER:VALUE9_@ = yes
+		            <div class="yes">
+		            @@ELSE@@
+		            <div class="no">
+		            @@END_IF@@
+		            @_LOWER:VALUE9_@</div>
+		        </td>
+		    </tr>
+		    @@END_TABLE@@
+		</table>
+         <p>@_PAGER_@<p>
+      </center>
+      </div>
+@@INCLUDE@@ footer.html
+</div>
+</body>
+</html>

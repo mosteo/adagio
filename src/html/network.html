@@ -1,0 +1,122 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+    <link rel="stylesheet" type="text/css" href="@_STYLE_@">
+    <title>Network status</title>
+    <meta http-equiv="refresh" content="15">
+  </head>
+  <body>
+    <!--
+        SINGLE1   <- Tracked hubs (not necessarily alive)
+        SINGLE2   <- Alive hubs
+        SINGLE3   <- Alive leaves (raw, with duplicates)
+        SINGLE4   <- Density (leaves/hubs)
+        SINGLE5   <- Alive/Tracked %
+        SINGLE6   <- Estimated network size (leaves/2 + alive hubs)
+
+        VALUE1    <- IP
+        VALUE2    <- Next query time
+        VALUE3    <- Last msg received time
+        VALUE4    <- Last answer time
+        VALUE5    <- Leaves
+        VALUE6    <- Growing
+    -->
+    <div id="contents">
+      <div id="main">
+         <span id="title">Network status</span>
+         <div id="menubar">
+         <a href="http://adagio.mosteo.com/crawler.html">Historical graphs</a>
+         | <a href="http://adagio.mosteo.com/snapshots/countries/countries.html">Geographical statistics</a>
+         | <a href="http://adagio.mosteo.com/snapshots/versions/versions.html">Client versions</a>
+         | <a href="http://adagio.mosteo.com/snapshots/vendors/vendors.html">Implementations</a>
+         </div>
+         <div class="refresh">[ <a href="network.html">Refresh</a> ]</div>
+         <p>Note that the above links are external.</p>                                    
+         <p>Values below are obtained from the search engine. If you don't have running searches they will be useless.</p>
+        <table border="0">
+           <tr>
+              <td>Estimated search horizon:</td>
+              <td>
+                 <table><tr>
+                       <td width="@_"/"(400):SINGLE6_@" bgcolor="red"></td> 
+                       <td>@_SINGLE6_@</td>
+                 </tr></table>
+              </td>
+           </tr>
+           <tr>
+              <td>Raw leaves count:</td>
+              <td>
+                 <table><tr>
+                       <td width="@_"/"(400):SINGLE3_@" bgcolor="red"></td> 
+                       <td>@_SINGLE3_@</td>
+                 </tr></table>
+              </td>
+           </tr>
+           <tr>
+              <td>Density (Leaves per hub):</td>
+              <td>
+                 <table><tr>
+                       <td width="@_SINGLE4_@" bgcolor="red"></td> 
+                       <td>@_SINGLE4_@</td>
+                 </tr></table>
+              </td>
+           </tr>
+           <tr>
+              <td>Alive hubs:</td>
+              <td>
+                 <table><tr>
+                       <td width="@_"/"(20):SINGLE2_@" bgcolor="red"></td> 
+                       <td>@_SINGLE2_@</td>
+                 </tr></table>
+              </td>
+           </tr>
+           <tr>
+              <td>Candidate Hubs:</td>
+              <td>
+                 <table><tr>
+                       <td width="@_"/"(20):SINGLE1_@" bgcolor="red"></td> 
+                       <td>@_SINGLE1_@</td>
+                 </tr></table>
+              </td>
+           </tr>
+           <tr>
+              <td>Efficiency:</td>
+              <td>
+                 <table><tr>
+                       <td width="@_SINGLE5_@" bgcolor="red"></td> 
+                       <td>@_SINGLE5_@%</td>
+                 </tr></table>
+              </td>
+           </tr>
+        </table>
+        <br>
+            <table summary="G2 Hubs" border="1" cellspacing="0" class="dataset">
+               <tr class="header">
+                  <td class="header" align="center">#</td>
+                  <td class="header">IP&nbsp;<a href="network.html?orden=1&amp;sentido=true"><img src="up.gif" border="0" alt="Sort descending"></a><a href="network.html?orden=1&amp;sentido=false"><img src="do.gif" border="0" alt="Sort ascending"></a></td>
+                  <td class="header">Next&nbsp;Query&nbsp;<a href="network.html?orden=2&amp;sentido=true"><img src="up.gif" border="0" alt="Sort descending"></a><a href="network.html?orden=2&amp;sentido=false"><img src="do.gif" border="0" alt="Sort ascending"></a></td>
+                  <td class="header">Last&nbsp;Msg&nbsp;Sent&nbsp;<a href="network.html?orden=3&amp;sentido=true"><img src="up.gif" border="0" alt="Sort descending"></a><a href="network.html?orden=3&amp;sentido=false"><img src="do.gif" border="0" alt="Sort ascending"></a></td>
+                  <td class="header">Last&nbsp;Answer&nbsp;<a href="network.html?orden=4&amp;sentido=true"><img src="up.gif" border="0" alt="Sort descending"></a><a href="network.html?orden=4&amp;sentido=false"><img src="do.gif" border="0" alt="Sort ascending"></a></td>
+                  <td class="header">Leaves&nbsp;<a href="network.html?orden=5&amp;sentido=true"><img src="up.gif" border="0" alt="Sort descending"></a><a href="network.html?orden=5&amp;sentido=false"><img src="do.gif" border="0" alt="Sort ascending"></a></td>
+                  <td class="header">Waiting growth&nbsp;<a href="network.html?orden=6&amp;sentido=true"><img src="up.gif" border="0" alt="Sort descending"></a><a href="network.html?orden=6&amp;sentido=false"><img src="do.gif" border="0" alt="Sort ascending"></a></td>
+             </tr>
+             @@TABLE@@
+             <tr valign="middle">						
+                 <td class="contentodd" align="right">@_TABLE_LINE_@</td>
+                 <td class="contentodd">@_VALUE1_@</td>                 
+                 <td class="contentodd" align="right">@_VALUE2_@</td>
+                 <td class="contentodd" align="right">@_VALUE3_@</td>
+                 <td class="contentodd" align="right">@_VALUE4_@</td>
+                 <td class="contentodd" align="right">@_VALUE5_@</td>
+                 <td class="contentodd" align="right">@_CAPITALIZE:VALUE6_@</td>
+             </tr>
+             @@END_TABLE@@
+         </table>
+         <p>@_PAGER_@<p>
+      </div>
+      @@INCLUDE@@ footer.html
+    </div>
+  </body>
+</html>
+

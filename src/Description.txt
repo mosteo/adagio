@@ -1,0 +1,33 @@
+ADAGIO
+
+Adagio aims to provide a server-only solution for the
+Gnutella2 protocol (www.gnutella2.com). It's primary purpose
+is to implement all the aspects of this protocol related to serving
+capabilities, that principally comprise: Library maintenance, local
+querying and hits reporting and upload capabilities to remote clients.
+
+Other related features are bandwidth throttling, multiple queues and,
+in general, any complementary aspects that can enhance the server
+task.
+
+This project intends to fill the void in currently existing
+applications for Gnutella2. The only complete client in existence is
+Shareaza (www.shareaza.com) which is only Win32 based. Adagio, in the
+contrary, is developed using the freely available Gnat Ada compiler,
+which exists for a variety of platforms.
+
+Adagio is designed as a stand-alone application that runs as a service
+and that is configured via a simple XML file, in similar fashion to
+other server software as is, for example, Apache HTTP server or Resin
+servlet container. The lack of a GUI and the multiple platform nature
+of Gnat ensures a good cross-platform portability and availability,
+which is of special interest for this project, given that it can
+enable distributors in any major platform to publish its data in the
+Gnutella2 network.
+
+Other technical features of Adagio are derived from the use of Ada:
+High reliability is expected for long uptimes, multitasking is fully
+profited by mean of the native capabilities in the Ada language, etc.
+
+Adagio is distributed for free under the GPL license.
+

@@ -1,0 +1,76 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html>
+<head>
+   <title>Gnutella2 vendors</title>
+		<link rel="stylesheet" type="text/css" href="@_STYLE_@">
+</head>
+
+<body>
+   <div id="contents">
+   <div id="main">
+   <center>
+      <p class="title">Gnutella2 vendors</p>
+      <p>This table is updated every hour</p>
+      <table summary="G2 vendors" border="1" cellspacing="0" cellpadding="0">
+         <!--
+            parameters:
+               VALUE1  <- key
+               VALUE2  <- value
+               VALUE3  <- percent
+               VALUE4  <- rounded percent
+               VALUE5  <- rounded normalization
+               SINGLE1 <- total
+         -->
+		    <tr class="header">
+		      <td class="header">#</td>
+            <td class="header">&nbsp;Code&nbsp;</td>
+            <td class="header">&nbsp;Number of hubs&nbsp;</td>
+		    </tr>
+		    @@TABLE@@
+		    <tr>
+		        <td class="contentodd">@_TABLE_LINE_@</td>
+		        <td class="contentodd">@_VALUE1_@</td>
+              <td class="contentodd">
+                 <div align="left">
+                    <table>
+                       <tr>
+                          <td valign="center">
+                             <table>
+                                <tr>
+                                   <td class="countrygraph" width="@_"*"(6):VALUE5_@"/>
+                                </tr>
+                             </table>
+                          </td>
+                          <td class="percountry" style="font-size:xx-small"><b>@_VALUE2_@</b>&nbsp;
+                             <span style="color:black">(@_VALUE3_@%)</span></td>
+                       </tr>
+                    </table>
+                 </div>
+              </td>
+		    </tr>
+		    @@END_TABLE@@
+		</table>
+
+      <p style="font-size:x-small">
+      Total: <b class="navy">@_SINGLE1_@</b>
+      </p>
+
+      <p>These graphs are updated every night at 6:00 am. All times are GMT+1.</p>
+      <p><span class="subtitle">LAST 24 HOURS</span><br>
+      <img src="vendors1.png" alt="24 hour"></p>
+      <p><span class="subtitle">LAST 7 DAYS</span><br>
+      <img src="vendors2.png" alt="7 days"></p>
+      <p><span class="subtitle">LAST 30 DAYS</span><br>
+      <img src="vendors3.png" alt="30 days"></p>
+      <p><span class="subtitle">LAST 365 DAYS</span><br>
+      <img src="vendors4.png" alt="365 days"></p>
+      <p><span class="subtitle">FULL HISTORY</span><br>
+      <img src="vendors5.png" alt="Full history"></p>
+   </center>
+
+   </div>
+@@INCLUDE@@ footer.html
+</div>
+</body>
+</html>

@@ -1,0 +1,22 @@
+<html>
+<head>
+   <title>404 - Not found</title>
+	 <link rel="stylesheet" type="text/css" href="@_STYLE_@" />
+</head>
+<body bgcolor="#ffffff" text="#000000">
+@@INCLUDE@@ header.html
+<div class="report">
+<p>Aenea error page
+<br>================
+
+<p>The requested service is unknown.
+
+<p>Valid services are:
+@@TABLE@@
+<br><a href="@_SERVICE_@">@_SERVICE_@</a>
+@@END_TABLE@@
+
+<p></div>
+@@INCLUDE@@ footer.html
+</body>
+</html>

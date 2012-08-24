@@ -1,0 +1,216 @@
+# Win32 only: If you want a console window to show logs, comment this line:
+#LINKMW=-mwindows
+
+###########################################
+## NO CHANGES TO BE MADE BELOW THIS LINE ##
+###########################################
+
+NAME=aenea
+FOLDER=aenea-crawler
+MAIN=../$(FOLDER)/aenea_main.adb
+
+GESQL=/c/prog/gnade/win32/gesql
+
+# OS dependant things.
+ifeq ($(OS), Windows_NT)
+OS_DIR=../os_win
+EXT=.exe
+else
+OS_DIR=../os_linux
+EXT=
+LINKMW=
+endif
+
+# Our libraries:
+ADAGIO=../kernel -I../storage -I$(OS_DIR) -I../misc -I../network -I../gui -I../library -I../g2 -I../tasking -I../upload -I../ed2k -I../$(FOLDER) -I../agpl -I../$(FOLDER)/html -I../gnatextra -I../search -I../obj_embed -I../download -I../../containers -I../../gnade/include
+
+# Third party libraries:
+ACF=../../adacf/src
+AWS=../../aws/src -I../../aws/include -I../../aws/soap -I../../aws/ssl
+CHARLES=../../charles
+GNATCOM=../../gnatcom/bindings
+PRAGMARC=../../pragmarc
+XMLADA=../../xmlada/sax -I../../xmlada/dom -I../../xmlada/input_sources -I../../xmlada/unicode
+ZLIB=../../zlibada
+
+# Win32 specific dependences
+ifeq ($(OS), Windows_NT)
+LINKPATCH=-L../obj_patch
+INCPATCH=-I../obj_patch 
+DEPEND=gnatpatch
+ODBC=../$(FOLDER)/bd_odbc
+LINKODBC=-lodbc32
+DEPRES=winres
+LINKRES=../obj_gnat/$(NAME)res.o
+else
+ODBC=../$(FOLDER)/bd_pgsql
+endif
+
+
+# Full libraries:
+INCLUDE=$(ACF) -I$(AWS) -I$(ADAGIO) -I$(CHARLES) -I$(GNATCOM) -I$(XMLADA) -I$(PRAGMARC) -I$(ZLIB) -I../obj_gnat $(INCPATCH) -I$(ODBC)
+
+# Linker options
+#LEXTRA=-Xlinker --stack=0x10000,0x1000
+#POSTOPT=--stack=0x8000000,0x8000000
+
+LINK=-bargs -E -largs $(LINKPATCH) -L../obj_gnat -L../../zlibc -lz -L../../aws/ssl $(LINKMW) $(LEXTRA) $(LINKODBC)
+LINKTEST=-bargs -E -largs -L$(LINKPATCH) -L../obj_gnat -L../../zlibc -lz -L../../aws/ssl #-lgmem
+LINKMPROF=$(LINK) -lgmem
+
+# Common options:
+COMMON=-gnatf -gnatec../gnat.adc # -gnatP
+# Polling is disabled because it really eats CPU.
+
+# Aditional options to gnatmake:
+DEBUG=-g -gnatwpru -fstack-check -gnata -gnato -O2
+RELEASE=-O3 -g -gnato -gnatn
+PROFILE=-g -pg # -fprofile-arcs -ftest-coverage -fstack-check
+
+# ------------- REGULAR TARGETS ------------------
+default:
+	make -f Makefile-$(NAME) lite 
+
+profile: zlib nossl force gnatextra awsres dummy_embed $(DEPRES) $(DEPEND)
+	mkdir -p obj_profile
+	cd obj_profile && gnatmake -o ../$(NAME)$(EXT) $(COMMON) $(PROFILE) $(MAIN) -I$(INCLUDE) $(LINK) $(LINKRES) $(POSTOPT)
+
+mprofile: zlib nossl force gnatextra awsres dummy_embed $(DEPRES) $(DEPEND)
+	mkdir -p obj_mprofile
+	cd obj_mprofile && gnatmake -o ../$(NAME)$(EXT) $(COMMON) $(DEBUG) $(MAIN) -I$(INCLUDE) $(LINKMPROF) $(LINKRES) $(POSTOPT)
+
+debug: $(DEPEND) zlib nossl force gnatextra awsres dummy_embed $(DEPRES)
+	mkdir -p obj_debug 
+	cd obj_debug && gnatmake -o ../$(NAME)$(EXT) $(COMMON) $(DEBUG) $(MAIN) -I$(INCLUDE) $(LINK) $(LINKRES) $(POSTOPT) 
+
+release: $(DEPEND) zlib nossl force gnatextra awsres dummy_embed $(DEPRES)
+	mkdir -p obj_release
+	cd obj_release && gnatmake -o ../$(NAME)$(EXT) $(COMMON) $(RELEASE) $(MAIN) -I$(INCLUDE) $(LINK) $(LINKRES) $(POSTOPT)
+
+lite: 
+	mkdir -p obj_debug 
+	cd obj_debug && gnatmake -o ../$(NAME)$(EXT) $(COMMON) $(DEBUG) $(MAIN) -I$(INCLUDE) $(LINK) $(LINKRES) $(POSTOPT) 
+
+all: force
+	make -f Makefile-$(NAME) release
+
+packed: $(DEPEND) zlib nossl force gnatextra awsres embed $(DEPRES)
+	rm -f aenea.gz
+	mkdir -p obj_release
+	cd obj_release && gnatmake -o ../$(NAME)$(EXT) $(COMMON) $(RELEASE) $(MAIN) -I$(INCLUDE) $(LINK) $(LINKRES) $(POSTOPT)
+	gzip -9 $(NAME)$(EXT)
+
+sql:
+	$(GESQL) $(FOLDER)/$(ODBC)/*.adq
+
+htmlfull: debug
+	mkdir -p ../htmldocs/$(NAME)
+	cd obj_debug && perl ../../gnathtml/gnathtml.pl -d -o ../../htmldocs/$(NAME) main.adb -I$(INCLUDE)
+
+zlib:
+	make -C ../zlibc libz.a
+
+nossl:
+	make -C ../aws/ssl build
+
+gnatpatch:
+	mkdir -p obj_patch
+	cd obj_patch && gnatmake -a -u ../../gnatpatch/*.ad?
+
+diagprofile:
+	gprof $(NAME)$(EXT) > log/profile.txt
+
+diagmemory:
+	gnatmem 10 -i gmem.out $(NAME)$(EXT) > log/memory.txt
+
+gnatextra: force
+	mkdir -p obj_gnat
+	cd obj_gnat && gnatmake -a -u ../network/g-socext.adb
+	cd obj_gnat && gnatmake -a -u ../gnatextra/*.ad?
+	cd obj_gnat && gnatmake -a -u -O2 -g ../../containers/a-contai.ads
+	cd obj_gnat && gnatmake -a -u -O2 -g ../../containers/a-crbltr.ads
+	cd obj_gnat && gnatmake -a -u -O2 -g ../../containers/a-cohata.ads
+	cd obj_gnat && gnatmake -a -u -O2 -g ../../containers/a-coprnu.adb
+	cd obj_gnat && gnatmake -a -u -O2 -g ../../containers/a-strhas.adb
+
+winres:
+	mkdir -p obj_gnat
+	rcl -i $(FOLDER)/$(NAME).rc -o obj_gnat/$(NAME)res.o
+
+awsres: gnatextra $(DEPEND)
+	mkdir -p obj_gnat
+	cd obj_gnat && gnatmake -I../gnatextra -I../obj_patch -I../../aws/src ../../aws/src/awsres.adb
+
+dummy_embed:
+	rm -rf obj_embed
+	mkdir -p obj_embed
+	echo "dummy" > obj_embed/dummy.txt
+	cd obj_embed && ../obj_gnat/awsres$(EXT) -r $(NAME)_resources dummy.txt
+
+embed: awsres
+	rm -rf obj_embed
+	mkdir -p obj_embed
+	cp $(FOLDER)/html/*.* obj_embed
+	cp ../geoip/*.csv obj_embed
+	cd obj_embed && ../obj_gnat/awsres$(EXT) -r $(NAME)_resources *
+
+fullres: gnatextra $(DEPEND)
+	mkdir -p obj_gnat
+	cd obj_gnat && gnatmake -I../gnatextra -I../obj_patch -I../../aws/src ../../aws/src/awsres.adb
+	#cp -f ../geoip/geoip.csv $(FOLDER)/html
+	cd $(FOLDER)/html/ && ../../obj_gnat/awsres$(EXT) -r $(NAME)_resources *.html #*.txt *.css *.gif *.png *.jpg *.csv
+
+# ---------------- DEPLOYMENT TARGETS -----------------
+
+dist-src:
+	echo Building sources...
+	make htmlfull
+	echo You can now commit all changes.
+
+dist-linux:
+	echo Building Linux...
+	rm -rf obj_install
+	make release
+	make utils
+	strip $(NAME)$(EXT)
+	mkdir -p obj_install
+	mkdir -p obj_install/$(FOLDER)
+	mkdir -p obj_install/$(FOLDER)/data
+	mkdir -p obj_install/$(FOLDER)/log
+	mkdir -p obj_install/$(FOLDER)/conf_samples
+	cp -f $(NAME).xml conf_samples
+	cp conf_samples/$(FOLDER)/*.xml obj_install/$(FOLDER)/conf_samples
+	cp $(FOLDER)/Changes.txt License.txt obj_install/$(FOLDER)
+	cp $(FOLDER)$(EXT) obj_install/$(FOLDER)
+	cp $(NAME).xml $(NAME).xml.html obj_install/$(FOLDER)
+	# Packaging
+	rm -f obj_install/$(NAME)-bin-linux.*
+	cd obj_install && tar cf $(NAME)-bin-linux.tar adagio
+	rm -f /tmp/$(NAME)-bin-linux.*
+	cp -f obj_install/$(NAME)-bin-linux.tar /tmp
+	gzip -9 /tmp/$(NAME)-bin-linux.tar
+	cp -f /tmp/$(NAME)-bin-linux.tar.gz $(NAME)-bin-linux.tgz
+
+dist-win32:
+	echo Building win32...
+	rm -rf obj_install
+	make all
+	strip adagio$(EXT)
+	strip agioutils$(EXT)
+	mkdir -p obj_install
+	mkdir -p obj_install/data
+	mkdir -p obj_install/log
+	mkdir -p obj_install/conf_samples
+	cp -f adagio.xml conf_samples
+	cp conf_samples/*.xml obj_install/conf_samples
+	cp Changes.txt Bugs.txt License.txt Missing.txt obj_install
+	cp security* obj_install
+	cp README obj_install/README.txt
+	cp adagio$(EXT) agioutils$(EXT) agiomon.jar obj_install
+	cp adagio.xml adagio.xml.html obj_install
+	# Installer things now
+	$(NSIS)/makensis adagio-win32.nsi
+
+force:
+	mkdir -p data
+	mkdir -p log

@@ -1,0 +1,1045 @@
+$Id: Changes.txt,v 1.38 2004/03/29 19:13:30 Jano Exp $
+
+Ada Gnutella2 Input/Output
+
+--------------
+-- Legend ----
+--------------
+[*] Comments
+[+] Additions
+[-] Supressions
+[!] Bug fixes
+[?] Unconfirmed data
+[X] Milestones (version changes)
+
+--------------
+-- 20041130 --
+--------------
+[+] Source.Http.Create.
+--------------
+-- 20041128 --
+--------------
+[+] Checker tasks for downloads.
+--------------
+-- 20041125 --
+--------------
+[*] Unstoppable advance towards downloading!
+--------------
+-- 20041124 --
+--------------
+[+] Matching of hits and downloads to add sources.
+[+] Agpl.Streams.Buffered_Unbounded.
+[+] Adagio.Http.Handshaker.
+--------------
+-- 20041122 --
+--------------
+[+] Source factory infrastructure.
+--------------
+-- 20041118 --
+--------------
+[+] Pagination for HTTP listings.
+[+] Saving of downloads metadata started.
+--------------
+-- 20041117 --
+--------------
+[+] Agpl.Xml escaping/unescaping functions.
+--------------
+-- 20041116 --
+--------------
+[+] Downloads basic initialization.
+--------------
+-- 20041110 --
+--------------
+[+] Agpl.Streams.Deflate_Unbounded (tested).
+[+] Agpl.Streams.Bandwidth_Throttle (tested).
+[*] Timed graphs and then... downloading.
+--------------
+-- 20041109 --
+--------------
+[+] Agpl.Bandwidth_Throttle (copy of Adagio.Bandwidth_Manager).
+--------------
+-- 20041108 --
+--------------
+[+] Agpl.Streams.Circular_Unbounded (tested).
+--------------
+-- 20041103 --
+--------------
+[+] Agpl.Streams.Deflate finished and tested.
+[*] Must do unbounded versions of Streams.Circular and Streams.Deflate
+--------------
+-- 20041010 --
+--------------
+[!] Leak in Udp_Message. Forgot to remove a Debug_Pool.
+--------------
+-- 20040927 --
+--------------
+[+] Downloads are listed in its own page (tho they don't do anything).
+--------------
+-- 20040926 --
+--------------
+[+] Minor progress.
+--------------
+-- 20040829 --
+--------------
+[!] Corrected mis-encoding of '.' and ':' in magnets.
+[!] Hits were being saved repeatedly even if unchanged.
+--------------
+-- 20040819 --
+--------------
+[+] Agpl.Segmented_Thing in preparation for partial files.
+[!] Minor html flaws.
+[!] Socket.Ip when checking for 172.x.x.x private addresses (again).
+--------------
+-- 20040816 --
+--------------
+[*] Back to work after San Lorenzo celebrations.
+[!] Library size misreporting - Bug reported by jlh.
+--------------
+-- 20040806 --
+--------------
+[+] Minor improvement in Adagio.Bandwidth_Throttle.
+[!] Socket.Ip when checking for 172.x.x.x private addresses.
+--------------
+-- 20040804 --
+--------------
+[+] Improvements in Agpl.Magnet.
+--------------
+-- 20040730 --
+--------------
+[+] Some gwebcache controls.
+[+] Less stringent defaults for server connection polls.
+--------------
+-- 20040728 --
+--------------
+[!] Minor bugs in new Agpl.Trace.
+[+] Migration to new Agpl.Trace.
+[+] Event queues now use Agpl.Trace objects so no traces are lost.
+[+] Link in the hits page to go to the 'start download' page.
+[+] Downloads first steps.
+--------------
+-- 20040727 --
+--------------
+[+] New packages Agpl.Trace, Agpl.Debug.
+[+] New packages Adagio.Constants, Adagio.Types, Adagio.Exceptions.
+[+] Much code moved around, nothing fundamental changed.
+--------------
+-- 20040726 --
+--------------
+[+] Exception handlers in G2 searches which were missing.
+[+] Migrated to Agpl.Event_Queues.* except for Generic_Event_Queue.
+[*] Generic_Event_Queue uses Adagio.Trace so in this respect we are safe.
+[+] Improved Agpl.Protected_Sorted_Index.
+[*] Could be the cause of some CPU load when high UDP traffic.
+[+] Untested Agpl.Streams.Deflate.
+[+] Exception handlers in Aenea which were missing.
+--------------
+-- 20040722 --
+--------------
+[!] Queries for words < 3 in lenght are discarded.
+[!] A rounding should have been a truncation at Agpl.Average_Queue.Timed.
+[+] New Agpl.Graph.Timed package.
+[!] Uploads without 'Range:' header did fail.
+[!] Overflow in GUI load page when using unlimited server link bandwidth.
+--------------
+-- 20040721 --
+--------------
+[+] XmlAda 1.0 migration, corrected problem in Input_Sources.Files for files exceeding stack size.
+[+] Hit saving/restoring is properly tested. Hits are saved only on proper shutdown and when idle.
+[+] Summary info about searches/hits in the GUI home page.
+--------------
+-- 20040720 --
+--------------
+[+] Moved to OS packages the interrupts handlers.
+[+] Revised the rating of GWebCache2 servers.
+[+] The XML writer now beautifies its output.
+[+] Hits are saved along with searches (untested).
+--------------
+-- 20040718 --
+--------------
+[+] New resolver for TCP connections.
+[!] The reference counting in the socket implementation was wrong. It works now.
+[*] Casually no bad side effects resulted by pure luck.
+[!] Get_Peer_Name will now return 0.0.0.0:0 for unconnected sockets.
+--------------
+-- 20040714 --
+--------------
+[+] Option in agioutils to reload configuration.
+[+] Minor cosmetic improvements FireFox specific (differs from Opera in some things).
+[!] Bug in hits listing when bandwidth is unlimited (prevented listing).
+--------------
+-- 20040713 --
+--------------
+[!] Installer no longer overwrites adagio.xml
+[!] Incorrect return addresses in NatForward search are corrected.
+[+] SIGHUP causes configuration reload.
+[+] Removed bad gwebcaches.
+[+] Finally, memory usage in linux (depends on /proc/x/statm)
+--------------
+-- 20040712 --
+--------------
+[+] 2.1.e Milestone.
+[+] Searching for firewalled nodes. 
+[+] Direct TCP search for neighbor nodes.
+[*] Remains untested properly because I have no access to a firewalled node.
+[+] Improved info about cached servers.
+--------------
+-- 20040711 --
+--------------
+[*] Detected dreadful bug in win32 protected objects, gnat fault.
+[+] Workaround for such bug.
+[!] Corrected a 100% CPU usage issue.
+--------------
+-- 20040709 --
+--------------
+[+] Optimized reuse of query keys.
+[+] Firewalled obtention of query keys.
+--------------
+-- 20040708 --
+--------------
+[X] 2.1.c Milestone.
+[+] Configurable KHL/LNI interval.
+[+] Web statistics.
+--------------
+-- 20040707 --
+--------------
+[X] 2.1.a Milestone.
+[!] Changed to warning the unimplemented /PI/RELAY. We shouldn't get those being a leaf.
+[+] Supporting functions in Network_Settings for NATF.
+[+] No UDP leaking in firewalled scenery.
+[+] Support for Port Forwarding, hits no longer report firewalled status.
+[*] Port Forwarding scenery remains untested as I have not access to such a platform.
+--------------
+-- 20040705 --
+--------------
+[X] 2.1.8 Milestone.
+[+] New agpl-http-server-single2_handler package.
+[+] Finished the configuration wizard.
+--------------
+-- 20040702 --
+--------------
+[+] Configuration form - presentation.
+--------------
+-- 20040625 --
+--------------
+[!] Some public addresses were incorrectly being reported as private.
+[!] Linux deadlock when restoring searches.
+--------------
+-- 20040624 --
+--------------
+[!] Linux deadlock when creating/deleting searches.
+[!] Typo caused that the low search increment were being overwritten by the threshold.
+[+] Added auto-pause for searchs after a given number of hits.
+[!] Improper listener connection closing leading to WAIT_END states in linux.
+[*] Identified the need for LD_ASSUME_KERNEL=2.4.1 for new 2.6.x kernel series.
+--------------
+-- 20040605 --
+--------------
+[+] Improved G2 search requery logic.
+--------------
+-- 20040604 --
+--------------
+[!] Fixed deadlock when creating a search under linux.
+--------------
+-- 20040526 --
+--------------
+[X] 2.1.6 Milestone.
+[+] Named sha1 searches.
+--------------
+-- 20040525 --
+--------------
+[+] Hits listings.
+[+] Searches storing.
+[+] Agpl.Magnet.
+[+] Searches by Sha1.
+[+] Search results icons.
+--------------
+-- 20040522 --
+--------------
+[+] Completion of hit storing.
+--------------
+-- 20040520 --
+--------------
+[+] Correction of incorrect named hits.
+[+] Revamped G2 search event system.
+--------------
+-- 20040519 --
+--------------
+[+] G2 hits creation.
+--------------
+-- 20040518 --
+--------------
+[+] Efficiency stats for network size page.
+[+] Search purging.
+--------------
+-- 20040517 --
+--------------
+[+] Hit, Hit_Family, more priority changes in G2 search.
+[+] Network size page.
+--------------
+-- 20040514 --
+--------------
+[!] Repaired a potential deadlock in the G2 search crawl.
+--------------
+-- 20040513 --
+--------------
+[+] Search network crawl completed.
+[!] New Charles not replacing when inserting at an existing key??
+--------------
+-- 20040512 --
+--------------
+[+] /QA/S processing.
+--------------
+-- 20040511 --
+--------------
+[+] Fine tuning of G2 searching.
+[+] Rest of hubs in searches.
+[+] More detailed error messages in startup.
+--------------
+-- 20040506 --
+--------------
+[+] Q2 sending.
+[+] Priority search management in place.
+[+] New load stat about udp out latency.
+--------------
+-- 20040427 --
+--------------
+[+] QKR sending.
+[!] Http.Headers.Parsing bug using constrained memory streams. 
+--------------
+-- 20040426 --
+--------------
+[+] Generic searching mechanism.
+[+] Connection drop on really large packets.
+--------------
+-- 20040420 --
+--------------
+[?] Detected bug in Shareaza 1.8.11.2
+[+] Workaround for a suspected bug in Shareaza 1.8.11.2
+[+] Agpl.Context_controllers.
+--------------
+-- 20040417 --
+--------------
+[+] Agpl.Average_queue.
+[+] Agpl.Average_queue.Timed.
+[*] The above are for calculating running averages.
+--------------
+-- 20040412 --
+--------------
+[X] 2.1.4 Milestone.
+--------------
+-- 20040407 --
+--------------
+[!] Exception reported in transceiving when security bans (cosmetic).
+--------------
+-- 20040326 --
+--------------
+[+] Load stats in GUI.
+--------------
+-- 20040325 --
+--------------
+[+] Separated statistics for TCP and UDP.
+--------------
+-- 20040324 --
+--------------
+[+] Memory usage statistics.
+--------------
+-- 20040319 --
+--------------
+[+] New throttled stream for sockets much more modular.
+--------------
+-- 20040318 --
+--------------
+[+] Udp BW throttle.
+--------------
+-- 20040310 --
+--------------
+[+] Hot reload of configuration file.
+--------------
+-- 20040302 --
+--------------
+[!] Agpl.Simple_list bug when exceeding list capacity.
+--------------
+-- 20040301 --
+--------------
+[+] Some HTML tidying (R. Bedia contribution).
+[+] Graphs clearing and period changing.
+[!] Agioutils correction (J. Röder notification).
+--------------
+-- 20040229 --
+--------------
+[X] 2.1.3 Milestone.
+[+] Graphs for bandwidth and uploads.
+[+] Configurable graph scale and axis.
+[!] Server_poll deadlock when when using uncompressed links.
+[*] Special thanks to Rafael Bedia for his contributions for this release.
+--------------
+-- 20040228 --
+--------------
+[+] Improved logic of country bans.
+[!] Bug in BMP generator: header offset.
+[+] Bresenham line algorithm for BMPs.
+--------------
+-- 20040226 --
+--------------
+[X] 2.1.2 Milestone.
+[+] Country based bans.
+[!] Some minor Web GUI bugs.
+--------------
+-- 20040224 --
+--------------
+[X] 2.1.1 Milestone.
+[+] Session user and password for remote GUI access.
+[+] Listing of completed uploads.
+[!] Fixed violation in uploads.
+--------------
+-- 20040209 --
+--------------
+[!] Race bug in new lists of data for web reports.
+[+] Log level can be changed.
+[+] Clearing for traffic and queries lists.
+--------------
+-- 20040205 --
+--------------
+[X] 2.1.0 Milestone.
+[+] Events page.
+[+] Cache page.
+[+] Server addition date keeping.
+[!] Nick decoding for uploaders.
+[+] Finished web gui.
+--------------
+-- 20040204 --
+--------------
+[+] Traffic page.
+[!] Disconnection of hubs was leaking spurious sockets.
+--------------
+-- 20040203 --
+--------------
+[+] Uploads page.
+[+] Persistent ratings.
+[+] Multicriteria ordering.
+[+] Queries page.
+--------------
+-- 20040129 --
+--------------
+[+] Library page.
+[+] Ordering preferences are stored.
+--------------
+-- 20040128 --
+--------------
+[+] Started web gui.
+[+] Home and hubs pages.
+--------------
+-- 20040115 --
+--------------
+[+] Lockfile removal on exit.
+--------------
+-- 20040111 --
+--------------
+[+] Improved XML configuration management.
+[+] Improved use of lock files.
+[!] Xml.Get_all was failing in some cases.
+[!] Improper shutdown if G2 wasn't enabled.
+[!] GUID is not more created for non-Adagio uses.
+--------------
+-- 20040111 --
+--------------
+[+] Separated timeouts for G2 connect and handshake.
+--------------
+-- 20031217 --
+--------------
+[!] Fixed failing G2.Packet.Get_child for non-inmediate children.
+--------------
+-- 20031201 --
+--------------
+[X] 2.0.1 Milestone.
+[!] Duration formatter for periods over 99 hours.
+--------------
+-- 20031104 --
+--------------
+[+] Support for G2 URN queries carrying more than one hash child.
+--------------
+-- 20031029 --
+--------------
+[+] Bandwidth throttler no longer uses an active task.
+[!] No more race conditions on shutdown, should always work properly.
+--------------
+-- 20031027 --
+--------------
+[+] Silly icon for the Agiomon java frame.
+--------------
+-- 20031026 --
+--------------
+[X] 2.0.0 Milestone.
+[+] Found a strange deadlock happening in protected_sorted_index in Linux.
+[+] Minor tracing improvements.
+[!] Race condition in Socket.Is_alive
+[!] G2.Upload_client was reporting wrong speeds (but using good ones).
+--------------
+-- 20031024 --
+--------------
+[+] Improvements towards Linux versión. There was a bug in Gnat.Sockets.
+[+] Created package Gnat.Sockets.Extra to workaround the bug.
+[+] Crawler settings.
+[+] Added a silly icon to the win32 executable.
+[+] A new installer for the win32 version.
+--------------
+-- 20031022 --
+--------------
+[+] Changes to safely save data upon system shutdown.
+--------------
+-- 20031020 --
+--------------
+[+] Some utf8ing in soap interface.
+--------------
+-- 20031017 --
+--------------
+[+] Some configuration limits enforcement.
+[+] Improved chances of clean shutdown (some race conditions remain however).
+[+] Some crawler efforts.
+--------------
+-- 20031016 --
+--------------
+[X] 1.9.5 Milestone.
+[+] Improved tigertree calculation much memory efficient: O (log2 N).
+[+] Some nice profiling improvements on hash speed.
+--------------
+-- 20031015 --
+--------------
+[!] On rare occasions a socket could lost track of its closed state.
+[!] Renamed connector task statistic to the correct server poll task.
+--------------
+-- 20031014 --
+--------------
+[!] A file could be re-added to pending files if it was being hashed at the
+      moment of a folder refresh.
+[!] Untrusted folders were not being removed if they had been trusted before.
+[!] Stack overflow for very large folders (in entries) in library.
+[!] Access violation when receiving a download request from a banned address.
+[+] New traffic pane in Agiomon.
+--------------
+-- 20031012 --
+--------------
+[X] 1.9.4 Milestone
+[!] Nasty bug in server BW throttle.
+[+] Better and now exact BW throttling in server links.
+--------------
+-- 20031010 --
+--------------
+[+] Some restructuring to avoid race conditions in G2 server management.
+--------------
+-- 20031008 --
+--------------
+[X] 1.9.3 Milestone.
+[+] Zlib.Streams.Extra.
+[!] Query error when more than 255 active upload slots.
+[+] Statistics: session completed uploads.
+[*] Located leak in expression evaluator (at least this time is foreign code
+      and thus not my fault. Arg).
+[!] Corrected mentioned leak.
+--------------
+-- 20031007 --
+--------------
+[+] Started work for deflated server links.
+[+] Circular streams.
+[+] Deflated outbound G2 server links.
+[+] Deflated inbound G2 server links.
+--------------
+-- 20031003 --
+--------------
+[+] Added element to configuration file to allow forced G2 servers.
+[!] Bug: null access when inspecting queues prior to loading.
+[!] Silly bug preventing selection of best servers to connect to when sorting.
+[!] Last leak in upload resources.
+[!] Protection fault because of a silly trace.
+[+] Added CSC reporting for G2 hits.
+--------------
+-- 20031002 --
+--------------
+[!] Small G2 Transceiver bug for packet sizes multiple of fragment size.
+[+] Upload statistics (total sent and mean speed).
+[+] Small cosmetic changes to Agiomon.
+--------------
+-- 20031001 --
+--------------
+[X] 1.9.2 Milestone.
+[!] G2 Transceiver was losing inbound available packet slots under heavy load.
+[!] G2 Transceiver was leaking packets when security bans prevented sending.
+[+] Earlier detection of G2 UDP banned packets.
+[+] New time-bounded IP filtering method.
+--------------
+-- 20030929 --
+--------------
+[!] Small conversion error for Xml.Utils.Get_speed.
+[+] New simple.xml sample configuration file.
+--------------
+-- 20030928 --
+--------------
+[!] Corrected the client string in GWebCache2 queries (thanks RocketX)
+[+] Some more checks for failed GWebCache2
+[!] Corrected bug displaying 0.0 instead of correct rating for G2 servers.
+--------------
+-- 20030925 --
+--------------
+[+] Reestructured configuration management.
+[!] Small leak corrected receiving already known profiles.
+--------------
+-- 20030924 --
+--------------
+[X] 1.9.1 Milestone.
+[+] Improvements in G2 server selection, now connects almost instantly.
+[+] Lost uploads are sorted by time from last sighting.
+[+] Removed Pragmarc from G2 UDP outbound, safer Charles used instead.
+[+] Polished Eliza bot.
+--------------
+-- 20030923 --
+--------------
+[!] Corrected critical bug in G2.Packet.Clone, introduced in last build.
+[*] This bug was causing a newly discovered leak.
+[+] New rating system for G2 servers, hopefully better than the old one.
+[!] Bug in socket refcounter was preventing chats after browses.
+[+] Eliza is almost here.
+--------------
+-- 20030922 --
+--------------
+[*] Detected very small leak in Xml/Ada
+[*] Detected noticeable leak of G2.Packet.Queue.Item_type.
+[!] Corrected the aforementioned memory leak. Culprits were Workers.
+[!] Corrected the leak in Xml/Ada. It was actually a leak in Adagio.Xml.
+[*] Hopefully there will be no remaining leaks.
+--------------
+-- 20030921 --
+--------------
+[+] Some memory tracking in win32.
+--------------
+-- 20030919 --
+--------------
+[X] 1.9.0 Milestone.
+[!] Corrected minor bug were lost downloads were sorted before live ones.
+[+] Basic (no virtual folders) host browsing for G2.
+[+] Plain or deflated connections for host browsing.
+[!] Corrected small bug which delayed purge of library when removing folders.
+[!] Corrected critical bug in server purging logic which could crash Adagio.
+--------------
+-- 20030918 --
+--------------
+[X] 1.8.0 Milestone.
+[!] Corrected bug in G2 transceiver for multipart packets.
+[!] Corrected bug in G2 transceiver not dropping expired inbound packets.
+[+] New queries tab in Agiomon.
+[+] Chat subsystem completed.
+[+] Autoreply chatterbot.
+--------------
+-- 20030917 --
+--------------
+[+] Improved connection logic.
+--------------
+-- 20030916 --
+--------------
+[+] Basic infrastructure for G2 chat.
+[!] Atomic writing of outbound G2 TCP packets.
+--------------
+-- 20030910 --
+--------------
+[X] 1.7.0 Milestone.
+[+] Alternate source meshes.
+--------------
+-- 20030908 --
+--------------
+[!] Fixed stack overflow in very large folders.
+[+] More statistics.
+--------------
+-- 20030905 --
+--------------
+[!] Silly bug in NAT detection.
+--------------
+-- 20030904 --
+--------------
+[+] Some more statistics.
+[!] Shutdown was delayed if hashing was using normal or fast speeds.
+--------------
+-- 20030903 --
+--------------
+[X] 1.6.0 Milestone.
+[X] 1.5.0 Milestone.
+[+] TTH serving.
+[+] Minor changes in Agiomon.
+[+] Some necessary impersonation.
+[+] Conversion of metadata searches to keyword searches.
+--------------
+-- 20030902 --
+--------------
+[+] File packager for TTH.
+--------------
+-- 20030901 --
+--------------
+[+] Improved hash speed by doing single file pass for all hashes.
+[+] Request resolver/resource factory.
+--------------
+-- 20030829 --
+--------------
+[+] Changed the upload system to support arbitrary resource kinds.
+--------------
+-- 20030828 --
+--------------
+[X] 1.4.0 Milestone.
+[+] Tigertree hashing.
+--------------
+-- 20030826 --
+--------------
+[X] 1.3.0 Milestone.
+[+] Computing of ed2k hashes.
+[+] Full ed2k integration: searches, requests, hits.
+--------------
+-- 20030825 --
+--------------
+[X] 1.2.0 Milestone.
+[+] Added setting for network/ValidAddresses and network/InternetRoute.
+[+] Autodetection of network/InternetRoute for misconfigured settings.
+[+] Added logic for NATed clients and address filtering.
+[+] Dropping of too old inbound incomplete G2 UDP packets.
+--------------
+-- 20030822 --
+--------------
+[X] 1.1.0 Milestone.
+--------------
+-- 20030821 --
+--------------
+[+] Finished the new java GUI.
+[+] Minor changes to the SOAP interface.
+[+] Improved information for uploads, specially for lost ones.
+--------------
+-- 20030820 --
+--------------
+[+] New java GUI
+--------------
+-- 20030717 --
+--------------
+[X] 1.0.10 Milestone
+[!] Checked no. of fragments for outbound packets.
+[+] Migrated Pragmarc to Charles for inbound UDP G2 packets.
+[+] G2 Transceiver now correctly drops oldest packets upon overflow.
+[*] Tonight observed server uptimes of eight hours!
+[!] QRT no longer is updated when refreshing unchanged folders.
+[!] Fixed the nasty bug in G2 transceiver causing unexpected crashes.
+--------------
+-- 20030716 --
+--------------
+[+] Located the critical bug in transceiver.
+--------------
+-- 20030709 --
+--------------
+[!] Corrected queue logic should decrease lost queued slots.
+--------------
+-- 20030703 --
+--------------
+[+] Added parameter for the queue request window.
+[+] Added parameter for the TCP buffer size.
+[+] Improved connection defaults in the default adagio.xml
+--------------
+-- 20030702 --
+--------------
+[!] Corrected some rehashing of already hashed files on startup.
+[+] Implemented non-delayed library startup sequence (1.0.9 milestone).
+[+] Some time statistics about library loading/refreshing.
+[!] Access violation when trying to read a non-existent profile.
+--------------
+-- 20030701 --
+--------------
+[!] Fixed a silly memory leak in the servers caching mechanism.
+[+] Workarounded a hideously memory leak not documented in Gnat.Sockets.
+[*] No known memory leaks remaining.
+--------------
+-- 20030630 --
+--------------
+[*] Verified no leaks in the G2 messaging (tcp/udp) subsystem.
+--------------
+-- 20030629 --
+--------------
+[+] User-agent banning (1.0.2 milestone)
+[+] Single queue per server
+[+] Single thread for connecting (1.0.5 milestone)
+[+] Connections/second throttle (1.0.6 milestone)
+--------------
+-- 20030627 --
+--------------
+[+] Agiomon over Keep-Alive connections.
+--------------
+-- 20030625 --
+--------------
+[+] The build process is now completely platform independent.
+--------------
+-- 20030614 --
+--------------
+[?] Detected a possible memory leak in upload clients management.
+--------------
+-- 20030612 --
+--------------
+[+] Independent GUID package (0.8.3 milestone).
+[+] bp/bitprint families search (0.8.4 milestone).
+[+] Negative searches (0.8.5 milestone).
+--------------
+-- 20030610 --
+--------------
+[+] Busy hits (0.8.1 milestone)
+[+] Busy and unavailable HTTP responses (0.8.2 milestone)
+[+] Atomic writes to sockets for HTTP headers
+--------------
+-- 20030606 --
+--------------
+[+] Gui (0.8 milestone).
+[+] Optimized memory usage for G2 upload clients.
+--------------
+-- 20030530 --
+--------------
+[+] Security rules from Shareaza schema (0.6 milestone).
+--------------
+-- 20030529 --
+--------------
+[+] Folder refresh
+[+] Enhanced sharing/unsharing policies.
+--------------
+-- 20030528 --
+--------------
+[+] Completed rating system for queues (0.4 milestone).
+--------------
+-- 20030527 --
+--------------
+[+] Multiqueuing for requests.
+[+] Tracking of data sent to clients.
+[+] Queue preemptions.
+--------------
+-- 20030526 --
+--------------
+[+] Uploads computing and evaluation.
+--------------
+-- 20030525 --
+--------------
+[+] Enhanced dead queue slots maintenance.
+[+] Queues' saving.
+[+] Timestamp for KHL
+--------------
+-- 20030523 --
+--------------
+[+] Root GWebCaches
+[+] Minimum upload speed checking
+[+] Startup conditional logs cleaning
+[+] Support for clients changing requests while queued.
+[+] Dead/alive slots for client remembering. (Only missing saving of queues).
+--------------
+-- 20030522 --
+--------------
+[+] UDP PIs
+[+] Active upload clients system.
+--------------
+-- 20030521 --
+--------------
+[+] Upload subsystem almost complete.
+[+] G2 push for uploads.
+[+] G2 AQM.
+--------------
+-- 20030521 --
+--------------
+[+] Upload subsystem almost completed.
+[+] New event queue with reentrant events.
+[*] Preliminary tests show optimum transfer rates and bandwidth sharing.
+--------------
+-- 20030514 --
+--------------
+[+] Bandwidth manager for G2 upload server links.
+[!] Fixed bandwidth managers.
+--------------
+-- 20030513 --
+--------------
+[+] Sha1 queries
+[+] Server link upload bandwidth control
+[+] Bandwidth manager object
+--------------
+-- 20030512 --
+--------------
+[+] G2 QRT sending complete.
+[!] Fixed conversion functions in Bit_arrays.Strings
+--------------
+-- 20030509 --
+--------------
+[+] Added forced kill in watchdog
+--------------
+-- 20030508 --
+--------------
+[+] Latin1 is the default encoding for the configuration file.
+[+] Added some criteria for files.
+[+] Improved hashing speed.
+[+] G2 hits chunking.
+[*] It seems that the /QH2/H/SZ child must come before /QH2/H/DN. Otherwise,
+    sometimes the first four chars of the name are stripped as size (10% rate)
+--------------
+-- 20030507 --
+--------------
+[*] Shareaza 1.8.8 corrects the issue with non-unicode /DN children
+--------------
+-- 20030506 --
+--------------
+[+] QH2 for /Q2/DN completed.
+[*] Starting upload subsystem.
+--------------
+-- 20030505 --
+--------------
+[+] Workers completed
+[*] /QH2/DN is not unicode (bug in shareaza or specifications)
+[*] /Q2/DN is not unicode (bug in shareaza or specifications)
+[*] /Q2/UDP seem to not have query key for queries received via TCP
+--------------
+-- 20030430 --
+--------------
+[+] Initial workers work.
+--------------
+-- 20030429 --
+--------------
+[+] QRP client side.
+[*] Compute size of files in library!!
+--------------
+-- 20030428 --
+--------------
+[+] Remote name extraction from UPROD/XML
+[+] Automatic deflate if needed in G2 transceiver
+[+] HAW ignored
+[+] Processing of KHL for CH children
+--------------
+-- 20030424 --
+--------------
+[+] G2 transceiver completed (it's is buggy in respect to drops, though)
+[*] Make more intelligent packet dropping logic in G2 transceiver.
+--------------
+-- 20030423 --
+--------------
+[+] Minimum debug level.
+--------------
+-- 20030422 --
+--------------
+[+] Profile sending.
+[+] G2 UDP Semi-reliable transceiver started.
+[+] Correct termination when not connecting to G2.
+[*] Set Latin1 as the encoding for Xml/Ada
+--------------
+-- 20030421 --
+--------------
+[+] Added unicode support functions.
+--------------
+-- 20030420 --
+--------------
+[+] Accurate packet latency reporting.
+[+] Library reworked. Much better now.
+[*] Program termination when not connecting to G2.
+--------------
+-- 20030416 --
+--------------
+[+] Changed locking structure for G2 servers management
+[*] Report G2 packets latency!
+--------------
+-- 20030411 --
+--------------
+[+] Safe pointers package.
+[+] Switched G2.Packet to safe pointer type.
+--------------
+-- 20030411 --
+--------------
+[+] Completed & verified G2 packet parsing
+[+] G2 Parser object
+[+] G2 Dispatcher
+[+] G2 Packet qualifier
+--------------
+-- 20030410 --
+--------------
+[+] Preliminar G2 packet parsing.
+[*] Parse X-Try-Ultrapeers
+--------------
+-- 20030409 --
+--------------
+[+] Gwebcache2 completed.
+--------------
+-- 20030407 --
+--------------
+[+] Gwebcache2 almost completed.
+--------------
+-- 20030404 --
+--------------
+[+] All tasking for G2 connection phase.
+[+] Gwebcache2 basics.
+[*] Deflate for sockets.
+--------------
+-- 20030401 --
+--------------
+[+] Preliminary work in Network/Server/G2 hierarchy
+--------------
+-- 20030329 --
+--------------
+[+] ZLib added
+[+] Http headers package
+--------------
+-- 20030326 --
+--------------
+[+] Renew logic for library saving/loading
+[+] Remove failing files/folders from pending lists
+[+] Cpu control library management
+[+] Replace straight file hashing by decoupled stream, cpu monitor oriented
+[*] Periodical check of folders in library?
+[*] Recursively remove subfolders of a folder
+--------------
+-- 20030326 --
+--------------
+[+] Get_pending_file, process_pending_file
+[+] Watchdog
+[-] Discarded idea about suspending tasks (unimplemented in Gnat)
+[*] Need to be in real_time priority class to use priorities reliably
+[*] Replace straight file hashing by decoupled stream, cpu monitor oriented
+--------------
+-- 20030325 --
+--------------
+[+] More serialization of library
+[*] Only dictionary is missing from library
+[*] Planned a new throttle based in suspending tasks
+--------------
+-- 20030326 --
+--------------
+[+] Renew logic for library saving/loading
+[+] Remove failing files/folders from pending lists
+[+] Cpu control library management
+[+] Replace straight file hashing by decoupled stream, cpu monitor oriented
+[*] Periodical check of folders in library?
+[*] Recursively remove subfolders of a folder
+--------------
+-- 20030326 --
+--------------
+[+] Get_pending_file, process_pending_file
+[+] Watchdog
+[-] Discarded idea about suspending tasks (unimplemented in Gnat)
+[*] Need to be in real_time priority class to use priorities reliably
+[*] Replace straight file hashing by decoupled stream, cpu monitor oriented
+--------------
+-- 20030325 --
+--------------
+[+] More serialization of library
+[*] Only dictionary is missing from library
+[*] Planned a new throttle based in suspending tasks
+--------------
+-- 20030324 --
+--------------
+[+] Folder and file types
+[+] Adding, removing, sharing folders
+[+] Throttle object
+[+] Basic serialization of library
+--------------
+-- 20030318 --
+--------------
+[+] Sha1 and Bit_arrays modules
+[*] Preliminary work on library module
+--------------
+-- 20030225 --
+--------------
+[+] PragmARC library.
+[+] Protected global exit flag.
+[+] Shutdown proc + SOAP hook.
+--------------
+-- 20030216 --
+--------------
+[-] Removed plugin system.
+[-] Removed integrated web server.

@@ -1,0 +1,38 @@
+------------------------------------------------------------------------------
+$Id: Bugs.txt,v 1.6 2004/03/01 18:51:51 Jano Exp $
+------------------------------------------------------------------------------
+
+----------------
+-- Known bugs --
+----------------
+Id    Priority Description
+----- -------- ---------------------------------------------------------------------
+   13 Low      Unclean shutdown: Protected object already finalized.
+
+----------------
+-- Fixed bugs --
+----------------
+----- -------- ---------------------------------------------------------------------
+    1 Fixed    Memory leak. About 0.5mB per hour. Culprit was Expressions_evaluator.
+    2 Fixed    Forcing preemption of uploads sometimes causes an access violation.
+    3 Fixed    Some Constraint_errors in g2 search workers.
+    4 Fixed    Memory leak. About 100 MB in 24 hours.
+    5 Fixed    Bug in library (rehashing of completed files - happens rarely?)
+    6 Fixed    Upload system suspected memory leak.
+    7 Fixed    Memory leak in Gnat.Sockets streams
+    8 Fixed    Memory leak in servers caching mechanism
+    9 Fixed    Every time a folder is refreshed, the QRT is dirtied even if there
+                  were no changes in the folder.
+   10 Fixed    Unknown death, no traces related, under heavy load it seems.
+   11 Fixed    Lookup on exit.
+   12 Fixed    Access violation in queue listing every now and then.
+   14 Fixed    Socket.Ip has a bug when checking the 172 private series of IPs
+   15 Fixed    The search walk is requerying hubs too soon.
+
+---------------------------------
+My thanks to these bug reporters:
+---------------------------------
+Jonathan Marriott
+Rafael Bedia
+Jann Röder
+Jlh

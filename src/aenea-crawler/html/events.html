@@ -1,0 +1,39 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html>
+<head>
+   <title>Aenea events</title>
+		<link rel="stylesheet" type="text/css" href="@_STYLE_@">
+</head>
+
+<body>   
+   <!--
+      VALUE1 -> Timestamp
+      VALUE2 -> Level (MINOR, MEDIUM, MAJOR)
+      VALUE3 -> Text
+      VALUE4 -> Is_new (TRUE, FALSE)
+   -->
+   <div id="contents">
+   <div id="main">
+   <center><p class="title">Aenea events</p>
+    <table summary="Aenea events" border="1" cellspacing="1">
+		    <tr class="header">
+		      <td class="header">#</td>
+            <td class="header">Timestamp<a href="events.html?orden=1&sentido=true"><img src="up.gif" border="0"></a><a href="events.html?orden=1&sentido=false"><img src="do.gif" border="0"></a></td>
+		      <td class="header">Text<a href="events.html?orden=2&sentido=false"><img src="up.gif" border="0"></a><a href="events.html?orden=2&sentido=true"><img src="do.gif" border="0"></a></td>
+		    </tr>
+		    @@TABLE@@
+		    <tr class="@_VALUE2_@ @_VALUE4_@">						
+		        <td class="content">@_TABLE_LINE_@</td>
+		        <td class="content">@_VALUE1_@</td>
+              <td class="teletype">@_VALUE3_@</td>
+		    </tr>
+		    @@END_TABLE@@
+		</table>
+   </div>
+      <p>
+@@INCLUDE@@ footer.html
+   </center>
+</div>
+</body>
+</html>

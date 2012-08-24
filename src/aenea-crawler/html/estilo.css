@@ -1,0 +1,150 @@
+.title {
+   font-family : "Times New Roman", Times, serif;
+   font-size   : large;
+   font-weight : bold;
+   text-align  : center;
+	font-style  : italic;
+}
+
+HTML, BODY {
+	font-family : tahoma, verdana, arial;
+   font-size   : x-small;
+	}
+	
+.report {
+	font-size: x-small;
+   font-family: courier;
+}
+
+TR.header {
+  background: #eeeeee;
+}
+
+TD.header {
+	font-weight: bold;
+	font-size: xx-small;
+	text-align: center;
+}
+
+TD.contenteven {
+  background: #eeeeaa;
+  font-size: xx-small;
+  text-align: center;
+}
+
+TD.contentodd {
+  background: white;
+  font-size: xx-small;
+  text-align: center;
+}
+
+TD.content {
+  font-size: xx-small;
+  text-align: center;
+}
+
+TD.teletype {
+   font-size: x-small;
+   font-family : "courier new";
+   text-align  : left;
+}
+
+TR.MINOR {
+   color : gray;
+}
+TR.MEDIUM {
+   color : navy;
+}
+TR.MAJOR{
+   color : crimson;
+}
+TR.TRUE {
+   background : #eeeeff;
+}
+
+TD.countrygraph {
+   height      : 9px;
+   background  : red;
+   margin      : 4px;
+}
+
+TABLE.contents {
+	font-family : tahoma, verdana, arial;
+   font-size   : x-small;
+}
+
+TD.contentsname {
+   width       : 150px;
+   background  : #ddeeee;
+   border-right: 1px solid crimson;
+   padding     : 4px;
+   text-align  : right;
+}
+
+TD.contentsdesc {
+   width       : 300px;
+   background  : #eeddee;
+   border-left : 1px solid crimson;
+   padding     : 4px;
+   text-align  : left;
+}
+
+A, A:hover, A:visited {
+	color: Navy;
+}
+
+.subtitle {
+   text-align:  center;
+   font-weight: bold;
+   font-size  : medium;
+}
+
+.black {
+   color: Black;
+}
+
+.percountry, .navy {
+   color: Navy;
+}
+
+.yes, .green {
+  color: green;
+}
+
+.no, .red {
+  color: red;
+}
+
+.toro {
+	position: relative;
+	float: right;
+	top: -20px;
+}
+
+.gnutella2 {
+   color       : navy;
+   font-size   : 150%;
+   font-weight : bold;
+   font-style  : italic;
+}
+
+.g2banner {
+   background  : #efdecf;
+   border      : 3px solid crimson;
+   width       : 600px;
+   padding     : 10px;
+   font-size   : medium;
+}
+
+.roll {
+   background     : black;
+   color          : white;
+   font-weight    : bold;
+   font-size      : 200%;
+   padding-left   : 3px;
+   padding-right  : 3px;
+}
+
+#footer {
+   text-align           : center;
+}

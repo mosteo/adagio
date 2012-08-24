@@ -1,0 +1,38 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+    <link rel="stylesheet" type="text/css" href="@_STYLE_@">
+    <title>Statistics</title>
+  </head>
+  <body>
+    <!--
+      VALUE1  <- Key
+      VALUE2  <- Value
+    -->
+    <div id="contents">
+      <div id="main">
+         <div class="refresh">[ <a href="@_URI_@">Refresh</a> ]</div>
+         <span id="title">Statistics</span>                   
+         <div id="menubar"></div>     
+            <table summary="Adagio statistics" border="1" cellspacing="0" class="dataset">
+               <tr class="header">
+                  <td class="header" align="center">#</td>
+                  <td class="header">Key&nbsp;<a href="stats.html?orden=1&amp;sentido=true"><img src="up.gif" border="0" alt="Sort descending"></a><a href="stats.html?orden=1&amp;sentido=false"><img src="do.gif" border="0" alt="Sort ascending"></a></td>
+                  <td class="header">Value&nbsp;<a href="stats.html?orden=2&amp;sentido=true"><img src="up.gif" border="0" alt="Sort descending"></a><a href="stats.html?orden=2&amp;sentido=false"><img src="do.gif" border="0" alt="Sort ascending"></a></td>
+             </tr>
+             @@TABLE@@
+             <tr valign="middle">						
+                 <td class="contentodd" align="right">@_TABLE_LINE_@</td>
+                 <td class="contentodd">@_VALUE1_@</td>                 
+                 <td class="contentodd">@_VALUE2_@</td>
+             </tr>
+             @@END_TABLE@@
+         </table>
+         <p>@_PAGER_@<p>
+      </div>
+      @@INCLUDE@@ footer.html
+    </div>
+  </body>
+</html>
+

@@ -1,0 +1,2 @@
+adagio -f local-config.xml &
+agiomon -f local-config.xml &

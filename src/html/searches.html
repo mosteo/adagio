@@ -1,0 +1,151 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1">
+    <link rel="stylesheet" type="text/css" href="@_STYLE_@">
+    <title>Searches</title>
+  </head>
+  <body>
+    <!--
+      VALUE1  <- Search subject
+      VALUE2  <- Hits
+      VALUE3  <- New hits
+      VALUE4  <- Firewalled hits
+      VALUE5  <- Priority setting
+      VALUE6  <- Priority applied
+      VALUE7  <- Paused (TRUE/FALSE)
+      VALUE8  <- Secure hits
+      VALUE9  <- Progress (string)
+    -->
+    <div id="contents">
+      <div id="main">
+         <div id="title">Searches</div><div class="refresh">[ <a href="searches.html">Refresh</a> ]</div>
+         <div id="menubar"></div>
+            <table summary="Searches" border="1" cellspacing="0" class="dataset">
+               <tr class="header">
+                  <td class="header" align="center">#</td>
+                  <td class="header">Subject&nbsp;<a href="searches.html?orden=1&amp;sentido=true"><img src="up.gif" border="0" alt="Sort descending"></a><a href="searches.html?orden=1&amp;sentido=false"><img src="do.gif" border="0" alt="Sort ascending"></a></td>
+                  <td class="header">Hits&nbsp;<a href="searches.html?orden=2&amp;sentido=true"><img src="up.gif" border="0" alt="Sort descending"></a><a href="searches.html?orden=2&amp;sentido=false"><img src="do.gif" border="0" alt="Sort ascending"></a></td>
+                 <td class="header">New&nbsp;<a href="searches.html?orden=3&amp;sentido=true"><img src="up.gif" border="0" alt="Sort descending"></a><a href="searches.html?orden=3&amp;sentido=false"><img src="do.gif" border="0" alt="Sort ascending"></a></td>
+                 <td class="header">Fwl&nbsp;<a href="searches.html?orden=4&amp;sentido=true"><img src="up.gif" border="0" alt="Sort descending"></a><a href="searches.html?orden=4&amp;sentido=false"><img src="do.gif" border="0" alt="Sort ascending"></a></td>
+                 <td class="header">Safe&nbsp;<a href="searches.html?orden=9&amp;sentido=true"><img src="up.gif" border="0" alt="Sort descending"></a><a href="searches.html?orden=9&amp;sentido=false"><img src="do.gif" border="0" alt="Sort ascending"></a></td>
+                 <td class="header">Progress&nbsp;<a href="searches.html?orden=8&amp;sentido=true"><img src="up.gif" border="0" alt="Sort descending"></a><a href="searches.html?orden=8&amp;sentido=false"><img src="do.gif" border="0" alt="Sort ascending"></a></td>
+                 <td class="header">Priority setting&nbsp;<a href="searches.html?orden=5&amp;sentido=true"><img src="up.gif" border="0" alt="Sort descending"></a><a href="searches.html?orden=5&amp;sentido=false"><img src="do.gif" border="0" alt="Sort ascending"></a></td>
+                 <td class="header">Priority applying&nbsp;<a href="searches.html?orden=6&amp;sentido=true"><img src="up.gif" border="0" alt="Sort descending"></a><a href="searches.html?orden=6&amp;sentido=false"><img src="do.gif" border="0" alt="Sort ascending"></a></td>
+                 <td class="header">Pause/Resume&nbsp;<a href="searches.html?orden=7&amp;sentido=true"><img src="up.gif" border="0" alt="Sort descending"></a><a href="searches.html?orden=7&amp;sentido=false"><img src="do.gif" border="0" alt="Sort ascending"></a></td>
+                 <td class="header">Remove</td>
+             </tr>
+             @@TABLE@@
+             <tr valign="middle" class="dummy
+                @@IF@@ @_VALUE3_@ /= 0 
+                highlight 
+                @@ELSIF@@ @_VALUE7_@ = TRUE 
+                dim 
+                @@END_IF@@
+                ">						
+                 <td class="contentodd" align="right">@_TABLE_LINE_@</td>
+                 <td class="contentodd"><a href="results.html?target=@_VALUE1_@">@_VALUE1_@</a></td>
+                 <td class="contentodd">@_VALUE2_@</td>
+                 <td class="contentodd">@_VALUE3_@</td>
+                 <td class="contentodd">@_VALUE4_@</td>
+                 <td class="contentodd">@_VALUE8_@</td>
+                 <td class="contentodd">@_VALUE9_@</td>
+                 <td class="contentodd">
+                    <form action="command" method="post">
+                       <input type="hidden" name="action" value="change_search_priority"/>
+                       <input type="hidden" name="target" value="@_VALUE1_@"/>
+                       <select class="listing" name="priority" size="1" onChange="javascript:submit()">
+                           <option value="Exclusive_forever"
+                           @@IF@@ @_VALUE5_@ = EXCLUSIVE_FOREVER
+                            selected 
+                           @@END_IF@@
+                           >Exclusive forever</option>
+                           <option value="Exclusive60m"
+                           @@IF@@ @_VALUE5_@ = EXCLUSIVE60M
+                            selected 
+                           @@END_IF@@
+                           >Exclusive 1 hour</option>
+                           <option value="Exclusive30m"
+                           @@IF@@ @_VALUE5_@ = EXCLUSIVE30M
+                            selected 
+                           @@END_IF@@
+                           >Exclusive 30m</option>
+                           <option value="Exclusive15m"
+                           @@IF@@ @_VALUE5_@ = EXCLUSIVE15M
+                            selected 
+                           @@END_IF@@
+                           >Exclusive 15m</option>
+                           <option value="Exclusive5m"
+                           @@IF@@ @_VALUE5_@ = EXCLUSIVE5M
+                            selected 
+                           @@END_IF@@
+                           >Exclusive 5m</option>
+                           <option value="High"
+                           @@IF@@ @_VALUE5_@ = HIGH
+                            selected 
+                           @@END_IF@@
+                           >High</option>
+                           <option value="Medium"
+                           @@IF@@ @_VALUE5_@ = MEDIUM
+                            selected 
+                           @@END_IF@@
+                           >Regular</option>
+                           <option value="Low"
+                           @@IF@@ @_VALUE5_@ = LOW
+                            selected 
+                           @@END_IF@@
+                           >Low</option>
+                           <option value="Idle"
+                           @@IF@@ @_VALUE5_@ = IDLE
+                            selected 
+                           @@END_IF@@
+                           >Idle</option>
+                           <option value="Auto"
+                           @@IF@@ @_VALUE5_@ = AUTO
+                            selected 
+                           @@END_IF@@
+                           >Auto</option>
+                  </select>
+                 </td></form>
+                 <td class="contentodd">@_CAPITALIZE:VALUE6_@</td>
+                 <td class="contentodd" align="center">
+                 @@IF@@ @_VALUE7_@ = TRUE
+                    <a href="command?action=resume_search&target=@_VALUE1_@">Resume</a>
+                 @@ELSE@@
+                    <a href="command?action=pause_search&target=@_VALUE1_@">Pause</a>
+                 @@END_IF@@
+                 </td>
+                 <td class="contentodd" align="center">
+                    <a href="command?action=delete_search&amp;target=@_VALUE1_@"><img src="cross.png" border="0" alt="remove" align="middle"></a>
+                 </td>
+             </tr>
+             @@END_TABLE@@
+         </table>
+         <form action="command" method="post">
+         <input type="hidden" name="action" value="search" />
+         <div style="vertical-align:middle">
+         <ul>
+            <li>Look for: <input name="target" type="text" maxlength="255" size="99" tabindex="1"/>
+            <li>Priority:&nbsp;
+               <select name="priority" size="1">
+                  <option value="Exclusive_forever">Exclusive forever</option>
+                  <option value="Exclusive60m">Exclusive - 1 hour</option>
+                  <option value="Exclusive30m">Exclusive - 30m</option>
+                  <option value="Exclusive15m">Exclusive - 15m</option>
+                  <option value="Exclusive5m">Exclusive - 5m</option>
+                  <option value="High">High</option>
+                  <option value="Medium">Regular</option>
+                  <option value="Low">Low</option>
+                  <option value="Idle">Idle</option>
+                  <option value="Auto" selected>Auto</option>
+               </select>&nbsp;<button type="submit">Start</button>
+         </ul>
+         </div>
+         </form>
+         You can search for keywords or URNs (use magnet syntax).
+      </div>
+      @@INCLUDE@@ footer.html
+    </div>
+  </body>
+</html>
+

@@ -1,0 +1,424 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<adagio>
+
+   <!-- General considerations 
+         All time values can be specified with their unit following.
+         Allowed units are: h, m, s, ms. 
+         Omiting the units will be interpreted as seconds. 
+
+         Sizes use b for bit, B for byte,
+         k for 1024 bytes, m for 1024*1024 bytes, g for 1024*1024*1024 bytes.
+         k, m and g are case insensitive.
+
+         Speeds are a size plus "/s", which is the only unit allowed.
+         A special speed is "unlimited" which can be used in bandwidths.
+
+         Times, sizes and speeds can contain decimal part (dot is separator).
+         Rounding is made towards bytes for sizes/speeds.
+
+         Paths must be specified with forward slashes "/" in windows and unix.
+         
+         All elements/attributes names are case sensitive! 
+   -->
+
+   <!-- GLOBALS 
+        This section contains global application parameters -->
+   <globals>
+      <!-- Max cpu usage allowed.
+            This is used in repetitive tasks. However, ocassional
+            spikes can take 100% but shouldn't be frequent. -->
+      <maxCPU>80</maxCPU>
+
+      <!-- Watchdog. 
+            After requesting shutdown, the watchdog task will try to
+            kill any remaining unfinished task.  -->
+      <watchdog deadline="60s" />
+
+      <!-- Time unit. Employed for bandwidth managers. Shouldn't be changed.
+            Higher time units will decrease accuracy -->
+      <TimeUnit>1s</TimeUnit>
+      <DataFolder path="data"/>
+      <GeoIP>../geoip/geoip.csv</GeoIP>
+   </globals>
+
+   <!-- GUI 
+         Adagio hasn't a GUI. Instead, it provides a SOAP interface to
+         acquire/provide data. That interface could allow the building
+         of a stand-alone GUI application. -->
+   <gui user="name" pass="word">
+      <!-- We can specify if the SOAP interface is running -->
+      <active>yes</active>
+      <!-- In which interface we must listen. 0.0.0.0 means any and
+            127.0.0.1 localhost. Note that Adagio doesn't provide for
+            now any authentication mechanism. Thus, listening in 0.0.0.0
+            without a firewall exposes Adagio to unknown controllers. -->
+      <address>127.0.0.1</address>
+      <!-- Port for the SOAP interface -->
+      <port>4445</port>
+
+      <GraphPeriod>10m</GraphPeriod>
+
+      <HtmlStyle>estilo.css</HtmlStyle>
+      <HtmlRoot>html/</HtmlRoot>
+
+      <LinesPerPage>20</LinesPerPage>
+
+      <LookAndFeel>java</LookAndFeel>
+      <AwsStackSize></AwsStackSize>
+   </gui>
+
+   <!-- LIBRARY.
+         Location specifies where the built library will be stored. Never
+         two concurrent instances of adagio should access the same. -->
+   <library 
+      location="data/library.dat">
+
+      <!-- Allow browsing of our shared files -->
+      <AllowBrowse>yes</AllowBrowse>
+
+      <!-- DelayedStartup -->
+      <DelayedStartup>yes</DelayedStartup>
+
+      <!-- Time between checks for pending folders -->
+      <FolderAddingInterval>100ms</FolderAddingInterval>
+
+      <!-- Time between checks for pending files -->
+      <FileAddingInterval>100ms</FileAddingInterval>
+
+      <!-- Period between saves of library. 
+            A checkpoint is saved during hashing. If library hasn't changed,
+            no saving will occur. -->
+      <AutosaveInterval>5m</AutosaveInterval>
+
+      <!-- Max num of pending searches to perform. -->
+      <MaxPendingSearches>1000</MaxPendingSearches>
+
+      <!-- Max num of concurrent searches to perform. -->
+      <MaxSearches>10</MaxSearches>
+
+      <!-- Time allowed to perform a search. In case it's not completed 
+         (too many results, for example) it will be discarded. -->
+      <SearchTimeout>5s</SearchTimeout>
+
+      <!-- QRT size. It shouldn't be changed unless you know what it is. -->
+      <QRTSize>20</QRTSize>
+
+      <TTHSize>10</TTHSize>
+
+      <!-- Max cpu usage while hashing/adding folders -->
+      <HashingCPUusage units="%">100</HashingCPUusage>
+
+      <!-- Hashing speed.
+            fast   : files will be hashed at top speed, without throttling,
+               but also they can't be moved or renamed while are being read.
+            normal : files will be hashed at good speed, but without pre-
+               venting renaming/moving/editing (that will trigger rehash of
+               the affected files).
+            slow   : cpu throttling is on and hashing will be slower. -->
+      <HashSpeed>normal</HashSpeed>
+
+      <!-- Shared folders. This element can be specified as many times as
+            folders we want to share. All subfolders of a given shared folder
+            will also be shared. 
+            Folders will be re-scanned for changes as specified. Rescan
+            periods can be not less than 5m. All folders are re-scanned on
+            startup regardeless of this period. -->
+      <shared path="/home/jano/shared"           RescanPeriod="1m" />
+      <shared path="c:\temp\shared"              RescanPeriod="1m" />
+   </library>
+
+   <!-- USER PROFILE.
+         The user profile is specified via the conformant schema of Shareaza.
+         The following subtree must be that XML profile. -->
+   <gProfile>
+      <identity>
+         <!-- Your nickname -->
+         <handle primary="&lt;&quot;&amp;Da Jano&amp;&quot;&gt;"/>
+      </identity>
+   </gProfile>
+
+   <!-- UPLOAD SUBSYSTEM -->
+   <!-- Location specifies the folder for persistence between runs.
+         Adagio remembers its uploaders and will restore queues upon
+         restart. -->
+   <uploads
+      location="./data/">
+      <!-- If queues are safe, every queued upload will be remembered. If not,
+            there is periodical saving. Clients arrived between saves could
+            be lost if Adagio is not shutdown correctly. If your queues are
+            really huge you should not activate it or performance could suffer.
+            The benefit is honestly negligible compared to performance lost. -->
+      <SafeQueues>yes</SafeQueues>
+      <!-- Queues are saved periodically. If they are large, this can take
+            some time so the autosave period must be not too fast -->
+      <AutosavePeriod>5m</AutosavePeriod>
+      <!-- Maximum simultaneous uploads allowed per client -->
+      <!-- Uploads will be queued in every matching queue that many times.
+            There is no problem if a request matches two queues' criteria. 
+            RATIONALE: since you can't know in which queue you'll arrive to
+            head sooner, Adagio takes the safest approach: clients are queued in
+            every queue as many times as total uploads they are allowed. That
+            means that if there are 3 queues and 2 uploads per client, one can
+            be queued in 6 slots. However, each time a client reaches a head,
+            their active uploads are checked. If a client is uploading the 
+            maximum allowed, their queued slots will be dropped. That ensures
+            respecting the maximum uploads per client and at the same time 
+            prevents that clients don't get a file which belongs to a queue 
+            because they're queued in another, slower, one. 
+            Similarly, when a request reaches a head, it is removed from any
+            other queue. -->
+      <MaxPerClient>99</MaxPerClient>
+      <!-- Since connection until the request is made, there is a period of
+            unknown status for clients. The following parameter regulates
+            how many clients can we have in that status. -->
+      <MaxUnknown>100</MaxUnknown>
+      <!-- Maximum allowed bandwidth for all uploads. -->
+      <bandwidth>16kB/s</bandwidth>
+      <!-- If bandwidth sharing is disabled, uploads will run at its max
+            allowed speed, given priority of queues and uploads per queue. 
+            If it is activated, bandwidth from uploads going slower than 
+            that will be used by faster ones. -->
+      <ShareBandwidth>yes</ShareBandwidth>
+      <!-- Throttle is a factor that applies for accelerating/slowing uploads
+            in function of network congestion. Default should be fine.
+            Must be between 0 and 1. Higher means smoother speed changes. -->
+      <throttle>0.6</throttle>
+      <!-- This following delay is the minimum time that must pass between two
+            sends. For high transfer rates (> 200 kB/s) you could make it 
+            longer if CPU usage starts to be noticeable -->
+      <MinimumSendDelay>200ms</MinimumSendDelay>
+      <!-- Internal buffer for sending. If you have very fast pipes, raising
+            this value will improve sending speeds. It's enough to have as
+            many KB as KB/s you can send. ITOH, if you're low on memory, 
+            you could decrease it. -->
+      <SendBufferSize>1kB</SendBufferSize>
+      <!-- Clients are remembered by Adagio between runs or drops. The next
+            parameter indicates for how many time a client can come back and
+            continue at his former queue position. 
+            If you make this period too long, your queues will get filled
+            more quickly. Never missing clients will defer ready ones.
+            -->
+      <RememberClientPeriod>24h</RememberClientPeriod>
+      <QueuePollWindow>10s</QueuePollWindow>
+
+      <queue name="1_fifo">
+         <active>yes</active>
+         <length>128</length>
+         <priority>10</priority>
+         <ActiveClients>1</ActiveClients>
+         <MinimumClientSpeed>0.0kB/s</MinimumClientSpeed>
+         <AveragePeriod>30s</AveragePeriod>
+         <criteria is="true"/>
+         <preemption active="no" size="16kB" />
+         <type>fifo</type>
+      </queue>
+      <queue name="3_rare files">
+         <active>yes</active>
+         <length>128</length>
+         <priority>10</priority>
+         <ActiveClients>1</ActiveClients>
+         <MinimumClientSpeed>0.0kB/s</MinimumClientSpeed>
+         <AveragePeriod>30s</AveragePeriod>
+         <criteria is="true"/>
+         <preemption active="no"/>
+         <type expression="-Uploads">rated</type>
+      </queue>
+      <queue name="2_small files">
+         <active>yes</active>
+         <length>128</length>
+         <priority>10</priority>
+         <ActiveClients>1</ActiveClients>
+         <MinimumClientSpeed>0.0kB/s</MinimumClientSpeed>
+         <AveragePeriod>30s</AveragePeriod>
+         <criteria is="Smaller_than 2mB"/>
+         <preemption active="no" size="16kB" />
+         <type>fifo</type>
+      </queue>
+   </uploads>
+
+   <!-- NETWORKS.
+         At current only G2 is supported, and GWebCache2 for discovery.
+         There are global setting and network specific settings.  
+
+         MaxConnection: maximum number of sockets that will be active.
+         proxy: If you use a proxy for HTTP, specify it here. The format is  
+            [user[:pass]@]host:port 
+      -->
+   <network
+      MaxConnections="1000"
+      proxy=""
+      InternetRoute="direct"
+      ValidAddresses="all">
+
+      <!-- Gnutella2 -->
+         <!-- Customizable connection handshake to allow private networks -->
+      <Gnutella2
+         HandshakeAsk="GNUTELLA CONNECT/0.6"
+         HandshakeAnswer="GNUTELLA/0.6">
+
+         <!-- We can disable support for G2 here -->
+         <connect>yes</connect>
+
+         <!-- Listening TCP/UDP port. -->
+         <port>40410</port>
+
+         <!-- Period for checking server connection status -->
+         <PollPeriod>200ms</PollPeriod>
+         <!-- Period for checking available data from servers -->
+         <PollConnection>100ms</PollConnection>
+         <!-- Period used by receiver of G2 packets. -->
+         <DispatchPeriod>100ms</DispatchPeriod>
+         <!-- Period used by sender of G2 packets. -->
+         <SendPeriod>100ms</SendPeriod>
+         <!-- Minimum time between QRT updates. Should be 5 min minimum -->
+         <QRTUpdatePeriod>1m</QRTUpdatePeriod>
+         <!-- Minimum time before we send our QRT to hubs. We always start
+               with a clean QRT, so until the real QRT is send we should not
+               get any search. This allows for quicker initial connections 
+               and ensuring connectivity to better hubs. -->
+         <QRTDelay>0s</QRTDelay>
+
+         <!-- Time allowed for connection + handshaking -->
+         <HandshakeTimeout>60s</HandshakeTimeout>
+
+         <!-- Retries to same server before giving up -->
+         <Retries>3</Retries>
+         <!-- Time that must pass between two attempts to the same server -->
+         <RestPeriod>15m</RestPeriod>
+         <!-- Servers to remember in our cache -->
+         <CachedServers>100</CachedServers>
+         <!-- Time before dropping repeatedly failed servers.
+               They will not be tried again until that many time elapses. -->
+         <ConfidencePeriod>1h</ConfidencePeriod>
+         <!-- Max age a server can have to be accepted from KHL or GWCache2-->
+         <MaximumAge>1h</MaximumAge>
+
+         <!-- Time before we try to ping a silent G2 server -->
+         <PingDelay>60s</PingDelay>
+         <!-- Time before we drop connection to a silent G2 server -->
+         <PingTimeout>5m</PingTimeout>
+
+         <!-- Number of servers we want to be simultaneously connected -->
+         <ActiveServers>1</ActiveServers>
+         <!-- Number of servers we want to try until full connectivity -->
+         <TryServers>1</TryServers>
+         <!-- Maximum bandwidth usage in server links. -->
+         <LinkBandwidth>4kB/s</LinkBandwidth>
+         <!-- Maximum udp in/out bandwidth usage -->
+         <UdpBandwidthIn>4kB/s</UdpBandwidthIn>
+         <UdpBandwidthOut>4kB/s</UdpBandwidthOut>
+         <root address="127.0.0.1:36765" rating="99999"/>
+      </Gnutella2>
+
+     <!-- GWCache2 -->
+      <GWebCache2>
+         <!-- Caches to remember -->
+         <CachedServers>100</CachedServers>
+         <!-- Timeouts for connection and data delivery -->
+         <ConnectTimeout>10s</ConnectTimeout>
+         <AnswerTimeout>10s</AnswerTimeout>
+         <!-- For development. If yes, it will report a G2 hub at 
+               127.0.0.1:port -->
+         <LocalTest port="36765">no</LocalTest>
+
+         <!--
+         <root url="http://www.gwc2.ip3.com/cgi-bin/gwc2/gcache.cgi"/>
+         <root url="http://g2cache.theg2.net/gwcache/lynnx.asp"/>
+         <root url="http://g2.instantnetworks.net/g2/bazooka.php"/>
+         <root url="http://bazooka1.servehttp.com/g2/bazooka.php"/>-->
+      </GWebCache2>
+   </network>
+
+   <!-- HOSTCACHE. 
+         This is the known servers cache (for all networks) -->
+   <hostcache
+      location="data/hostcache.dat">
+      <!-- Enable purging of worst servers 
+            (quantities specified in each network). -->
+      <purge>yes</purge>
+      <!-- Time between purges -->
+      <period>60s</period>
+   </hostcache>
+
+   <!-- SECURITY
+         Host banning. That's made through additional xml files conforming
+         to Shareaza schema for security rules. 
+         There is no limit in the number of files you can specify here.  -->
+   <security>
+      <policy allow="yes"/>
+      <!-- File with security rules. They can be disabled if desired.
+            Only "address" type rules will be processed. -->
+      <file path="./security.xml" active="yes" />
+
+      <country code="??" allow="no"/>
+   </security>
+
+   <!-- CHAT -->
+   <chat logfile="log/chat.log">
+      <!-- Enable or disable it here -->
+      <!-- Currently only chat for G2 is implemented -->
+      <enabled>yes</enabled>
+      <!-- Answering machine. You can select one of these:
+            Away   : the standard away message below will be sent.
+            Eliza  : a classic Eliza bot will chat with the requester.
+            Random : one of the previous will be chosen randomly. -->
+      <answer>Eliza</answer>
+      <AwayMessage>Q t den</AwayMessage>
+   </chat>
+
+   <download active="yes">
+      <bandwidth>17kB/s</bandwidth>
+   </download>
+
+
+   <search>
+      <!-- Priority values. Each search has a score which is increased with 
+            the following values after each hub query. When a hub is to be
+            searched, the search with the lowest score is chosen. In practice,
+            this means that with the default values, a high priority search is
+            being performed two times oftener than a medium, and four times
+            more than a low one.
+           The thresholds are used for auto priorities and refer to hits -->
+      <priorities>
+         <high                 >10</high>
+         <medium threshold="10">20</medium>
+         <low    threshold="50">40</low>
+      </priorities>
+      <!-- Watchdog period; searching after running out of hubs is attempted
+            every this period -->
+      <WatchdogPeriod>15s</WatchdogPeriod>
+      <!-- Minimum wait between two quieres to the same hub from the same search -->
+      <MinimumRequeryWait>30m</MinimumRequeryWait>
+      <!-- Timeout for a queried hub to give life signals: -->
+      <HubTimeout>5m</HubTimeout>
+      <!-- Rest period locally enforced between two queries to the same hub -->
+      <HubRestPeriod>10m</HubRestPeriod>
+      <!-- Minimum wait between two search messages sending -->
+      <SendingThrottle>200ms</SendingThrottle>
+      <!-- Memory cleanups. Oftener will take less CPU -->
+      <PurgePeriod>1m</PurgePeriod>
+      <PurgeAge>30m</PurgeAge>
+      <KeyDuration>24h</KeyDuration>
+   </search>
+
+   <!-- DEBUG.
+         active: enabled or not
+         logfile: file to keep the log. Unbounded size.
+         netlogfile: file to keep network related log.
+         loglevel: Level of tracing: debug, informative, warning, error.
+            Below warning level, messages are not relevant to the developer.
+         localEcho: enables echo of messages in console.
+         PurgeOnStartup: logfiles will be deleted in each run.
+   -->
+   <debug 
+      active="yes"
+      logfile="log/adagio.log" 
+      netlogfile="log/adagio.log"
+      loglevel="informative"
+      HeartBeat="1s"
+      ConsoleEcho="yes"
+      DebugStatistics="yes"
+      MemoryPeriod="1m"
+      PurgeOnStartup="yes"
+   />
+</adagio>

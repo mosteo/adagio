@@ -1,0 +1,18 @@
+---------------------
+-- Next milestones --
+---------------------
+      3.2.0 : First release with RLEAF tracking.
+      3.0.2 : Top ten.
+      3.0.0 : Renewed FSA.
+      2.4.0 : Trapped that pesky 24h bug.
+      2.2.8 : Leaves histogram
+      2.2.6 : Uptimes histogram
+      2.2.0 : First Instantnetworks release
+
+----------------
+-- TO DO list --
+----------------
+
+Autokill if some memory usage exceeded.
+Correct shut down. Some task is maintaining everything alive.
+Proper hub listing with status, time to next event and failures.

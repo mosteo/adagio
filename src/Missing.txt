@@ -1,0 +1,46 @@
+------------------------------------------------------------------------------
+$Id: Missing.txt,v 1.18 2004/03/22 07:14:52 Jano Exp $
+------------------------------------------------------------------------------
+
+---------------------
+-- Next milestones --
+---------------------
+      3.6   : Http sources manually entered.
+      3.4   : Deflating for uploads.
+      3.2   : G2 search mechanism renovation.
+      3.0   : Freenet integration (?).
+      2.6   : Partial file sharing.
+      2.4   : Anti-spam-corruption banning.
+      2.2.6 : Tigertree verification of downloads
+      2.2.4 : Retrieving of TTHs <internal>
+      2.2.2 : SHA1 verification of downloads
+      2.2   : Downloading <internal>
+----->     <----- We are here.
+      2.1.e : Searching for firewalled nodes
+      2.1.c : Secondary statistics for web variables.
+      2.1.a : NAT+Port forward / Forced firewalling (no UDP at all)
+      2.1.8 : Configuration wizard
+      2.1.6 : Searching
+      2.1.4 : Load page
+      2.1.3 : BW[1min|5min|sesión][in|out]/#Uploads graphs
+      2.1.2 : Country based bans
+      2.1.1 : Autentificación/sesión para conexiones remotas
+      2.1   : Web gui
+      2.0   : Linux working version.
+      1.9.3 : Deflated server links.
+      1.9.2 : Fast binary search filter tables.
+      1.9.1 : Eliza chatterbot.
+      1.9   : Browse host.
+      1.8   : Chat subsystem.
+      1.7   : Upload mesh.
+      1.6   : Metadata searches.
+      1.5   : TTH hashing.
+      1.4   : TTH serving.
+      1.3   : Ed2k hashing.
+      1.2   : Direct/NAT/Firewalled management.
+      1.1   : Renewed java monitor.
+      1.0   : Initial release.
+
+------------------------------------------------------------------------------
+
+Estoy haciendo: un Stream.Filter tiene get_avail_read. Observable_filter desaparece.

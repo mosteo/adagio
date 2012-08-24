@@ -1,0 +1,104 @@
+Adagio - Ada Gnutella2 Input/Output.
+
+Supported platforms: Linux/Windows NT/2000/XP
+
+IMPORTANT: 
+   * You MUST delete all .dat files if upgrading from a version prior to 2.1.1, 
+since formats have changed. Failing to do so can crash Adagio or prevent normal 
+operation.
+
+CONTENTS
+- Installing and running Adagio
+- Interface
+- Command line parameters
+- What is what
+- Notes for Linux users
+
+********************************
+* Installing and running Adagio:
+********************************
+
+   * Linux
+   =======
+   Extract the files to your folder of choice.
+   Use the start script: 
+      adagio-start.sh
+   Open 
+      http://localhost:24444/config.html 
+      to create a default configuration.
+   Restart Adagio.
+   Open
+      http://localhost:24444/
+      for the main web interface.
+
+   * Windows
+   =========
+   Launch the installer.
+   Launch Adagio (Start Menu).
+   Open the Shortcut to the configuration wizard or manually browse to
+      http://127.0.0.1:24444/config.html
+   Restart Adagio.
+   Open the Adagio Monitoring Console (Start Menu) to get the web GUI.
+
+************
+* Interface:
+************
+
+Point your browser to http://127.0.0.1:24444/
+
+If you have changed the default port for the GUI (24444) you must change the
+above URL accordingly.
+
+**************************
+* Command line parameters:
+**************************
+
+adagio [-f config_file]
+agiomon [-f config_file]
+agioutils [-f config_file] [-s] [--shutdown]
+
+If -f is not specified, a default adagio.xml will be searched in the 
+   current directory. 
+
+The same file must be provided for Adagio, Agiomon and Agioutils because 
+   it contains the required information to establish the SOAP/Web link.
+
+Note that agiomon is a java application which needs a Java2 JRE. It's
+packaged in a single .jar named agiomon.jar. You can run it from command-line
+with
+
+java -jar agiomon.jar [-f config_file]
+
+or
+
+javaw -jar agiomon.jar [-f config_file]
+
+if you are running Windows and don't want the debug console.
+
+***************
+* WHAT IS WHAT:
+***************
+
+   Adagio   : The core G2 service.
+   Agiomon  : A graphical monitoring interface.
+   Agioutils: Controller of the service via command-line
+      (only option currently is shutdown ;-)
+
+************************
+* NOTES FOR LINUX USERS:
+************************
+
+There are three scripts provided to launch and stop Adagio, named:
+
+adagio-start.sh
+adagio-stop.sh
+adagio-kill.sh
+
+For kernel 2.6.x series, you must export the following environment variable:
+LD_ASSUME_KERNEL=2.4.1
+
+Note that the adagio-start.sh will do that for you.
+
+Use the adagio-kill.sh script if something goes wrong using adagio-stop.sh 
+
+Please address any comments to adagio@mosteo.com      

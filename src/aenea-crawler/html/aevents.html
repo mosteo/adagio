@@ -1,0 +1,62 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+    <link rel="stylesheet" type="text/css" href="@_STYLE_@">
+    <title>Events</title>
+  </head>
+  <body>
+    <!--
+      VALUE1  <- Time
+      VALUE2  <- Level
+      VALUE3  <- Text
+      VALUE4  <- New?
+    -->
+    <div id="contents">
+      <div id="main">
+<!--         <div class="refresh">[ <a href="aevents.html">Refresh</a> ]</div>
+<span id="title">Events</span>                   -->
+<!--         <div id="menubar">
+            <a href="command?action=clear&amp;what=events">Clear</a> | 
+            Set level: 
+            <a href="command?action=set_log&amp;level=debug">Debug</a> | 
+            <a href="command?action=set_log&amp;level=informative">Normal</a> | 
+            <a href="command?action=set_log&amp;level=warning">Warning</a> | 
+            <a href="command?action=set_log&amp;level=error">Error</a></div>      -->
+         <center>
+            <table summary="Adagio events" border="1" cellspacing="0" class="dataset">
+               <tr class="header">
+                  <td class="header" align="center">#</td>
+                  <td class="header">Time&nbsp;<a href="events.html?orden=1&amp;sentido=true"><img src="up.gif" border="0" alt="Sort descending"></a><a href="events.html?orden=1&amp;sentido=false"><img src="do.gif" border="0" alt="Sort ascending"></a></td>
+                  <td class="header">Level&nbsp;<a href="events.html?orden=2&amp;sentido=true"><img src="up.gif" border="0" alt="Sort descending"></a><a href="events.html?orden=2&amp;sentido=false"><img src="do.gif" border="0" alt="Sort ascending"></a></td>
+                  <td class="header">Text&nbsp;<a href="events.html?orden=3&amp;sentido=true"><img src="up.gif" border="0" alt="Sort descending"></a><a href="events.html?orden=3&amp;sentido=false"><img src="do.gif" border="0" alt="Sort ascending"></a></td>
+             </tr>
+             @@TABLE@@
+             <tr valign="middle" style=
+                 @@IF@@ @_VALUE2_@ = DEBUG
+                 "color:gray"
+                 @@ELSIF@@ @_VALUE2_@ = NORMAL
+                 "color:black"
+                 @@ELSIF@@ @_VALUE2_@ = WARNING
+                 "color:orange"
+                 @@ELSE@@
+                 "color:crimson"
+                 @@END_IF@@             
+                 @@IF@@ @_UPPER:VALUE4_@ = "TRUE"
+                 bgcolor="#ccffff"
+                 @@END_IF@@
+             >						
+                 <td class="contentodd" align="right">@_TABLE_LINE_@</td>
+                 <td class="contentodd">@_VALUE1_@</td>                 
+                 <td class="contentodd">@_CAPITALIZE:VALUE2_@</td>
+                 <td class="contentodd" align="left">@_WEB_ESCAPE:VALUE3_@</td>
+             </tr>
+             @@END_TABLE@@
+         </table>
+      </center>
+      </div>
+      @@INCLUDE@@ footer.html
+    </div>
+  </body>
+</html>
+

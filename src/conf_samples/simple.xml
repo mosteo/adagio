@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<adagio>
+
+   <!-- MINIMAL CONFIGURATION FILE -->
+   <!-- This file contains only the bare minimum options needed to run Adagio.
+         See adagio.xml for all features. The values in that file are the
+         default ones, used when absent. -->
+   
+
+   <!-- General considerations 
+
+         All time values can be specified with their unit following.
+         Allowed units are: d, h, m, s, ms. 
+         Omiting the units will be interpreted as seconds. 
+         Don't leave spaces between the quantity and their units.
+
+         Sizes use b for bit, B for byte,
+         k for 1024 bytes, m for 1024*1024 bytes, g for 1024*1024*1024 bytes.
+         k, m and g are case insensitive.
+
+         Speeds are a size plus "/s", which is the only unit allowed.
+         A special speed is "unlimited".
+
+         Times, sizes and speeds can contain decimal part (dot is separator).
+         Rounding is made towards bytes for sizes/speeds.
+
+         Paths should be specified with forward slashes "/" in 
+         windows and unix.
+         
+         All elements/attributes names are case sensitive! 
+   -->
+
+   <!-- LIBRARY. -->
+   <library>
+      <shared path="c:/shared"  RescanPeriod="1h" />
+   </library>
+
+   <!-- UPLOAD SUBSYSTEM -->
+   <!-- See full.xml for advanced queue settings -->
+   <uploads>
+      <queue name="smaller first">
+         <type expression="-File_size">rated</type>
+      </queue>
+   </uploads>
+
+   <!-- NETWORKS. -->
+   <network>
+      <!-- Gnutella2 -->
+      <Gnutella2 port="24610"/>
+
+      <!-- GWCache2 -->
+      <GWebCache2>
+         <root url="http://www.gwc2.ip3.com/cgi-bin/gwc2/gcache.cgi"/>
+         <root url="http://g2cache.theg2.net/gwcache/lynnx.asp"/>
+         <root url="http://g2.instantnetworks.net/g2/bazooka.php"/>
+         <root url="http://bazooka1.servehttp.com/g2/bazooka.php"/>
+      </GWebCache2>
+   </network>
+
+   <!-- SECURITY -->
+   <security>
+      <file path="./security.xml" active="yes" />
+   </security>
+
+   <!-- USER PROFILE. -->
+   <gProfile xmlns="http://www.shareaza.com/schemas/GProfile.xsd">
+      <identity>
+         <!-- Replace Anonymous with your nickname here -->
+         <handle primary="Anonymous"/>
+      </identity>
+   </gProfile>
+
+</adagio>

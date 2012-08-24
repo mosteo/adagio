@@ -1,0 +1,14 @@
+// Resource file for Win32 version of Adagio.
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Icon
+//
+
+0x1C02   ICON    DISCARDABLE     "resource/adagio.ico"
+0x1C03   ICON    DISCARDABLE     "resource/adagio2.ico"
+0x1C04   ICON    DISCARDABLE     "resource/adagio3.ico"
+0x1C05   ICON    DISCARDABLE     "resource/adagio4.ico"
+0x1C06   ICON    DISCARDABLE     "resource/adagio5.ico"
+0x1C07   ICON    DISCARDABLE     "resource/adagio6.ico"
+0x1C08   ICON    DISCARDABLE     "resource/adagio7.ico"

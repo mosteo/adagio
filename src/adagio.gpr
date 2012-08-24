@@ -1,0 +1,63 @@
+project Adagio is
+
+   for Languages use ("Ada");
+   for Object_Dir use "obj_debug";
+
+   for Main use ("main.adb");
+   type Build_Type is ("Devel", "Release");
+
+   Build : Build_Type := external ("Build", "Devel");
+
+   type OS_Type is ("Linux", "Win32");
+   OS : OS_Type := external ("OS", "Linux");
+
+   for Object_Dir use "obj_debug";
+
+   Sources := ("agpl", "aenea-crawler", "download", "ed2k", "g2", "gui", "kernel", "library", "misc", "network", 
+               "search", "storage", "tasking", "upload", 
+               "../adacf/src", "../aws", "../charles", "../pragmarc", "agpl/xmlada", "../zlibada", "../zlibc",
+               "../aws/include", "../aws/soap", "../aws/src", "../aws/ssl");
+
+   case OS is
+      when "Win32" =>
+         for Source_Dirs use Sources & ("os_win");
+
+      when "Linux" =>
+         for Source_Dirs use Sources & ("os_linux");
+   end case;
+
+   package Compiler is
+      for Default_Switches ("c") use ("-g");
+      for Default_Switches ("c++") use ("-g");
+      for Default_Switches ("ada") use ("-O2", "-gnatf", "-gnato", "-fstack-check", "-g", "-gnata", "-gnat05", 
+                                        "-gnatwcfjmopruvz", "-gnatVa", "-gnatyaceikln");
+
+
+   end Compiler;
+
+   package Linker is
+      for Default_Switches ("ada") use ("-g");
+   end Linker;
+
+   package Builder is
+
+      for Default_Switches ("ada") use ("-m", "-j2", "-g", "-gnatQ");
+      for Executable ("main.adb") use "adagio";
+
+   end Builder;
+
+   package Binder is
+
+      for Default_Switches ("ada") use ("-E", "-static");
+
+   end Binder;
+
+
+   package Pretty_Printer is
+
+      for Default_Switches ("ada") use ("-c4", "-A1", "-A2", "-A3", "-A4");
+
+   end Pretty_Printer;
+
+end Adagio;
+

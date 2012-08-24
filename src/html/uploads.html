@@ -1,0 +1,94 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+    <link rel="stylesheet" type="text/css" href="@_STYLE_@">
+    <title>Uploads</title>
+    <meta http-equiv="refresh" content="60">
+  </head>
+  <body>
+    <!--
+      VALUE1  <- Queue name
+      VALUE2  <- Position
+      VALUE3  <- Rating
+      VALUE4  <- Status
+      VALUE5  <- Filename
+      VALUE6  <- Speed
+      VALUE7  <- Client
+      VALUE8  <- Arrival
+      VALUE9  <- Last seen
+      VALUE10 <- Slot expiration
+      VALUE11 <- IP
+      VALUE12 <- Country code
+      VALUE13 <- Country name
+    -->
+    <div id="contents">
+      <div id="main">
+         <div class="refresh">[ <a href="@_URI_@">Refresh</a> ]</div>
+         <span id="title">Current uploads</span>
+         <div id="menubar">
+         @@IF@@ @_SHOW_LOST_@
+            <a href="uploads.html?queue=@_QUEUE_@&amp;show_lost=false">Hide lost clients</a>
+         @@ELSE@@
+            <a href="uploads.html?queue=@_QUEUE_@&amp;show_lost=true">Show lost clients</a>
+         @@END_IF@@
+         @@IF@@ not @_IS_EMPTY:QUEUE_@
+         | <a href="uploads.html?queue=show_all">All queues</a>
+         @@END_IF@@
+         | <a href="ufinished.html">Finished</a>
+         </div>                        
+            <table summary="Adagio uploads" border="1" cellspacing="0" class="dataset">
+               <tr class="header">
+                  <td class="header" align="center">#</td>                  
+                  <td class="header">Queue<a href="uploads.html?orden=1&amp;sentido=true"><img src="up.gif" border="0" alt="Sort descending"></a><a href="uploads.html?orden=1&amp;sentido=false"><img src="do.gif" border="0" alt="Sort ascending"></a></td>
+                  <td class="header">Pos<a href="uploads.html?orden=2&amp;sentido=true"><img src="up.gif" border="0" alt="Sort descending"></a><a href="uploads.html?orden=2&amp;sentido=false"><img src="do.gif" border="0" alt="Sort ascending"></a></td>
+                  <td class="header">Prio<a href="uploads.html?orden=3&amp;sentido=true"><img src="up.gif" border="0" alt="Sort descending"></a><a href="uploads.html?orden=3&amp;sentido=false"><img src="do.gif" border="0" alt="Sort ascending"></a></td>
+                  <td class="header">Status<a href="uploads.html?orden=4&amp;sentido=true"><img src="up.gif" border="0" alt="Sort descending"></a><a href="uploads.html?orden=4&amp;sentido=false"><img src="do.gif" border="0" alt="Sort ascending"></a></td>
+                  <td class="header">File<a href="uploads.html?orden=5&amp;sentido=true"><img src="up.gif" border="0" alt="Sort descending"></a><a href="uploads.html?orden=5&amp;sentido=false"><img src="do.gif" border="0" alt="Sort ascending"></a></td>
+                  <td class="header">Speed<a href="uploads.html?orden=6&amp;sentido=true"><img src="up.gif" border="0" alt="Sort descending"></a><a href="uploads.html?orden=6&amp;sentido=false"><img src="do.gif" border="0" alt="Sort ascending"></a></td>
+                  <td class="header">Client<a href="uploads.html?orden=7&amp;sentido=true"><img src="up.gif" border="0" alt="Sort descending"></a><a href="uploads.html?orden=7&amp;sentido=false"><img src="do.gif" border="0" alt="Sort ascending"></a></td>
+                  <td class="header">Address<a href="uploads.html?orden=11&amp;sentido=true"><img src="up.gif" border="0" alt="Sort descending"></a><a href="uploads.html?orden=11&amp;sentido=false"><img src="do.gif" border="0" alt="Sort ascending"></a></td>
+                  <td class="header">Arrival<a href="uploads.html?orden=8&amp;sentido=true"><img src="up.gif" border="0" alt="Sort descending"></a><a href="uploads.html?orden=8&amp;sentido=false"><img src="do.gif" border="0" alt="Sort ascending"></a></td>
+                  <td class="header">Seen<a href="uploads.html?orden=9&amp;sentido=true"><img src="up.gif" border="0" alt="Sort descending"></a><a href="uploads.html?orden=9&amp;sentido=false"><img src="do.gif" border="0" alt="Sort ascending"></a></td>
+                  <td class="header">Expires<a href="uploads.html?orden=10&amp;sentido=true"><img src="up.gif" border="0" alt="Sort descending"></a><a href="uploads.html?orden=10&amp;sentido=false"><img src="do.gif" border="0" alt="Sort ascending"></a></td>
+             </tr>
+             @@TABLE@@
+             <tr valign="middle">						
+                 <td class="contentodd" align="right">@_TABLE_LINE_@</td>
+                 <td class="contentodd"><a class="linknou" href="uploads.html?queue=@_VALUE1_@">@_VALUE1_@</a></td>                 
+                 <td align="right" class="contentodd">@_VALUE2_@</td>
+                 <td align="right" class="contentodd">@_VALUE3_@</td>
+                 <td class="contentodd">
+                 @@IF@@ @_VALUE4_@ = Uploading
+                 <div class="yes">
+                 @@ELSIF@@ @_VALUE4_@ = Waiting
+                 <div class="navy">
+                 @@ELSE@@
+                 <div class="no">
+                 @@END_IF@@
+                 @_VALUE4_@</div>
+                 </td>
+                 <td class="contentodd">@_VALUE5_@</td>
+                 <td align="right" class="contentodd">
+                 @@IF@@ @_VALUE6_@ = 0.00
+                 <div class="no">
+                 @@ELSE@@
+                 <div class="yes">
+                 @@END_IF@@
+                 @_VALUE6_@ kB/s</div>
+                 </td>
+                 <td class="contentodd">@_VALUE7_@</td>
+                 <td class="contentodd"><img src="zflag_@_LOWER:VALUE12_@.png" alt="@_VALUE12_@" width="14" height="14" align="middle">&nbsp;@_VALUE11_@</td>
+                 <td class="contentodd">@_VALUE8_@</td>
+                 <td class="contentodd">@_VALUE9_@</td>
+                 <td class="contentodd">@_VALUE10_@</td>
+             </tr>
+             @@END_TABLE@@
+         </table>
+         <p>@_PAGER_@<p>
+      </div>
+      @@INCLUDE@@ footer.html
+    </div>
+  </body>
+</html>
+

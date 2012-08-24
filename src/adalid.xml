@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<adalid>
+
+   <!-- Normal profile. See in conf_samples for a simpler example and for
+         the full options available. -->
+
+   <!-- General considerations 
+         All time values can be specified with their unit following.
+         Allowed units are: d, h, m, s, ms. 
+         Omiting the units will be interpreted as seconds. 
+         Don't leave spaces between the quantities and their units.
+
+         Sizes use b for bit, B for byte,
+         k for 1024 bytes, m for 1024*1024 bytes, g for 1024*1024*1024 bytes.
+         k, m and g are case insensitive.
+         Quantities in bits are rounded towards bytes.
+
+         Speeds are a size plus "/s", which is the only unit allowed.
+         A special speed is "unlimited".
+
+         Times can contain decimal part (dot is separator).
+
+         Sizes/speeds can't have decimal part.
+
+         Paths should be specified with forward slashes "/" in 
+         both windows and unix.
+         
+         All elements/attributes names are case sensitive! 
+   -->
+
+   <!-- GLOBALS 
+        This section contains global application parameters -->
+   <globals>
+      <!-- Data directory for all persistent information across runs -->
+      <DataFolder path="adalid_data" />
+   </globals>
+
+   <!-- GUI 
+         Adagio hasn't a GUI. Instead, it provides a Web/SOAP interface to
+         acquire/provide data. That interface could allow the building
+         of a stand-alone GUI application. -->
+   <gui>
+      <!-- We can specify if the web interface is running -->
+      <active>yes</active>
+      <!-- In which interface we must listen. 0.0.0.0 means any and
+            127.0.0.1 localhost. Please set an username and password if you're
+            listening outside 127.0.0.1 -->
+      <address>127.0.0.1</address>
+      <!-- Port for the Web/SOAP interfaces -->
+      <port>25444</port>
+
+      <!-- This user/password combination would allow access from remote
+            computers -->
+      <user>name</user>
+      <pass>word</pass>
+   </gui>
+
+   <!-- USER PROFILE.
+         The user profile is specified via the conformant schema of Shareaza.
+         The following subtree must be that XML profile. -->
+   <gProfile xmlns="http://www.shareaza.com/schemas/GProfile.xsd">
+      <identity>
+         <!-- Replace Anonymous with your nickname here -->
+         <handle primary="Anonymous"/>
+      </identity>
+   </gProfile>
+
+   <!-- NETWORKS.
+         At current only G2 is supported, and GWebCache2 for discovery.
+         There are global setting and network specific settings.  
+
+         proxy: If you use a proxy for HTTP, specify it here. The format is  
+            [user[:pass]@]host:port 
+         InternetRoute: direct/NAT/none. 
+            Use direct if you have a public IP.
+            Use NAT if you are behing a transparent NAT router. 
+            Use none if you're stuck in a LAN without direct external access.
+         ValidAddresses: public/private/all
+            Use public to discard private addresses.
+            Use private if you want a LAN network.
+            Use all if you are in a mixed environment.
+            Note that for local testing you must allow private addresses.
+      -->
+   <network
+      proxy=""
+      InternetRoute="direct"
+      ValidAddresses="public">
+
+      <!-- Gnutella2 -->
+      <Gnutella2>
+         <!-- Listening TCP/UDP port. -->
+         <port>25610</port>
+
+         <!-- Servers to remember in our cache -->
+         <CachedServers>1000</CachedServers>
+
+         <!-- Root servers. Use a rating of 0 to not use them.
+               Higher ratings mean higher preference to use them.
+               These servers are never dropped so you can specify here
+               static IP servers you know and prefer.
+               For comparison, new servers are rated like that:
+               * From GWebCache2: 300
+               * From /KHL/NH:    250
+               * From /KHL/CH:    200 -->
+         <root address="127.0.0.1:36765" rating="0"/>
+      </Gnutella2>
+
+      <!-- GWCache2 -->
+      <GWebCache2>
+         <!-- Some root (non discardable) GWCaches -->
+         <root url="http://www.gwc2.ip3.com/cgi-bin/gwc2/gcache.cgi"/>
+         <root url="http://gwc.isuldor.com/g2only/cache.asp"/>
+         <root url="http://gwebcache2.jonatkins.com/cgi-bin/gwebcache.cgi"/>
+         <root url="http://g2cache.theg2.net/gwcache/lynnx.asp"/>
+         <root url="http://cache.shareaza.com/cache.aspx"/>
+         <root url="http://g2.instantnetworks.net/g2/bazooka.php"/>
+         <root url="http://bazooka1.servehttp.com/g2/bazooka.php"/>
+      </GWebCache2>
+   </network>
+
+   <!-- SECURITY
+         Host banning. That's made through additional xml files conforming
+         to Shareaza schema for security rules. 
+         There is no limit in the number of files you can specify here.  -->
+   <security>
+      <!-- Default banning policy. If you set it to "no", no connections
+            will be allowed except to selected countries (see below). -->
+      <policy allow="yes"/>
+
+      <!-- File with security rules. They can be disabled if desired.
+            Only "address" type rules will be processed. -->
+      <file path="./security 2.5.xml" active="yes" />
+      <file path="./security 2.6.xml" active="yes" />
+      <file path="./security 2.7.xml" active="yes" />
+      <file path="./security 2.7.5.xml" active="yes" />
+      <file path="./security pg 1.0.xml" active="yes" />
+
+      <!-- Specific User-Agent bannings are specified here (multiple allowed).
+            Two kind of banning strings are allowed (both case-insensitive):
+               * substring: any user agent containing this substring
+                  will be banned
+               * regexp: file-like regular expressions.
+                  Must match the whole user agent
+                     -->
+      <ban client="bearshare" type="substring" active="no" />
+      <ban client="bear*4.2.3*" type="regexp" active="no" />
+
+      <!-- Country bannings. You can ban countries or allow them against the
+            general policy. Note that the country detection can't be 100%
+            accurate, use it at your own risk! 
+           Use the code "??" to refer to unknown locations. 
+           Private addresses will not be checked.  -->
+      <country code="es" allow="yes"/>
+      <!-- Example of hypotetical banned country: -->
+      <country code="zz" allow="no"/>
+   </security>
+
+   <!-- CHAT -->
+   <chat logfile="log/chat.log" log="yes">
+      <!-- Enable or disable it here -->
+      <!-- Currently only chat for G2 is implemented -->
+      <enabled>yes</enabled>
+      <!-- Answering machine. You can select one of these:
+            Away   : the standard away message below will be sent.
+            Eliza  : a classic Eliza bot will chat with the requester.
+            Random : one of the previous will be chosen randomly. -->
+      <answer>Away</answer>
+      <AwayMessage>Hello. This is an away bot, nobody here. My master is using Adalid, you can check it at http://agio.sourceforge.net</AwayMessage>
+   </chat>
+
+   <!-- DEBUG.
+         active: enabled or not
+         logfile: file to keep the log. Unbounded size.
+         netlogfile: file to keep network related log.
+         loglevel: Level of tracing: debug, informative, warning, error.
+            Below warning level, messages are not relevant to the developer.
+         ConsoleEcho: echoes traces in console. 
+            NOTE: You need a console-based platform (i.e. linux). In windows
+               that will cause undefined (probably faultly) behavior.
+         DebugStatistics: shows statistics about internal status.
+         PurgeOnStartup: logfiles will be deleted in each run.
+         MemoryPeriod: lap between memory usage counting
+         CrawlerAllowed: Adagio will answer to crawler requests (this reveals
+            your IP but not your Gnutella GUID).
+   -->
+   <debug 
+      active="yes"
+      logfile="log/adagio.log" 
+      netlogfile="log/adagio.log"
+      loglevel="informative"
+      ConsoleEcho="no"
+      DebugStatistics="no"
+      PurgeOnStartup="yes"
+      heartbeat="1s"
+      MemoryPeriod="1m"
+      CrawlerAllowed="yes"
+   />
+</adalid>

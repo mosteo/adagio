@@ -1,0 +1,805 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<adagio>
+
+   <!-- Full configuration profile. All options are explicitly set here.
+         Note that these are the default values which will take place in 
+         case of missing options (see simple.xml for a simpler example). -->
+
+   <!-- General considerations 
+         All time values can be specified with their unit following.
+         Allowed units are: d, h, m, s, ms. 
+         Omiting the units will be interpreted as seconds. 
+         Don't leave spaces between the quantities and their units.
+
+         Sizes use b for bit, B for byte,
+         k for 1024 bytes, m for 1024*1024 bytes, g for 1024*1024*1024 bytes.
+         k, m and g are case insensitive.
+         Quantities in bits are rounded towards bytes.
+
+         Speeds are a size plus "/s", which is the only unit allowed.
+         A special speed is "unlimited".
+
+         Times can contain decimal part (dot is separator).
+
+         Sizes/speeds can't have decimal part.
+
+         Paths should be specified with forward slashes "/" in 
+         windows and unix.
+         
+         All elements/attributes names are case sensitive! 
+   -->
+
+   <!-- GLOBALS 
+        This section contains global application parameters -->
+   <globals>
+      <!-- Max cpu usage allowed.
+            This is used in repetitive tasks. However, ocassional
+            spikes can take 100% but shouldn't be frequent. -->
+      <maxCPU>80</maxCPU>
+
+      <!-- Watchdog. 
+            After requesting shutdown, the watchdog task will try to
+            kill any remaining unfinished task.  -->
+      <watchdog deadline="60s" />
+
+      <!-- Time unit. Employed for bandwidth managers. Shouldn't be changed.
+            Higher time units will decrease accuracy -->
+      <TimeUnit>500ms</TimeUnit>
+
+      <!-- Data directory for all persistent information across runs -->
+      <DataFolder path="data" />
+
+      <!-- Database with geographic information.
+            Use a full path to override the internal database.
+            Leave like this to use the internal database.  -->
+      <GeoIP>geoip.csv</GeoIP>
+   </globals>
+
+   <!-- GUI 
+         Adagio hasn't a GUI. Instead, it provides a SOAP interface to
+         acquire/provide data. That interface could allow the building
+         of a stand-alone GUI application. -->
+   <gui>
+      <!-- We can specify if the SOAP interface is running -->
+      <active>yes</active>
+      <!-- In which interface we must listen. 0.0.0.0 means any and
+            127.0.0.1 localhost. Please set an username and password if you're
+            listening outside 127.0.0.1 -->
+      <address>127.0.0.1</address>
+      <!-- Port for the Web/SOAP interfaces -->
+      <port>24444</port>
+
+      <!-- This user/password combination would allow access from remote
+            computers -->
+      <user>name</user>
+      <pass>word</pass>
+
+      <!-- Graphs can cover any time period from 10 minutes in advance. -->
+      <GraphPeriod>10m</GraphPeriod>
+
+      <!-- Adagio supports two types of cosmetical changes. In one hand,
+            you can change the default CSS file. In the other, you can
+            completely remake the html files. The pointers to both of them
+            are here. -->
+      <HtmlRoot>html/</HtmlRoot> <!-- With trailing slash! -->
+      <HtmlStyle>estilo.css</HtmlStyle><!-- Without path, must be in root -->
+
+      <!-- Use this value to split large listings in several pages -->
+      <LinesPerPage>1000</LinesPerPage>
+
+      <!-- Use this parameter to specify the stack size for the web gui.
+            Some large listings (thousands of lines) may require several
+            MB of stack, but more than 1MB can cause problems in Linux.
+            The recommended values are 1MB for Linux and 4MB for Windows. -->
+      <StackSize>1mB</StackSize>
+
+      <!-- Number of simultaneous connections to the GUI. Notice that each
+            instance will use as many stack as specified before -->
+      <listeners>1</listeners>
+
+      <!-- AGIOMON SPECIFIC -->
+      <!-- This could be in a separate configuration file for Agiomon but
+            is kept here for uniqueness and simplicity purposes -->
+      <!-- Says if the look and feel has to be 'java' or 'native' -->
+      <LookAndFeel>native</LookAndFeel>
+   </gui>
+
+   <!-- LIBRARY. -->
+   <library>
+      <!-- Allow browsing of our shared files -->
+      <AllowBrowse>yes</AllowBrowse>
+
+      <!-- If DelayedStartup is true, the refreshing/checking of 
+            new/changed files/folders is done in parallel with normal
+            running of Adagio. If it's false, all refresh will be done
+            on startup. This can take quite a time for big libraries. -->
+      <DelayedStartup>yes</DelayedStartup>
+
+      <!-- Time between processing of pending folders -->
+      <FolderAddingInterval>100ms</FolderAddingInterval>
+
+      <!-- Time between processing of pending files -->
+      <FileAddingInterval>100ms</FileAddingInterval>
+
+      <!-- Period between saves of the library during hashing. -->
+      <AutosaveInterval>5m</AutosaveInterval>
+
+      <!-- Max num of pending searches to be performed. -->
+      <MaxPendingSearches>100</MaxPendingSearches>
+
+      <!-- Max num of concurrent searches to perform. -->
+      <MaxSearches>10</MaxSearches>
+
+      <!-- Time allowed to perform a search. In case it's not completed 
+         (too many results, for example) it will be discarded. -->
+      <SearchTimeout>2s</SearchTimeout>
+
+      <!-- QRT size. It shouldn't be changed unless you know what it is. 
+            You could raise it if you observe a usage of more than 1% -->
+      <QRTSize>20</QRTSize>
+
+      <!-- TTH size. Levels of tigertree to store for each file. 10 levels
+            take 24kB. Each additional level doubles size. -->
+      <TTHSize>10</TTHSize>
+
+      <!-- Max cpu usage while hashing/adding folders -->
+      <HashingCPUusage units="%">85</HashingCPUusage>
+
+      <!-- Hashing speed.
+            fast   : files will be hashed at top speed, without throttling,
+               but also they can't be moved or renamed while are being read.
+            normal : files will be hashed at good speed, but without pre-
+               venting renaming/moving/editing (that will trigger rehash of
+               the affected files).
+            slow   : cpu throttling is on and hashing will be slower. -->
+      <HashSpeed>slow</HashSpeed>
+
+      <!-- Alternate source mesh. -->
+      <!-- Use it or not -->
+      <mesh active="yes">
+         <!-- How many alternates we maintain per file -->
+         <sources>100</sources>
+         <!-- For how many time we remember them -->
+         <TTL>24h</TTL>
+         <!-- Period for mesh cleanup. -->
+         <CleanupPeriod>1m</CleanupPeriod>
+      </mesh>
+
+      <!-- Shared folders. This element can be specified as many times as
+            folders we want to share. All subfolders of a given shared folder
+            will also be shared. 
+            Folders will be re-scanned for changes as specified. Rescan
+            periods can be not less than 5m. All folders are re-scanned on
+            startup regardeless of this period. -->
+      <shared path="c:/movies"  RescanPeriod="24h" />
+      <shared path="c:/music"   RescanPeriod="6h" />
+      <!-- Unshared folders can be used to disallow sharing of specific 
+            subfolders. This facilitates specifying entire branchs for sharing
+            and removing only selected, unshared folders under them. -->
+      <unshared path="c:/music/own/unfinished" />
+   </library>
+
+   <!-- USER PROFILE.
+         The user profile is specified via the conformant schema of Shareaza.
+         The following subtree must be that XML profile. -->
+   <gProfile xmlns="http://www.shareaza.com/schemas/GProfile.xsd">
+      <gnutella/> <!-- This element is necessary. Don't remove it -->
+      <identity>
+         <!-- Replace Anonymous with your nickname here -->
+         <handle primary="Anonymous"/>
+      </identity>
+   </gProfile>
+
+   <!-- UPLOAD SUBSYSTEM -->
+   <uploads>
+      <!-- If queues are safe, every queued upload will be remembered. If not,
+            there is a periodical saving. Clients arrived between saves could
+            be lost if Adagio is not shutdown correctly. If your queues are
+            really large you should not activate it or performance could 
+            be affected.
+            The benefit is honestly negligible. -->
+      <SafeQueues>no</SafeQueues>
+      <!-- Queues are saved periodically. If they are large, this can take
+            some time so the autosave period must be not too fast -->
+      <AutosavePeriod>5m</AutosavePeriod>
+      <!-- Maximum simultaneous uploads allowed per client -->
+      <!-- Uploads will be queued in every matching queue that many times.
+            There is no problem if a request matches two queues' criteria. 
+            RATIONALE: since you can't know in which queue you'll arrive to
+            head sooner, Adagio takes the safest approach: clients wait in
+            every queue as many times as total uploads they are allowed. That
+            means that if there are 3 queues and 2 uploads per client, one can
+            be queued in 6 slots. However, each time a client reaches a head,
+            their active uploads are checked. If a client is uploading the 
+            maximum allowed, their queued slots will be dropped. That ensures
+            respecting the maximum uploads per client and at the same time 
+            prevents that clients don't get a file which belongs to a queue 
+            because they're queued in another, slower, one. 
+            Similarly, when a request reaches a head, it is removed from any
+            other queue. -->
+      <MaxPerClient>2</MaxPerClient>
+      <!-- Since connection until the request is made, there is a period of
+            unknown status for clients. The following parameter regulates
+            how many clients can we have in that status. -->
+      <MaxUnknown>100</MaxUnknown>
+      <!-- Maximum allowed bandwidth for all uploads. -->
+      <bandwidth>16kB/s</bandwidth>
+      <!-- If bandwidth sharing is disabled, uploads will run at its max
+            allowed speed, given priority of queues and uploads per queue. 
+            If it is activated, bandwidth from uploads going slower than 
+            that will be used by faster ones. -->
+      <ShareBandwidth>yes</ShareBandwidth>
+      <!-- Throttle is a factor that applies for accelerating/slowing uploads
+            in function of network congestion. Default should be fine.
+            Must be between 0 and 1. Higher means smoother speed changes. -->
+      <throttle>0.6</throttle>
+      <!-- This following delay is the minimum time that must pass between two
+            sends. For high transfer rates (> 200 kB/s) you could make it 
+            longer if CPU usage starts to be noticeable -->
+      <MinimumSendDelay>200ms</MinimumSendDelay>
+      <!-- Internal buffer for sending. If you have very fast pipes, raising
+            this value will improve sending speeds. It's enough to have as
+            many KB as KB/s you can send. ITOH, if you're low on memory, 
+            you could decrease it. -->
+      <SendBufferSize>64kB</SendBufferSize>
+      <!-- Clients are remembered by Adagio between runs or drops. The next
+            parameter indicates for how many time a client can come back and
+            continue at his former queue position. 
+            If you make this period longer, your queues will get filled
+            more quickly. Never missing clients will defer ready ones.
+            -->
+      <RememberClientPeriod>1h</RememberClientPeriod>
+      <!-- The poll window is used in HTTP connections to provide a period
+            in that the client must refresh its request while queued. Don't
+            make it too narrow or clients will fail in congested situations.
+            -->
+      <QueuePollWindow>90s</QueuePollWindow>
+
+      <!-- Time allowed for a client to make a request after connection -->
+      <RequestDeadline>60s</RequestDeadline>
+
+      <!-- Queues. We can have as many of these as we want. -->
+      <!-- The queue name must be unique. It's employed for queue data saving,
+            so it must be a valid OS filename. -->
+      <!-- The queue name also prioritizes a queue over another, if
+            several are free when a new client arrives and it's valid for
+            more than one. You may want to name them with some numbering 
+            or alphabetical order. -->
+      <queue name="example queue">
+         <!-- Inactive queues will not be used on next run. -->
+         <active>no</active>
+         <!-- Maximum length of the queue. It's convenient to make these
+               as long as possible given your resources. -->
+         <length>256</length>
+         <!-- Priority. It acts as a ratio. All queues' priorities will be
+               added up. This priority divided by the total gives the upload
+               bandwidth ratio guaranteed for this queue. Note that wasted 
+               bandwidth in empty queues or slower clients will be reallocated
+               proportionally to other queues if bandwidth sharing is enabled.
+               Total doesn't need to sum 100. -->
+         <priority>30</priority>
+         <!-- Number of slots with actively uploading clients -->
+         <ActiveClients>2</ActiveClients>
+         <!-- Minimum average bandwidth a client must consume to not be
+               dropped. It is calculated over the period specified later.
+               Take care to not set contradictory values given the queue
+               priority, active clients and total upload capacity. -->
+         <MinimumClientSpeed>1kB/s</MinimumClientSpeed>
+         <!-- Period used to average the client speed. Don't be too res-
+               trictive here or short periods of starvation can cause the
+               drop of valid connections -->
+         <AveragePeriod>30s</AveragePeriod>
+         <!-- Entry criteria for the queue.
+               Existing ones:
+                  Greater_than            Size greater OR EQUAL than 
+                  Smaller_than            Size smaller than 
+                  Is_in                   File is in a certain folder branch.
+                           Paths must be specified between '|'
+                           Must be absolute paths.
+                           Any path starting like this will match (subfolders)
+                           I.e: "Is_in |c:/shared files/release/|"
+                  Extension_is            Extension comparison (with dot)
+                           I.e: "Extension_is .mp3"
+                  Additionally we have: 'and' 'or' 'true' 'false'
+                     evaluated always left to righ
+
+                  Examples:
+                  Smaller_than 1024kB or Is_in c:/test or Extension_is .mp3
+                  Greater_than 1024kB and Smaller_than 10240kB -->
+         <criteria is="true"/> <!-- Queue for everybody -->
+         <!-- Rotating queues. You can enable here preemption after some
+               time of upload or bytes transferred. At least one of these
+               two conditions must be provided if enabled. Both can be 
+               supplied and the first to occur will cause the preemption.  -->
+         <preemption active="yes" time="15m" size="10mB"/>
+         <!-- Queues can be "fifo" or "rated". In rating-based queues, 
+               each client rating is computed when another client is done.
+               The higher the rating, the near to head of the queue.
+               For two clients with same rating, FIFO policy is applied.
+               The expression doesn't apply for fifo queues but it's in
+               this example for documentation purposes.
+               Rating expressions can use the following operators:
+                  sin, cos, tan, log, ln, exp, cot, sqrt, !, 
+                  trigonometric hyperbolic (same with trailing h), 
+                  trigonometric inverse (same with leading arc)
+                  + - * / ^ ( ) with usual precedence. They act on numerals
+               and the following predefined variables:
+                  Uploads   : number of started uploads of the requested file.
+                  Bytes_sent: number of bytes sent to some uploader. 
+                  File_size : size in bytes of the requested file.
+                  Waited    : seconds elapsed since arrival (starts at 1.0) 
+               These variables are of course persistent across sessions. -->
+         <type expression="waited">rated</type> <!-- FIFO emulation -->
+      </queue>
+
+      <!-- MORE EXAMPLE QUEUES -->
+      <!-- Note that they are all inactive -->
+      <queue name="ratio system queue">
+         <!-- Clients who have get less from us are prioritized -->
+         <active>no</active>
+         <length>512</length>
+         <priority>10</priority>
+         <ActiveClients>2</ActiveClients>
+         <MinimumClientSpeed>1kB/s</MinimumClientSpeed>
+         <AveragePeriod>30s</AveragePeriod>
+         <criteria is="true"/>
+         <preemption active="yes" time="15m"/>
+         <type expression="1000 / (Bytes_sent + 1)">rated</type>
+      </queue>
+
+      <queue name="rare files queue">
+         <!-- Files less demanded are prioritized -->
+         <active>no</active>
+         <length>512</length>
+         <priority>10</priority>
+         <ActiveClients>2</ActiveClients>
+         <MinimumClientSpeed>1kB/s</MinimumClientSpeed>
+         <AveragePeriod>30s</AveragePeriod>
+         <criteria is="true"/>
+         <preemption active="yes" time="15m"/>
+         <type expression="1000 / (Uploads + 1)">rated</type>
+      </queue>
+
+      <queue name="standard fifo queue">
+         <!-- Well known Gnutella[2] queues are like this -->
+         <active>no</active>
+         <length>512</length>
+         <priority>10</priority>
+         <ActiveClients>2</ActiveClients>
+         <MinimumClientSpeed>1kB/s</MinimumClientSpeed>
+         <AveragePeriod>30s</AveragePeriod>
+         <criteria is="true"/>
+         <preemption active="no"/>
+         <type>fifo</type>
+      </queue>
+
+      <queue name="standard lifo queue (pity queue)">
+         <!-- Latest arrived, first served (!) -->
+         <active>no</active>
+         <length>512</length>
+         <priority>10</priority>
+         <ActiveClients>2</ActiveClients>
+         <MinimumClientSpeed>1kB/s</MinimumClientSpeed>
+         <AveragePeriod>30s</AveragePeriod>
+         <criteria is="true"/>
+         <preemption active="no"/>
+         <type expression="100 / waited">rated</type>
+      </queue>
+
+      <queue name="release queue">
+         <!-- Queue for priority files -->
+         <active>no</active>
+         <length>512</length>
+         <priority>10</priority>
+         <ActiveClients>2</ActiveClients>
+         <MinimumClientSpeed>1kB/s</MinimumClientSpeed>
+         <AveragePeriod>30s</AveragePeriod>
+         <criteria is="Is_in |c:/shared/release|"/>
+         <preemption active="yes" time="10m" size="10mB"/>
+         <type>fifo</type>
+      </queue>
+
+      <queue name="music queue">
+         <!-- Queue for music files -->
+         <active>no</active>
+         <length>512</length>
+         <priority>10</priority>
+         <ActiveClients>2</ActiveClients>
+         <MinimumClientSpeed>1kB/s</MinimumClientSpeed>
+         <AveragePeriod>30s</AveragePeriod>
+         <criteria is="Extension_is .mp3 or Extension_is .ogg"/>
+         <preemption active="yes" size="10mB"/>
+         <type>fifo</type>
+      </queue>
+
+      <queue name="books queue">
+         <!-- Queue for literature lovers -->
+         <active>no</active>
+         <length>512</length>
+         <priority>10</priority>
+         <ActiveClients>2</ActiveClients>
+         <MinimumClientSpeed>1kB/s</MinimumClientSpeed>
+         <AveragePeriod>30s</AveragePeriod>
+         <criteria is="Is_in |c:/shared/books/| or Extension_is .txt or Extension_is .doc or Extension_is .pdf or Extension_is .rtf or Extension_is .pdb or Extension_is .lit"/>
+         <preemption active="yes" size="2mB"/>
+         <type>fifo</type>
+      </queue>
+
+      <!-- DEFAULT QUEUES -->
+      <!-- These are the default queues supplied with this installation.
+            You can change the queuing system at will. -->
+
+      <queue name="smaller first">
+         <active>yes</active>
+         <length>512</length>
+         <priority>10</priority>
+         <ActiveClients>1</ActiveClients>
+         <MinimumClientSpeed>0kB/s</MinimumClientSpeed>
+         <AveragePeriod>30s</AveragePeriod>
+         <criteria is="true"/>
+         <preemption active="yes" time="10m" size="10mB"/>
+         <type expression="-File_size">rated</type>
+      </queue>
+
+      <queue name="rare first">
+         <active>yes</active>
+         <length>512</length>
+         <priority>10</priority>
+         <ActiveClients>1</ActiveClients>
+         <MinimumClientSpeed>0kB/s</MinimumClientSpeed>
+         <AveragePeriod>30s</AveragePeriod>
+         <criteria is="true"/>
+         <preemption active="yes" time="10m" size="10mB"/>
+         <type expression="-Uploads">rated</type>
+      </queue>
+
+      <queue name="small files">
+         <active>yes</active>
+         <length>512</length>
+         <priority>10</priority>
+         <ActiveClients>1</ActiveClients>
+         <MinimumClientSpeed>0kB/s</MinimumClientSpeed>
+         <AveragePeriod>30s</AveragePeriod>
+         <criteria is="Smaller_than 1mB"/>
+         <preemption active="no" />
+         <type expression="-Bytes_sent">rated</type>
+      </queue>
+
+      <queue name="fifo">
+         <active>yes</active>
+         <length>512</length>
+         <priority>10</priority>
+         <ActiveClients>1</ActiveClients>
+         <MinimumClientSpeed>0kB/s</MinimumClientSpeed>
+         <AveragePeriod>30s</AveragePeriod>
+         <criteria is="true"/>
+         <preemption active="yes" time="10m" size="10mB"/>
+         <type>fifo</type>
+      </queue>
+      <!-- End of default queues -->
+   </uploads>
+
+   <!-- NETWORKS.
+         At current only G2 is supported, and GWebCache2 for discovery.
+         There are global setting and network specific settings.  
+
+         ConnectionsPerSecond : throttle for connections creation.
+         BufferSize: TCP send/receive buffer. Default should be fine.
+         MaxHandshakeSize: Max allowed size for a HTTP request.
+         proxy: If you use a proxy for HTTP, specify it here. The format is  
+            [user[:pass]@]host:port 
+         InternetRoute: direct/NAT/NatForward/none. 
+            Use direct if you have a public IP.
+            Use NAT if you are behing a transparent NAT router. 
+            Use NatForward if you have additionally redirected your server ports in the NAT router.
+            Use none if you're stuck in a LAN with only outbound TCP access or no access at all.
+         ValidAddresses: public/private/all
+            Use public to discard private addresses.
+            Use private if you want a LAN network.
+            Use all if you are in a mixed environment.
+            Note that for local testing you must allow private addresses.
+      -->
+   <network
+      ConnectionsPerSecond="10"
+      BufferSize="32kB"
+      MaxHandshakeSize="1kB"
+      proxy=""
+      InternetRoute="direct"
+      ValidAddresses="public">
+
+      <!-- Gnutella2 -->
+         <!-- Customizable connection handshake to allow private networks -->
+      <Gnutella2
+         HandshakeAsk="GNUTELLA CONNECT/0.6"
+         HandshakeAnswer="GNUTELLA/0.6">
+
+         <!-- We can disable support for G2 here -->
+         <connect>yes</connect>
+
+         <!-- Listening TCP/UDP port. -->
+         <port>24610</port>
+
+         <!-- Period for checking server connection status -->
+         <PollPeriod>1s</PollPeriod>
+         <!-- Period for checking available data from servers -->
+         <PollConnection>500ms</PollConnection>
+         <!-- Period used by sender of G2 packets. -->
+         <SendPeriod>100ms</SendPeriod>
+         <!-- Minimum time between QRT updates. Should be 5 min minimum -->
+         <QRTUpdatePeriod>15m</QRTUpdatePeriod>
+         <!-- Minimum time before we send our QRT to hubs. We always start
+               with a clean QRT, so until the real QRT is send we should not
+               get any search. This allows for quicker initial connections 
+               and encourages connectivity to better hubs. -->
+         <QRTDelay>30s</QRTDelay>
+
+         <!-- Time allowed for connection -->
+         <ConnectTimeout>15s</ConnectTimeout>
+         <!-- Time allowed for handshaking -->
+         <HandshakeTimeout>45s</HandshakeTimeout>
+
+         <!-- Retries to same server before giving up -->
+         <retries>3</retries>
+         <!-- Time that must pass between two attempts to the same server -->
+         <RestPeriod>5m</RestPeriod>
+         <!-- Servers to remember in our cache -->
+         <CachedServers>1000</CachedServers>
+         <!-- Time before dropping repeatedly failed servers.
+               They will not be tried again until that many time elapses. -->
+         <ConfidencePeriod>2h</ConfidencePeriod>
+         <!-- Max old a server can be to be accepted from KHL or GWCache2 -->
+         <MaximumAge>1h</MaximumAge>
+
+         <!-- Time before we try to ping a silent G2 server -->
+         <PingDelay>60s</PingDelay>
+         <!-- Time before we drop connection to a silent G2 server -->
+         <PingTimeout>5m</PingTimeout>
+         <!-- Time between KHL/LNI sendings -->
+         <ServerInfoDelay>3m</ServerInfoDelay>
+
+         <!-- Number of servers we want to be simultaneously connected -->
+         <ActiveServers>2</ActiveServers>
+         <!-- Number of servers we want to try until full connectivity -->
+         <TryServers>30</TryServers>
+         <!-- Maximum bandwidth usage in server links. -->
+         <LinkBandwidth>4kB/s</LinkBandwidth>
+         <!-- Maximum udp in bandwidth usage -->
+         <UdpBandwidthIn>Unlimited</UdpBandwidthIn>
+         <!-- Throttled udp out bandwidth usage -->
+         <UdpBandwidthOut>16kB/s</UdpBandwidthOut>
+         <!-- Outbound timeout to discard throttled UDP packets -->
+         <UdpOutboundTimeout>60s</UdpOutboundTimeout>
+         <!-- Udp buffers for sending/receiving -->
+         <UdpBuffers>256</UdpBuffers>
+         <!-- Max packets in a queue -->
+         <MaxPacketQueueLength>1024</MaxPacketQueueLength>
+         <!-- Attempt compressed connections to servers? -->
+         <CompressedLink>yes</CompressedLink>
+         <!-- Alt-locations to serve with each request -->
+         <AltLocations>10</AltLocations>
+         <!-- Root servers. Use a rating of 0 to not use them.
+               Higher ratings mean higher preference to use them.
+               These servers are never dropped so you can specify here
+               static IP servers you know and prefer.
+               For comparison, new servers are rated like that:
+               * From GWebCache2: 300
+               * From /KHL/NH:    250
+               * From /KHL/CH:    200 -->
+         <root address="127.0.0.1:36765" rating="0"/>
+
+         <!-- Maximum headers size allowed for negotiations -->
+         <MaxHeaders>4096</MaxHeaders>
+
+         <!-- SEARCHING -->
+         <search>
+            <!-- Priority values. Each search has a score which is increased with 
+                  the following values after each hub query. When a hub is to be
+                  searched, the search with the lowest score is chosen. In practice,
+                  this means that with the default values, a high priority search is
+                  being performed two times oftener than a medium, and four times
+                  more than a low one.
+                 The thresholds are used for auto priorities and refer to hits.
+                 The special entry "stop" is used only to mandate the auto-pause of
+                  a search after a given number of hits. -->
+            <priorities>
+               <high                 >10</high>
+               <medium threshold="5">20</medium>
+               <low    threshold="20">40</low>
+               <stop   threshold="100"/>
+            </priorities>
+            <!-- Watchdog period; searching after running out of hubs is attempted
+                  every this period -->
+            <WatchdogPeriod>15s</WatchdogPeriod>
+            <!-- Minimum wait between two quieres to the same hub from the same search -->
+            <MinimumRequeryWait>30m</MinimumRequeryWait>
+            <!-- Timeout for a queried hub to give life signals: -->
+            <HubTimeout>5m</HubTimeout>
+            <!-- Rest period locally enforced between two queries to the same hub -->
+            <HubRestPeriod>10m</HubRestPeriod>
+            <!-- Duration of query keys, on our side. -->
+            <KeyDuration>24h</KeyDuration>
+            <!-- Minimum wait between two search messages sending -->
+            <SendingThrottle>200ms</SendingThrottle>
+            <!-- Memory cleanups. Oftener will take less CPU -->
+            <PurgePeriod>1m</PurgePeriod>
+            <!-- Older hubs will be purged -->
+            <PurgeAge>30m</PurgeAge>
+            <!-- Hubs with less leaves will not be requeried -->
+            <MinimumLeaves>10</MinimumLeaves>
+            <!-- This time will pass until a low leaved hub is requeried -->
+            <HubGrowingPeriod>1h</HubGrowingPeriod>
+
+            <!-- Max hits we will process from a packet. Needed to prevent stack overflows. -->
+            <MaxHitsPerPacket>64</MaxHitsPerPacket>
+
+            <!-- Save hits when saving searches -->
+            <SaveHits>yes</SaveHits>
+            <!-- Delay from search saving to hits saving. Necessary because hit saving can 
+                  be a long time when thousands of hits. A crash in this period will lost 
+                  the hits on restart (but not the searches). -->
+            <SaveHitsDelay>30s</SaveHitsDelay>
+         </search>
+
+         <!-- DOWNLOADING IN G2 -->
+         <download>
+            <!-- Max size requested in a single petition -->
+            <ChunkSize>64kB</ChunkSize>
+
+            <!-- Allow compressed links for downloading -->
+            <deflate>yes</deflate>
+
+            <!-- Max transmitting downloads -->
+            <MaxActive>32</MaxActive>
+
+            <!-- Max alive (down + queued) connections -->
+            <MaxAlive>1024</MaxAlive>
+
+            <!-- Maximum time between waits for a source -->
+            <MaxBackoffPeriod>24h</MaxBackoffPeriod>
+
+            <!-- Fails over this cause source drop -->
+            <MaxFailures>10</MaxFailures>
+
+            <!-- If we want to drop sources that fail the previous times -->
+            <ForgetFailedSources>yes</ForgetFailedSources>
+         </download>
+
+      </Gnutella2>
+
+      <!-- GWCache2 -->
+      <GWebCache2>
+         <connect>yes</connect>
+         <!-- Caches to remember -->
+         <CachedServers>1000</CachedServers>
+         <!-- Timeouts for connection and data delivery -->
+         <ConnectTimeout>10s</ConnectTimeout>
+         <AnswerTimeout>10s</AnswerTimeout>
+         <!-- Mimimum wait between two queries to a cache. Values below
+               15m will be reset to that value -->
+         <WaitPeriod>15m</WaitPeriod>
+         <!-- For development. If yes, it will report a G2 hub at 
+               127.0.0.1:port -->
+         <LocalTest port="36765">no</LocalTest>
+         <!-- Some root (non discardable) GWCaches -->
+         <root url="http://www.gwc2.ip3.com/cgi-bin/gwc2/gcache.cgi"/>
+         <root url="http://g2cache.theg2.net/gwcache/lynnx.asp"/>
+         <root url="http://g2.instantnetworks.net/g2/bazooka.php"/>
+         <root url="http://bazooka1.servehttp.com/g2/bazooka.php"/>
+      </GWebCache2>
+   </network>
+
+   <!-- HOSTCACHE. 
+         This is the known servers cache (for all networks) -->
+   <hostcache>
+      <!-- Enable periodical purging of worst servers 
+            (quantities specified in each network). -->
+      <purge period="30s">yes</purge>
+      <!-- Enable periodical autosave of hostcache -->
+      <save period="1m">yes</save>
+   </hostcache>
+
+   <!-- SECURITY
+         Host banning. That's made through additional xml files conforming
+         to Shareaza schema for security rules. 
+         There is no limit in the number of files you can specify here.  
+         Thanks to CrashUK for this file.
+   -->
+   <security>
+      <!-- Default banning policy. If you set it to "no", no connections
+            will be allowed except to selected countries (see below). -->
+      <policy allow="yes"/>
+
+      <!-- File with security rules. They can be disabled if desired.
+            Only "address" type rules will be processed. -->
+      <file path="./security.xml" active="yes" />
+
+      <!-- Specific User-Agent bannings are specified here (multiple allowed).
+            Two kind of banning strings are allowed (both case-insensitive):
+               * substring: any user agent containing this substring
+                  will be banned
+               * regexp: file-like regular expressions.
+                  Must match the whole user agent
+                     -->
+      <ban client="bearshare" type="substring" active="no" />
+      <ban client="bear*4.2.3*" type="regexp" active="no" />
+
+      <!-- Country bannings. You can ban countries or allow them against the
+            general policy. Note that the country detection can't be 100%
+            accurate, use it at your own risk! 
+           Use the code "??" to refer to unknown locations. 
+           Private addresses will not be checked.  -->
+      <country code="es" allow="yes"/>
+      <!-- Example of hypotetical banned country: -->
+      <country code="zz" allow="no"/>
+   </security>
+
+   <!-- CHAT -->
+   <chat logfile="log/chat.log" log="yes">
+      <!-- Enable or disable it here -->
+      <!-- Currently only chat for G2 is implemented -->
+      <enabled>yes</enabled>
+      <!-- Answering machine. You can select one of these:
+            Away   : the standard away message below will be sent.
+            Eliza  : a classic Eliza bot will chat with the requester.
+            Random : one of the previous will be chosen randomly. -->
+      <answer>Away</answer>
+      <AwayMessage>Hello. This is an away bot, nobody here. My master is using Adagio server, you can check it at http://agio.sourceforge.net</AwayMessage>
+   </chat>
+
+
+   <!-- DOWNLOADING GENERAL -->
+   <download>
+      <!-- To spare the download/search resources, deactivate it here -->
+      <active>yes</active>
+
+      <!-- Bandwidth to use in downloads -->
+      <bandwidth>unlimited</bandwidth>
+
+      <!-- Incomplete downloads folder -->
+      <incomplete>incomplete</incomplete>
+
+      <!-- Finished downloads folder -->
+      <finished>finished</finished>
+
+      <!-- Sources are classified in checking priorities (not to confuse with
+            the abstract priority given by the user) according with the tasks
+            they must perform. For example, a disconnected source is low priority
+            if it is not to be tried until some hours later.
+           A source is guaranteed to be checked once in that period.
+      -->
+      <!-- High: intended for running downloads.
+           Med : intended for queued http sources.
+           Low : disconnected sources. -->
+      <SourceCheckingPeriod priority="high">1s</SourceCheckingPeriod>
+      <SourceCheckingPeriod priority="medium">10s</SourceCheckingPeriod>
+      <SourceCheckingPeriod priority="low">60s</SourceCheckingPeriod>
+   </download>
+
+   <!-- DEBUG.
+         active: enabled or not
+         logfile: file to keep the log. Unbounded size.
+         netlogfile: file to keep network related log.
+         loglevel: Level of tracing: debug, informative, warning, error.
+            Below warning level, messages are not relevant to the developer.
+         ConsoleEcho: echoes traces in console. 
+            NOTE: You need a console-based platform (i.e. linux). In windows
+               that will cause undefined (probably faultly) behavior.
+         DebugStatistics: shows statistics about internal status.
+         PurgeOnStartup: logfiles will be deleted in each run.
+         MemoryPeriod: lap between memory usage counting
+         CrawlerAllowed: Adagio will answer to crawler requests (this reveals
+            your IP but not your Gnutella GUID).
+   -->
+   <debug 
+      active="yes"
+      logfile="log/adagio.log" 
+      netlogfile="log/adagio.log"
+      loglevel="informative"
+      ConsoleEcho="no"
+      DebugStatistics="no"
+      PurgeOnStartup="yes"
+      heartbeat="1s"
+      MemoryPeriod="1m"
+      CrawlerAllowed="yes"
+   />
+</adagio>

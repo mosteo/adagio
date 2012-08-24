@@ -1,0 +1,70 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <META HTTP-EQUIV="Pragma" CONTENT="no-cache">
+    <META HTTP-EQUIV="Expires" CONTENT="-1">
+    <link rel="stylesheet" type="text/css" href="@_STYLE_@">
+    <title>Graphs</title>
+		<meta http-equiv="content-type" content="text/html;charset=iso-8859-1">
+	</head>
+  <body>
+    <!--
+      VALUE1  <- flagcode
+      VALUE2  <- country
+      VALUE3  <- IP:port
+      VALUE4  <- Status
+      VALUE5  <- Nick
+      VALUE6  <- Version
+      VALUE7  <- Leaf load
+      VALUE8  <- QRP status
+      VALUE9  <- Rating
+      VALUE10 <- Uptime
+      VALUE11 <- Packets in
+      VALUE12 <- Packets out
+    -->
+    <div id="contents">
+      <div id="main">
+      Change graph timeframe: [ <a href="/command?action=graph_period&period=600">10min</a> | <a href="/command?action=graph_period&period=1200">20min</a> | <a href="/command?action=graph_period&period=900">30min</a> | <a href="/command?action=graph_period&period=3600">1h</a> | <a href="/command?action=graph_period&period=7200">2h</a> | <a href="/command?action=graph_period&period=14400">4h</a> | <a href="/command?action=graph_period&period=28800">8h</a> | <a href="/command?action=graph_period&period=43200">12h</a> | <a href="/command?action=graph_period&period=86400">24h</a> ]
+            <p><b><span class="enfasis">UDP BANDWIDTH USAGE</span></b><br></p>
+				<table border="0" cellspacing="2" cellpadding="0">
+					<tr>
+                  <td rowspan="6"><img src="/cgi-bmp?bmp=bw_usage_udp" height="140"></td>
+						<td bgcolor="#006000" width="18"></td>
+						<td class="contentodd">Session avg in bandwidth</td>
+					</tr>
+					<tr>
+						<td bgcolor="lime" width="18"></td>
+						<td class="contentodd">5 min avg in bandwidth</td>
+					</tr>
+
+					<tr>
+						<td bgcolor="#600000" width="18"></td>
+						<td class="contentodd">Session avg out bandwidth</td>
+					</tr>
+					<tr>
+						<td bgcolor="red" width="18"></td>
+						<td class="contentodd">5 min avg out bandwidth</td>
+					</tr>
+					<tr>
+						<td width="18"></td>
+						<td class="contentodd">Gray marks at inbound limit and outbound limit</td>
+					</tr>
+					<tr>
+						<td width="18"></td>
+						<td class="contentodd">White marks every 8kB/s</td>
+					</tr>
+				</table>
+				<p><b><span class="enfasis">MEMORY USAGE</span></b><br></p>
+				<table border="0" cellspacing="2" cellpadding="0">
+					<tr>
+						<td><img src="/cgi-bmp?bmp=memory_usage" height="70" align="top"></td>
+						<td class="contentodd" valign="top" width="18"></td>
+						<td class="contentodd" valign="top">White marks every 8 mB.</td>
+					</tr>
+				</table>
+			</div>
+      @@INCLUDE@@ footer.html
+    </div>
+  </body>
+</html>
+

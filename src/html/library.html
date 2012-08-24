@@ -1,0 +1,56 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+    <link rel="stylesheet" type="text/css" href="@_STYLE_@">
+    <title>Library</title>
+  </head>
+  <body>
+    <!--
+      VALUE1  <- Path to file
+      VALUE2  <- Filename
+      VALUE3  <- Filesize
+      VALUE4  <- Uploads today
+      VALUE5  <- Uploads total
+      VALUE6  <- Hits today
+      VALUE7  <- Hits total
+      VALUE8  <- SHA1
+      VALUE9  <- TTH
+      VALUE10 <- ed2k
+    -->
+    <div id="contents">
+      <div id="main">
+         <div class="refresh">[ <a href="@_URI_@">Refresh</a> ]</div>
+         <span id="title">Library</span>
+         <div id="menubar"><a href="hashes.html">Hashes</a></div>                        
+            <table summary="G2 current library" border="1" cellspacing="0" class="dataset">
+               <tr class="header">
+                  <td class="header" align="center">#</td>
+                  <td class="header">Path&nbsp;<a href="library.html?orden=1&amp;sentido=true"><img src="up.gif" border="0" alt="Sort descending"></a><a href="library.html?orden=1&amp;sentido=false"><img src="do.gif" border="0" alt="Sort ascending"></a></td>
+                  <td class="header">Name&nbsp;<a href="library.html?orden=2&amp;sentido=true"><img src="up.gif" border="0" alt="Sort descending"></a><a href="library.html?orden=2&amp;sentido=false"><img src="do.gif" border="0" alt="Sort ascending"></a></td>
+                  <td class="header">Size&nbsp;<a href="library.html?orden=3&amp;sentido=true"><img src="up.gif" border="0" alt="Sort descending"></a><a href="library.html?orden=3&amp;sentido=false"><img src="do.gif" border="0" alt="Sort ascending"></a></td>
+                  <td class="header">Ul.ses&nbsp;<a href="library.html?orden=4&amp;sentido=true"><img src="up.gif" border="0" alt="Sort descending"></a><a href="library.html?orden=4&amp;sentido=false"><img src="do.gif" border="0" alt="Sort ascending"></a></td>
+                  <td class="header">Ul.tot&nbsp;<a href="library.html?orden=5&amp;sentido=true"><img src="up.gif" border="0" alt="Sort descending"></a><a href="library.html?orden=5&amp;sentido=false"><img src="do.gif" border="0" alt="Sort ascending"></a></td>
+                  <td class="header">Hits ses&nbsp;<a href="library.html?orden=6&amp;sentido=true"><img src="up.gif" border="0" alt="Sort descending"></a><a href="library.html?orden=6&amp;sentido=false"><img src="do.gif" border="0" alt="Sort ascending"></a></td>
+                  <td class="header">Hits tot&nbsp;<a href="library.html?orden=7&amp;sentido=true"><img src="up.gif" border="0" alt="Sort descending"></a><a href="library.html?orden=7&amp;sentido=false"><img src="do.gif" border="0" alt="Sort ascending"></a></td>
+             </tr>
+             @@TABLE@@
+             <tr valign="middle">						
+                 <td class="contentodd" align="right">@_TABLE_LINE_@</td>
+                 <td class="contentodd">@_VALUE1_@</td>                 
+                 <td><a class="linknou" href="file://@_VALUE1_@@_VALUE2_@">@_VALUE2_@</a></td>
+                 <td class="contentodd" align="right">@_VALUE3_@</td>
+                 <td class="contentodd" align="center">@_VALUE4_@</td>
+                 <td class="contentodd" align="center">@_VALUE5_@</td>
+                 <td class="contentodd" align="center">@_VALUE6_@</td>
+                 <td class="contentodd" align="center">@_VALUE7_@</td>
+             </tr>
+             @@END_TABLE@@
+         </table>
+         <p>@_PAGER_@</p>
+      </div>
+      @@INCLUDE@@ footer.html
+    </div>
+  </body>
+</html>
+

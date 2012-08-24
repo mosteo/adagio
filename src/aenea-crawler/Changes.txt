@@ -1,0 +1,192 @@
+$Id: Changes.txt,v 1.11 2004/03/22 07:14:55 Jano Exp $
+
+Ada Experimental Net Explorer Apprentice.
+
+--------------
+-- Legend ----
+--------------
+[*] Comments
+[+] Additions
+[-] Supressions
+[!] Bug fixes
+[?] Unconfirmed data
+[X] Milestones (version changes)
+
+--------------
+-- 20050526 --
+--------------
+[+] Removed dependence on Adagio.Os.Memory_Stats.
+[X] 3.2.6c
+--------------
+-- 20050524 --
+--------------
+[+] Memory and UDP BW graph.
+[+] Relaxed limits for incoming packet size/children.
+--------------
+-- 20050516 --
+--------------
+[+] Minor stats additions.
+[+] Explanations in webpages.
+--------------
+-- 20050514 --
+--------------
+[+] Added new stat hubs per leaf, and purged unique count.
+--------------
+-- 20050511 --
+--------------
+[+] New packet management system, works better for memory problems.
+[+] Unique nodes count column added to database.
+--------------
+-- 20050503 --
+--------------
+[+] Verified that the database problems don't happen under linux.
+--------------
+-- 20050502 --
+--------------
+[+] Migrated to GNAT GAP 1.1.0, tested under win32, some problems with the
+database connection.
+--------------
+-- 20041111 --
+--------------
+[+] Log page.
+--------------
+-- 20041102 --
+--------------
+[X] 3.0.6 Milestone (codename Memorion).
+[!] Best uptimes could be ignored in certain circumstances.
+--------------
+-- 20041029 --
+--------------
+[X] 3.0.4 Milestone.
+[X] 3.0.2 Milestone.
+[+] Top ten persistent uptimes.
+[+] Status page.
+[+] Version of top ten uptimes.
+--------------
+-- 20041025 --
+--------------
+[+] 3.0.0 is almost complete.
+--------------
+-- 20041011 --
+--------------
+[X] 2.4.0 Milestone.
+[!] Fixed the 24h bug. Was a memory leak.
+--------------
+-- 20041007 --
+--------------
+[!] Fix to leaves histogram.
+--------------
+-- 20041006 --
+--------------
+[X] 2.2.8 Milestone.
+[+] Histogram of leaves.
+[+] Reports fixed to use same timestamps for each vendor.
+[*] Experimental change of G2.Packet.Get_Children to bounded form.
+--------------
+-- 20041003 --
+--------------
+[X] 2.2.4 Milestone.
+[+] Uptimes histogram.
+[+] Better throttling in message sending.
+--------------
+-- 20040930 --
+--------------
+[+] Purging of old hubs.
+--------------
+-- 20040929 --
+--------------
+[X] 2.2.0 Milestone.
+[+] Migrated from hashed to sorted container.
+[+] User authentication for remote web access.
+--------------
+-- 20040928 --
+--------------
+[+] Reconnection if database lost.
+[+] Timestamp taken from database local time.
+[!] Logfile was being incorrectly deleted on startup.
+[+] Memory usage in raw page.
+[+] Estimated network size in raw page.
+[!] Corrected the Win32 build process.
+--------------
+-- 20040901 --
+--------------
+[X] 2.0.1 Milestone.
+[*] Linux working version (without database).
+--------------
+-- 20040816 --
+--------------
+[!] Shutdown wasn't working.
+--------------
+-- 20040719 --
+--------------
+[+] Minor changes to manage the possibility of an address changing of hub version.
+[+] Database recording of vendor quantities and percents.
+--------------
+-- 20040716 --
+--------------
+[X] 2.0.0 Milestone.
+[+] Different hubs per leave are taken into account, assuming 2 for RAZA and 1 for GDNA.
+--------------
+-- 20040315 --
+--------------
+[+] Placer_tree.
+--------------
+-- 20040309 --
+--------------
+[+] Topograms.
+--------------
+-- 20040302 --
+--------------
+[+] Improved timeouts.
+[!] Agpl.Simple_list bug when exceeding list capacity.
+--------------
+-- 20040126 --
+--------------
+[X] 1.5.0 Milestone.
+[+] Country statistics.
+--------------
+-- 20040122 --
+--------------
+[X] 1.4.0 Milestone.
+[+] Configurable templates and styles within templates.
+--------------
+-- 20040121 --
+--------------
+[+] Hubs report.
+[+] Optional saving of hubs.
+[+] Failures parameter.
+[+] Hiding of IPs.
+--------------
+-- 20040120 --
+--------------
+[+] Embedded resources.
+--------------
+-- 20040119 --
+--------------
+[+] New web interface.
+--------------
+-- 20040116 --
+--------------
+[!] Averages aren't computed using startup period.
+[+] Number of averaging samples is now configurable.
+[+] Web interface foundation.
+--------------
+-- 20040115 --
+--------------
+[!] Corrected lock behavior.
+[!] Hosts data follows de Data_folder directive.
+--------------
+-- 20040111 --
+--------------
+[X] 1.3.0 Milestone.
+[+] Persistent storage for tracked hosts.
+--------------
+-- 20031221 --
+--------------
+[X] 1.0.1 Milestone.
+[+] Added timeout parameter.
+[*] Decreased probability of overcounting.
+--------------
+-- 20031217 --
+--------------
+[X] 0.2.0 Milestone. First version.

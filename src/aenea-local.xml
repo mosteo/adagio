@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<aenea>
+
+   <!-- Global settings -->
+   <globals DataFolder="data" GeoIP="../geoip/geoip.csv" />
+
+   <!-- Gui -->
+   <gui 
+      address="0.0.0.0" 
+      port="6666"
+      HideAddresses="yes"
+      HtmlRoot="aenea/html/"
+      HtmlStyle="estilo.css"
+      />
+
+   <!-- Walker configuration -->
+   <walk>
+      <!-- Time between refreshes for a hub -->
+      <RefreshUnit>15s</RefreshUnit>
+      <timeout>2s</timeout>
+      <!-- Number of pings between queries -->
+      <pings>0</pings>
+      <!-- Speed throttle. Pause between UDP sends -->
+      <delay>10ms</delay>
+
+      <!-- Allowed failures before considering the host down -->
+      <failures>0</failures>
+
+      <!-- Delay until first record is inserted to not have false lows -->
+      <InsertDelay>24h</InsertDelay>
+      <!-- Period for database insertions -->
+      <InsertPeriod>1m</InsertPeriod>
+
+      <!-- Save hubs? -->
+      <SaveHubs>no</SaveHubs>
+      <!-- Period for hubs saving -->
+      <SavePeriod>1h</SavePeriod>
+
+      <!-- Purging of lost hubs -->
+      <purge active="yes" period="1m" age="1m" />
+
+      <!-- Samples used for averaging (taken every second) -->
+      <AveragingSamples>60</AveragingSamples>
+
+      <!-- Hardcoded starting hub -->
+      <hub address="127.0.0.1:36765" />
+   </walk>
+
+   <topogram>
+      <!-- Minimum hubs in a island to be drawn -->
+      <MinimumCount>0</MinimumCount>
+      <!-- Type of topogram [radial/topdown] -->
+      <type>radial</type>
+      <!-- Size in pixels -->
+      <width>800</width>
+      <height>600</height>
+
+      <!-- Parameters for tree map -->
+      <tree>
+         <VSpace>30.0</VSpace>
+         <HSpace>20.0</HSpace>
+         <pile>no</pile>
+      </tree>
+
+      <!-- Parameters for dynamic map -->
+      <dynamic>
+         <MaxIterations>1000</MaxIterations>
+         <convergence>0.1</convergence>
+         <!-- Forces -->
+         <LinkForce>1.0</LinkForce>   <!-- Attractive -->
+         <LinkPow>2.1</LinkPow>
+         <HubForce>100000.0</HubForce>     <!-- Repulsive  -->
+         <HubPow>2.0</HubPow>
+         <CoreForce>1.0</CoreForce>  <!-- Attractive -->
+         <CorePow>2.0</CorePow>
+         <MassFactor>0.0001</MassFactor>
+      </dynamic>
+
+   </topogram>
+
+   <network>
+      <!-- Gnutella2 -->
+      <Gnutella2>
+         <!-- Listener port -->
+         <port>24666</port>
+      </Gnutella2>
+
+      <!-- GWCache2 -->
+      <GWebCache2>
+         <!-- Number of hubs to get from GWC2 to start walk -->
+         <BootstrapHubs>0</BootstrapHubs>
+         <!-- Some root (non discardable) GWCaches -->
+         <root url="http://www.gwc2.ip3.com/cgi-bin/gwc2/gcache.cgi"/>
+         <root url="http://gwc.fspn.cryptnet.net/gcache.cgi"/>
+         <root url="http://gwc.isuldor.com/g2only/cache.asp"/>
+         <root url="http://gwebcache2.jonatkins.com/cgi-bin/gwebcache.cgi"/>
+         <root url="http://ads-clan.org/gwebcache/gcache.php"/>
+         <root url="http://g2cache.theg2.net/gwcache/lynnx.asp"/>
+         <root url="http://cache.shareaza.com/cache.aspx"/>
+      </GWebCache2>
+   </network>
+
+   <!-- DEBUG.
+         active: enabled or not
+         logfile: file to keep the log. Unbounded size.
+         netlogfile: file to keep network related log.
+         loglevel: Level of tracing: debug, informative, warning, error.
+            Below warning level, messages are not relevant to the developer.
+         ConsoleEcho: echoes traces in console. 
+            NOTE: You need a console-based platform (i.e. linux). In windows
+               that will cause undefined (probably faultly) behavior.
+         DebugStatistics: shows statistics about internal status.
+         PurgeOnStartup: logfiles will be deleted in each run.
+         MemoryPeriod: lap between memory usage counting
+         CrawlerAllowed: Adagio will answer to crawler requests (this reveals
+            your IP but not your Gnutella GUID).
+   -->
+   <debug 
+      active="yes"
+      logfile="log/aenea.log" 
+      netlogfile="log/aenea.log"
+      loglevel="debug"
+      ConsoleEcho="yes"
+      PurgeOnStartup="yes"
+   />
+</aenea>

@@ -1,0 +1,60 @@
+------------------------------------------------------------------------------
+--                         ADAGIO - ADALID - AENEA.                         --
+--                                                                          --
+--                            Copyright (C) 2003                            --
+--                                 A. Mosteo.                               --
+--                                                                          --
+--  Authors: A. Mosteo. (adagio@mosteo.com)                                 --
+--                                                                          --
+--  If you have any questions in regard to this software, please address    --
+--  them to the above email.                                                --
+--                                                                          --
+--  This program is free software; you can redistribute it and/or modify    --
+--  it under the terms of the GNU General Public License as published by    --
+--  the Free Software Foundation; either version 2 of the License, or (at   --
+--  your option) any later version.                                         --
+--                                                                          --
+--  This program is distributed in the hope that it will be useful, but     --
+--  WITHOUT ANY WARRANTY; without even the implied warranty of              --
+--  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU       --
+--  General Public License for more details.                                --
+--                                                                          --
+--  You should have received a copy of the GNU General Public License       --
+--  along with this library; if not, write to the Free Software Foundation, --
+--  Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.          --
+--                                                                          --
+--  You are not allowed to use any part of this code to develop a program   --
+--  whose output would be used to harass or prosecute other users of the    --
+--  networks Adagio connects with. All data collected with Adagio or a tool --
+--  containing Adagio code about other network users must remain            --
+--  confidential and cannot be made public by any mean, nor be used to      --
+--  harass or legally prosecute these users.                                --
+------------------------------------------------------------------------------
+--  $Id: License.txt,v 1.7 2004/03/01 22:30:44 Jano Exp $
+
+All original source code for Adagio is under the /src folder. Accompaning
+libraries are available in internet but have been modified to correct
+bugs, remove unused items, provide specific functions needed by Adagio and
+not present in the original sources and automatizing the building process. 
+Documentation, tutorials, tests, etc. have been stripped but naturally not 
+their license agreement. Changes are signaled by comments.
+
+NOTE THAT IF YOU WANT TO USE ANY OF THESE LIBRARIES,YOU SHOULD OBTAIN
+THEM IN THEIR MOST RECENT AND COMPLETE VERSION FROM THEIR ORIGINAL
+AUTHORS. They are provided with the Adagio source code only to ease
+the compilation process and by no other reason.
+
+AWS Ada Web Server: http://libre.act-europe.fr/aws/main.html
+Charles           : http://home.earthlink.net/~matthewjheaney/charles/
+Flag icons        : http://awstats.sourceforge.net/
+Geoip database    : http://www.maxmind.com
+GNADE             : http://gnade.sourceforge.net
+NanoXML           : http://nanoxml.n3.net/
+Pgada             : http://www.rfc1149.net/devel/pgada (Samuel Tardieu)
+PragmARC          : http://home.earthlink.net/~jrcarter010/pragmarc.htm
+Security files    : David John Allison (CrashUK) 
+                  : http://forums.shareaza.com/forumdisplay.php?s=&forumid=9
+Spheon-JSOAP      : http://spheon-jsoap.sourceforge.net/
+Xml/Ada           : http://libre.act-europe.fr/xmlada/
+ZLib-Ada          : http://zlib-ada.sourceforge.net/
+ZLib              : http://www.gzip.org/zlib/

@@ -1,0 +1,6 @@
+# Set the $1 to the version of the program
+
+cp obj/aenea $HOME/bin/aenea/aenea.$1
+strip $HOME/bin/aenea/aenea.$1
+rm $HOME/bin/aenea/aenea
+ln -s $HOME/bin/aenea/aenea.$1 $HOME/bin/aenea/aenea

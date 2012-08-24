@@ -1,0 +1,115 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1">
+    <link rel="stylesheet" type="text/css" href="@_STYLE_@">
+    <title>Downloads</title>
+  </head>
+  <body>
+    <!--
+      VALUE1  <- Slot Id
+      VALUE2  <- Slot Name
+      VALUE3  <- Slot Size (beautified)
+      VALUE4  <- URL of status bar image
+      VALUE5  <- Speed (beautified)
+      VALUE6  <- Status
+      VALUE7  <- Sources
+      VALUE8  <- Priority applying
+      VALUE9  <- Priority setting
+      VALUE10 <- Paused (TRUE/FALSE)
+    -->
+    <div id="contents">
+      <div id="main">
+         <div id="title">Downloads</div><div class="refresh">[ <a href="downloads.html">Refresh</a> ]</div>
+         <div id="menubar"></div>
+            <table summary="Downloads" border="1" cellspacing="0" class="dataset">
+               <tr class="header">
+                  <td class="header" align="center">#</td>
+                  <td class="header">Name&nbsp;<a href="downloads.html?orden=2&amp;sentido=true"><img src="up.gif" border="0" alt="Sort descending"></a><a href="downloads.html?orden=2&amp;sentido=false"><img src="do.gif" border="0" alt="Sort ascending"></a></td>
+                  <td class="header">Size&nbsp;<a href="downloads.html?orden=3&amp;sentido=true"><img src="up.gif" border="0" alt="Sort descending"></a><a href="downloads.html?orden=3&amp;sentido=false"><img src="do.gif" border="0" alt="Sort ascending"></a></td>
+                 <td class="header">Progress&nbsp;<a href="downloads.html?orden=4&amp;sentido=true"><img src="up.gif" border="0" alt="Sort descending"></a><a href="downloads.html?orden=4&amp;sentido=false"><img src="do.gif" border="0" alt="Sort ascending"></a></td>
+                 <td class="header">Speed&nbsp;<a href="downloads.html?orden=5&amp;sentido=true"><img src="up.gif" border="0" alt="Sort descending"></a><a href="downloads.html?orden=5&amp;sentido=false"><img src="do.gif" border="0" alt="Sort ascending"></a></td>
+                 <td class="header">Status&nbsp;<a href="downloads.html?orden=6&amp;sentido=true"><img src="up.gif" border="0" alt="Sort descending"></a><a href="downloads.html?orden=6&amp;sentido=false"><img src="do.gif" border="0" alt="Sort ascending"></a></td>
+                 <td class="header">Sources&nbsp;<a href="downloads.html?orden=7&amp;sentido=true"><img src="up.gif" border="0" alt="Sort descending"></a><a href="downloads.html?orden=7&amp;sentido=false"><img src="do.gif" border="0" alt="Sort ascending"></a></td>
+                 <td class="header">Priority applying&nbsp;<a href="downloads.html?orden=8&amp;sentido=true"><img src="up.gif" border="0" alt="Sort descending"></a><a href="downloads.html?orden=8&amp;sentido=false"><img src="do.gif" border="0" alt="Sort ascending"></a></td>
+                 <td class="header">Priority setting&nbsp;<a href="downloads.html?orden=9&amp;sentido=true"><img src="up.gif" border="0" alt="Sort descending"></a><a href="downloads.html?orden=9&amp;sentido=false"><img src="do.gif" border="0" alt="Sort ascending"></a></td>
+                 <td class="header">Actions</td>
+             </tr>
+             @@TABLE@@
+             <tr valign="middle">						
+                 <td class="contentodd" align="right">@_TABLE_LINE_@</td>
+                 <td class="contentodd"><a href="downdetail.html?slot=@_VALUE1_@">@_WEB_ESCAPE:VALUE2_@</a></td>
+                 <td class="contentodd">@_VALUE3_@</td>
+                 <td class="contentodd"><img src="@_VALUE4_@" alt="progress"></td>
+                 <td class="contentodd">@_VALUE5_@</td>
+                 <td class="contentodd">@_VALUE6_@</td>
+                 <td class="contentodd">@_VALUE7_@</td>
+                 <td class="contentodd">@_VALUE8_@</td>
+                 <td class="contentodd">
+                    <form action="command" method="post">
+                       <input type="hidden" name="action" value="change_download_priority"/>
+                       <input type="hidden" name="slot" value="@_VALUE1_@"/>
+                       <select class="listing" name="priority" size="1" onChange="javascript:submit()">
+                           <option value="Critical"
+                           @@IF@@ @_VALUE9_@ = CRITICAL
+                            selected 
+                           @@END_IF@@
+                           >Critical</option>
+                           <option value="High"
+                           @@IF@@ @_VALUE9_@ = HIGH
+                            selected 
+                           @@END_IF@@
+                           >High</option>
+                           <option value="Medium"
+                           @@IF@@ @_VALUE9_@ = MEDIUM
+                            selected 
+                           @@END_IF@@
+                           >Medium</option>
+                           <option value="Low"
+                           @@IF@@ @_VALUE9_@ = LOW
+                            selected 
+                           @@END_IF@@
+                           >Low</option>
+                           <option value="Auto"
+                           @@IF@@ @_VALUE9_@ = AUTO
+                            selected 
+                           @@END_IF@@
+                           >Auto</option>
+                  </select>
+                 </td></form>
+                 <td class="contentodd" align="center">
+                 @@IF@@ @_VALUE10_@ = FALSE
+                 <a href="command?action=pause_download&slot=@_VALUE1_@"><img src="pause.png" border="0" alt="pause" align="middle"></a>
+                 @@ELSE@@
+                 <a href="command?action=resume_download&slot=@_VALUE1_@"><img src="play.png" border="0" alt="resume" align="middle"></a>
+                 @@END_IF@@&nbsp;
+                    <a href="command?action=delete_download&slot=@_VALUE1_@"><img src="cross.png" border="0" alt="remove" align="middle"></a>
+                 </td>
+             </tr>
+             @@END_TABLE@@
+         </table>
+         <p>@_PAGER_@<p>
+         <form action="command" method="post">
+         <input type="hidden" name="action" value="get" />
+         <input type="hidden" name="secure" value="false"/>
+         <div style="vertical-align:middle">
+         <ul>
+            <li>Download URI: <input name="magnet" type="text" maxlength="255" size="99" tabindex="1"/>
+            <li>Priority:&nbsp;
+               <select name="priority" size="1">
+                  <option value="Critical">Critical</option>
+                  <option value="High">High</option>
+                  <option value="Medium">Medium</option>
+                  <option value="Low">Low</option>
+                  <option value="Auto" selected>Auto</option>
+               </select>&nbsp;<button type="submit">Start</button>
+         </ul>
+         </div>
+         </form>
+         Use magnet syntax to manually enter a download.
+      </div>
+      @@INCLUDE@@ footer.html
+    </div>
+  </body>
+</html>
+

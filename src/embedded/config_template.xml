@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<adagio>
+
+   <!-- Normal profile. See in conf_samples for a simpler example and for
+         the full options available. -->
+
+   <!-- General considerations 
+         All time values can be specified with their unit following.
+         Allowed units are: d, h, m, s, ms. 
+         Omiting the units will be interpreted as seconds. 
+         Don't leave spaces between the quantities and their units.
+
+         Sizes use b for bit, B for byte,
+         k for 1024 bytes, m for 1024*1024 bytes, g for 1024*1024*1024 bytes.
+         k, m and g are case insensitive.
+         Quantities in bits are rounded towards bytes.
+
+         Speeds are a size plus "/s", which is the only unit allowed.
+         A special speed is "unlimited".
+
+         Times can contain decimal part (dot is separator).
+
+         Sizes/speeds can't have decimal part.
+
+         Paths should be specified with forward slashes "/" in 
+         both windows and unix.
+         
+         All elements/attributes names are case sensitive! 
+   -->
+
+   <!-- LIBRARY. -->
+   <library>
+      <!-- Allow browsing of our shared files -->
+      @@IF@@ @_EXIST:ALLOWBROWSE_@ = TRUE
+      <AllowBrowse>yes</AllowBrowse>
+      @@ELSE@@
+      <AllowBrowse>no</AllowBrowse>
+      @@END_IF@@
+      <shared path="@_SHAREDPATH_@" RescanPeriod="6h" />
+   </library>
+
+   <!-- USER PROFILE. -->
+   <gProfile xmlns="http://www.shareaza.com/schemas/GProfile.xsd">
+      <identity>
+         <!-- Replace Anonymous with your nickname here -->
+         <handle primary="@_NICK_@"/>
+      </identity>
+   </gProfile>
+
+   <!-- UPLOAD SUBSYSTEM -->
+   <uploads>
+      <!-- Maximum allowed bandwidth for all uploads. -->
+      <bandwidth>@_UPLOADBANDWIDTH_@kB/s</bandwidth>
+      <!-- DEFAULT QUEUES -->
+      <queue name="smaller first">
+         @@IF@@ @_EXIST:SMALLERACTIVE_@ = TRUE
+         <active>yes</active>
+         @@ELSE@@
+         <active>no</active>
+         @@END_IF@@
+         <length>512</length>
+         <priority>10</priority>
+         <ActiveClients>1</ActiveClients>
+         <MinimumClientSpeed>0kB/s</MinimumClientSpeed>
+         <AveragePeriod>30s</AveragePeriod>
+         <criteria is="true"/>
+         <preemption active="yes" time="10m" size="10mB"/>
+         <type expression="-File_size">rated</type>
+      </queue>
+
+      <queue name="rare first">
+         @@IF@@ @_EXIST:RAREACTIVE_@ = TRUE
+         <active>yes</active>
+         @@ELSE@@
+         <active>no</active>
+         @@END_IF@@
+         <length>512</length>
+         <priority>10</priority>
+         <ActiveClients>1</ActiveClients>
+         <MinimumClientSpeed>0kB/s</MinimumClientSpeed>
+         <AveragePeriod>30s</AveragePeriod>
+         <criteria is="true"/>
+         <preemption active="yes" time="10m" size="10mB"/>
+         <type expression="-Uploads">rated</type>
+      </queue>
+
+      <queue name="small files">
+         @@IF@@ @_EXIST:SMALLACTIVE_@ = TRUE
+         <active>yes</active>
+         @@ELSE@@
+         <active>no</active>
+         @@END_IF@@
+         <length>512</length>
+         <priority>10</priority>
+         <ActiveClients>1</ActiveClients>
+         <MinimumClientSpeed>0kB/s</MinimumClientSpeed>
+         <AveragePeriod>30s</AveragePeriod>
+         <criteria is="Smaller_than 1mB"/>
+         <preemption active="no" />
+         <type expression="-Bytes_sent">rated</type>
+      </queue>
+
+      <queue name="fifo">
+         @@IF@@ @_EXIST:FIFOACTIVE_@ = TRUE
+         <active>yes</active>
+         @@ELSE@@
+         <active>no</active>
+         @@END_IF@@
+         <length>512</length>
+         <priority>10</priority>
+         <ActiveClients>1</ActiveClients>
+         <MinimumClientSpeed>1kB/s</MinimumClientSpeed>
+         <AveragePeriod>30s</AveragePeriod>
+         <criteria is="true"/>
+         <preemption active="yes" time="10m" size="10mB"/>
+         <type>fifo</type>
+      </queue>
+      <!-- End of default queues -->
+   </uploads>
+
+   <!-- NETWORKS.
+         At current only G2 is supported, and GWebCache2 for discovery.
+         There are global setting and network specific settings.  
+
+         proxy: If you use a proxy for HTTP, specify it here. The format is  
+            [user[:pass]@]host:port 
+         InternetRoute: direct/NAT/none. 
+            Use direct if you have a public IP.
+            Use NAT if you are behing a transparent NAT router. 
+            Use none if you're stuck in a LAN without direct external access.
+         ValidAddresses: public/private/all
+            Use public to discard private addresses.
+            Use private if you want a LAN network.
+            Use all if you are in a mixed environment.
+            Note that for local testing you must allow private addresses.
+      -->
+   <network
+      proxy=""
+      InternetRoute="@_INTERNETROUTE_@"
+      ValidAddresses="public">
+
+      <!-- Gnutella2 -->
+      <Gnutella2>
+         <!-- Number of servers we want to be simultaneously connected -->
+         <ActiveServers>@_ACTIVESERVERS_@</ActiveServers>
+      </Gnutella2>
+
+      <!-- GWCache2 -->
+      <GWebCache2>
+         <!-- Some root (non discardable) GWCaches -->
+         <root url="http://www.gwc2.ip3.com/cgi-bin/gwc2/gcache.cgi"/>
+         <root url="http://g2cache.theg2.net/gwcache/lynnx.asp"/>
+         <root url="http://g2.instantnetworks.net/g2/bazooka.php"/>
+         <root url="http://bazooka1.servehttp.com/g2/bazooka.php"/>
+      </GWebCache2>
+   </network>
+
+   <!-- SECURITY
+         Host banning. That's made through additional xml files conforming
+         to Shareaza schema for security rules. 
+         There is no limit in the number of files you can specify here.  -->
+   <security>
+      <file path="./security.xml" active="yes" />
+   </security>
+
+   <!-- DEBUG.
+         active: enabled or not
+         logfile: file to keep the log. Unbounded size.
+         netlogfile: file to keep network related log.
+         loglevel: Level of tracing: debug, informative, warning, error.
+            Below warning level, messages are not relevant to the developer.
+         ConsoleEcho: echoes traces in console. 
+            NOTE: You need a console-based platform (i.e. linux). In windows
+               that will cause undefined (probably faultly) behavior.
+         DebugStatistics: shows statistics about internal status.
+         PurgeOnStartup: logfiles will be deleted in each run.
+         MemoryPeriod: lap between memory usage counting
+         CrawlerAllowed: Adagio will answer to crawler requests (this reveals
+            your IP but not your Gnutella GUID).
+   -->
+   <debug 
+      active="yes"
+      logfile="log/adagio.log" 
+      netlogfile="log/adagio.log"
+      loglevel="informative"
+      ConsoleEcho="no"
+      DebugStatistics="no"
+      PurgeOnStartup="yes"
+      heartbeat="1s"
+      MemoryPeriod="1m"
+      CrawlerAllowed="yes"
+   />
+</adagio>

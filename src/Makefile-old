@@ -1,0 +1,346 @@
+# Win32 only: If you want a console window to show logs, comment this line:
+LINKMW=-mwindows
+
+# NSIS installation directory to generate win32 installer
+NSIS=c:/archiv~1/nsis
+
+# If you plan to build Agiomon you need a Java 2 functional (in path) SDK
+
+###########################################
+## NO CHANGES TO BE MADE BELOW THIS LINE ##
+###########################################
+
+.PHONY: clean agiomon debug release profile all zlib htmlfull nossl force gnatpatch utils dist-src dist-win32 gnatextra
+.SILENT: clean debug release profile all zlib htmlfull nossl force gnatpatch utils dist-src dist-win32 gnatextra
+
+# Commands:
+ifeq ($(OS), Windows_NT)
+D2U=
+else
+D2U=dep2unix
+endif
+
+# Main file:
+MAIN=../kernel/main.adb
+NAME=adagio
+
+# OS dependant things.
+ifeq ($(OS), Windows_NT)
+OS_DIR=../os_win
+EXT=.exe
+else
+OS_DIR=../os_linux
+EXT=
+LINKMW=
+DEPEND=helpers_linux
+endif
+
+# Our libraries:
+ADAGIO=../kernel -I../storage -I$(OS_DIR) -I../misc -I../network -I../gui -I../library -I../g2 -I../tasking -I../upload -I../ed2k -I../agpl -I../aenea-crawler -I../html -I../gnatextra -I../search -I../obj_embed -I../download
+
+# Java things
+JAGIO=com/trulisoft/adagio
+JLIBS=-classpath "agiomon;../spheon-jsoap/src;../nanoxml/sources/java;."
+
+# Java compiler: sun provided or ibm jikes
+# JC=/c/windows/jikes
+JC=javac
+
+# Third party libraries:
+ACF=../../adacf/src
+AWS=../../aws/src -I../../aws/include -I../../aws/soap -I../../aws/ssl
+CHARLES=../../charles
+GNATCOM=../../gnatcom/bindings
+PRAGMARC=../../pragmarc
+XMLADA=../../xmlada/sax -I../../xmlada/dom -I../../xmlada/input_sources -I../../xmlada/unicode
+ZLIB=../../zlibada
+CONTAINERS=../../containers
+
+# Win32 specific dependences
+ifeq ($(OS), Windows_NT)
+LINKPATCH=-L../obj_patch
+INCPATCH=-I../obj_patch
+DEPEND=gnatpatch
+endif
+
+ifeq ($(OS), Windows_NT)
+DEPRES=winres
+LINKRES=../obj_gnat/winres.o
+endif
+
+# Full libraries:
+INCLUDE=$(ACF) -I$(AWS) -I$(ADAGIO) -I$(CHARLES) -I$(CONTAINERS) -I$(XMLADA) -I$(PRAGMARC) -I$(ZLIB) -I../obj_gnat $(INCPATCH)
+
+# Linker options
+# POSTOPT=--Xlinker --stack=4000000,4000000
+
+LINK=-bargs -E -largs $(LINKPATCH) -L../obj_gnat -L../../zlibc -lz -L../../aws/ssl
+LINKTEST=-bargs -E -largs $(LINKPATCH) -L../obj_gnat -L../../zlibc -lz -L../../aws/ssl #-lgmem
+LINKMPROF=$(LINK) -lgmem
+
+# Common options:
+COMMON=-gnatf -gnatec../gnat.adc -gnatwcfopru 				# A lot of warnings
+# Polling is disabled because it really eats CPU.
+
+# Aditional options to gnatmake:
+DEBUG=-g -O2 -fstack-check -gnato -gnata						
+RELEASE=-O3 -gnatws -gnatn											# -gnatws supress all warnings
+PROFILE=-g -pg -O2 -fstack-check -gnato -gnata
+#PROFILE=-g -pg # -fprofile-arcs -ftest-coverage -fstack-check
+
+# ------------- REGULAR TARGETS ------------------
+default:
+	make lite
+
+profile: zlib nossl force gnatextra awsres $(DEPRES) $(DEPEND)
+	rm -f embedded/geoip.csv
+	mkdir -p obj_profile
+	cd obj_profile && gnatmake -o ../adagio$(EXT) $(COMMON) $(PROFILE) $(MAIN) -I$(INCLUDE) $(LINK) $(LINKRES) $(POSTOPT)
+
+mprofile: zlib nossl force gnatextra awsres $(DEPRES) $(DEPEND)
+	rm -f embedded/geoip.csv
+	mkdir -p obj_mprofile
+	cd obj_mprofile && gnatmake -o ../adagio$(EXT) $(COMMON) $(DEBUG) $(MAIN) -I$(INCLUDE) $(LINKMPROF) $(LINKRES) $(POSTOPT)
+
+lite: zlib nossl force gnatextra $(DEPRES) $(DEPEND)
+	rm -f embedded/geoip.csv
+	mkdir -p obj_debug 
+	cd obj_debug && gnatmake -o ../adagio$(EXT) $(COMMON) $(DEBUG) $(MAIN) -I$(INCLUDE) $(LINK) $(LINKRES) $(POSTOPT) 
+
+debug: $(DEPEND) zlib nossl force gnatextra awsres $(DEPRES)
+	rm -f embedded/geoip.csv
+	mkdir -p obj_debug 
+	cd obj_debug && gnatmake -o ../adagio$(EXT) $(COMMON) $(DEBUG) $(MAIN) -I$(INCLUDE) $(LINK) $(LINKRES) $(POSTOPT) 
+
+release: $(DEPEND) zlib nossl force gnatextra awsres $(DEPRES)
+	mkdir -p obj_release
+	cd obj_release && gnatmake -o ../adagio$(EXT) $(COMMON) $(RELEASE) $(MAIN) -I$(INCLUDE) $(LINK) $(LINKMW) $(LINKRES) $(POSTOPT)
+
+test: zlib nossl force gnatextra $(DEPEND)
+	mkdir -p obj_test
+	cd obj_test && gnatmake -o ../test$(EXT) -gnatt $(COMMON) $(PROFILE) ../tests/test.adb -I$(INCLUDE) -I../tests $(LINKTEST) $(POSTOPT) -lgmem
+
+all: force
+	make release
+	make utils
+#	make agiomon
+
+agiomonpre:
+	mkdir -p obj_java
+	$(JC) -d obj_java $(JLIBS) ../nanoxml/sources/java/net/n3/nanoxml/*.java
+	$(JC) -d obj_java $(JLIBS) ../spheon-jsoap/src/de/fmui/spheon/jsoap/encoding/*.java
+
+agiomonlite:
+	mkdir -p obj_java
+	$(JC) -d obj_java $(JLIBS) agiomon/$(JAGIO)/Agiomon.java
+
+agiomonbuild:
+	echo "Main-Class: com.trulisoft.adagio.Agiomon" > obj_java/manifest.txt
+	cp -f ../spheon-jsoap/src/jsoapconfig.xml obj_java
+	cp -f resource/adagio.png obj_java
+	cd obj_java && jar cmf manifest.txt ../agiomon.jar com de net jsoapconfig.xml adagio.png
+
+agiomonq:
+	make agiomonlite
+	make agiomonbuild
+
+agiomon:
+	make agiomonpre
+	make agiomonlite
+	make agiomonbuild
+
+htmlfull: awsres
+	# requires clean to be sane
+	rm -f embedded/geoip.csv
+	mkdir -p obj_debug 
+	# Next individual compilings to force omission in -gnatt compilation.
+	# Documentation will be missing for these files, I suppose.
+	cd obj_debug && gnatmake -gnatc -u ../download/adagio-download-slot-maps.ads $(COMMON) $(DEBUG) -I$(INCLUDE) $(LINK) $(LINKRES) $(POSTOPT)
+	# Now the main compilation.
+	cd obj_debug && gnatmake -gnatc -gnatt $(MAIN) $(COMMON) $(DEBUG) -I$(INCLUDE) $(LINK) $(LINKRES) $(POSTOPT)
+	echo Generating with AdaBrowse...
+	htmlgen.sh adagio
+	echo Done.
+
+../zlibc/libz.a:
+	make -C ../zlibc libz.a
+
+zlib: ../zlibc/libz.a
+
+nossl:
+	make -C ../aws/ssl build
+
+gnatpatch:
+	mkdir -p obj_patch
+	cd obj_patch && gnatmake -a -u -I../gnatextra ../../gnatpatch/*.ad?
+
+utils:
+	mkdir -p obj_release
+	cd obj_release && gnatmake -o ../agioutils$(EXT) $(COMMON) -I$(INCLUDE) $(RELEASE) ../console/agioutils.adb
+
+utils-debug:
+	mkdir -p obj_debug
+	cd obj_debug && gnatmake -o ../agioutils$(EXT) $(COMMON) -I$(INCLUDE) $(DEBUG) ../console/agioutils.adb
+
+diagprofile:
+	gprof adagio$(EXT) > log/profile.txt
+
+diagmemory:
+	gnatmem 10 -i gmem.out adagio$(EXT) -f local-config.xml > log/memory.txt
+
+gnatextra: force
+	mkdir -p obj_gnat
+	cd obj_gnat && gnatmake -a -u ../network/g-socext.adb
+	cd obj_gnat && gnatmake -a -u ../gnatextra/*.ad?
+	cd obj_gnat && gnatmake -a -u -O2 -g ../../containers/a-contai.ads
+	cd obj_gnat && gnatmake -a -u -O2 -g ../../containers/a-crbltr.ads
+	cd obj_gnat && gnatmake -a -u -O2 -g ../../containers/a-strhas.ad?
+	cd obj_gnat && gnatmake -a -u -O2 -g ../../containers/a-cohata.ad?
+	cd obj_gnat && gnatmake -a -u -O2 -g ../../containers/a-coprnu.ad?
+
+winres:
+	mkdir -p obj_gnat
+	rcl -i adagio.rc -o obj_gnat/winres.o
+
+awsres: gnatextra $(DEPEND)
+	mkdir -p obj_gnat
+	cd obj_gnat && gnatmake -I../gnatextra -I../../aws/src -I../obj_patch ../../aws/src/awsres.adb
+	rm -rf obj_embed
+	mkdir -p obj_embed
+#	cp html/*.* obj_embed
+	cp embedded/* obj_embed
+	cd obj_embed && ../obj_gnat/awsres$(EXT) -r adagio_resources *
+
+helpers_linux:
+	mkdir -p obj_gnat
+	cd obj_gnat && gcc -Wall -c ../os_linux/helpers.c
+
+dep2unix:
+	dos2unix ../zlibc/*.h
+	dos2unix ../zlibc/*.c
+
+bug:
+	mkdir -p obj_debug
+	cd obj_debug && gnatmake -o bug -I../bugs ../bugs/bug.adb
+
+# ---------------- ADALID TARGETS ---------------------
+
+adalid: force
+	make -f Makefile-adalid
+
+adalid-debug: force
+	make -f Makefile-adalid debug
+
+adalid-release: force
+	make -f Makefile-adalid release
+
+# ---------------- AENEA TARGETS ----------------------
+
+aenea: force
+	make -f Makefile-aenea
+
+aenea-release: force
+	make -f Makefile-aenea release
+
+aenea-debug: force
+	make -f Makefile-aenea debug
+
+aenea-lite: force
+	make -f Makefile-aenea lite
+
+aenea-packed: force
+	make -f Makefile-aenea packed
+
+# ---------------- DEPLOYMENT TARGETS -----------------
+
+dist-src:
+	echo Building sources...
+	rm -f embedded/geoip.csv
+	make htmlfull
+	echo You can now commit all changes.
+
+dist-linux:
+	echo Building Linux...
+	rm -rf obj_install
+	cp -f ../geoip/geoip.csv embedded
+	make release
+	make utils
+	strip adagio$(EXT)
+	strip agioutils$(EXT)
+	mkdir -p obj_install
+	mkdir -p obj_install/adagio
+	mkdir -p obj_install/adagio/data
+	mkdir -p obj_install/adagio/html
+	mkdir -p obj_install/adagio/log
+	mkdir -p obj_install/adagio/conf_samples
+	cp -f adagio.xml conf_samples
+	cp conf_samples/*.xml obj_install/adagio/conf_samples
+	cp html/*.* obj_install/adagio/html
+	cp Changes.txt Bugs.txt License.txt Missing.txt obj_install/adagio
+	cp security.xml obj_install/adagio
+	cp README obj_install/adagio/README.txt
+	cp adagio$(EXT) agioutils$(EXT) *.sh obj_install/adagio
+	# cp adagio$(EXT) agioutils$(EXT) agiomon.jar obj_install/adagio
+	# cp adagio.xml adagio.xml.html obj_install/adagio
+	# Packaging
+	rm -f obj_install/adagio-bin-linux.*
+	cd obj_install && tar cf adagio-bin-linux.tar adagio
+	rm -f /tmp/adagio-bin-linux.*
+	cp -f obj_install/adagio-bin-linux.tar /tmp
+	gzip -9 /tmp/adagio-bin-linux.tar
+	cp -f /tmp/adagio-bin-linux.tar.gz adagio-bin-linux.tgz
+
+dist-win32:
+	echo Building win32...
+	rm -rf obj_install
+	cp -f ../geoip/geoip.csv embedded 
+	make all
+	strip adagio$(EXT)
+	strip agioutils$(EXT)
+	mkdir -p obj_install
+	mkdir -p obj_install/data
+	mkdir -p obj_install/html
+	mkdir -p obj_install/log
+	mkdir -p obj_install/conf_samples
+	cp -f adagio.xml conf_samples
+	cp conf_samples/*.xml obj_install/conf_samples
+	cp html/*.* obj_install/html
+	cp Changes.txt Bugs.txt License.txt Missing.txt obj_install
+	cp security.xml obj_install
+	cp README obj_install/README.txt
+	cp adagio$(EXT) agioutils$(EXT) obj_install
+	# cp adagio.xml adagio.xml.html obj_install
+	# Installer things now
+	$(NSIS)/makensis adagio-win32.nsi
+
+# ---------------- CLEANING TARGET --------------------
+clean:
+	rm -rf obj_*
+	rm -rf data finished incomplete
+	rm -rf adalid_data
+	rm -rf log
+	rm -f *.exe
+	rm -f *.jar
+	rm -f *.out
+	rm -f profile.txt
+	rm -f memory.txt
+	rm -f adagio
+	rm -f agioutils
+	rm -f aenea 
+	rm -f aenea.gz
+	rm -f test
+	rm -f ../zlibc/libz.a
+	rm -f ../zlibc/*.o
+	rm -f ../aws/ssl/libnosslaws.a
+	rm -f ../aws/ssl/*.o
+	rm -f ../aws/ssl/*.ali
+	rm -f html/adagio_resources*
+	rm -f embedded/geoip.csv
+	rm -f adalid/html/adalid_resources*
+	rm -f adalid/html/geoip.csv
+	rm -f aenea-crawler/html/aenea_resources*
+	rm -f aenea-crawler/html/geoip.csv
+
+force:
+	mkdir -p data
+	mkdir -p log

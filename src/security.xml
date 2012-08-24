@@ -1,0 +1,130 @@
+<?xml version="1.0"?>
+<security xmlns="http://www.shareaza.com/schemas/Security.xsd">
+<rule address="0.0.0.0" action="deny" guid="235F114E-1F6D-4D1D-95C7-A729114623CB" type="address" comment="BAD HOST: Fake IP"/>
+<rule address="38.118.155.0" action="deny" guid="2E0603BE-0A5E-4580-86CC-DD09DC12682C" type="address" mask="255.255.255.0" comment="BAD HOST: Corrupt Chunks "/>
+<rule address="38.118.163.0" action="deny" guid="D9A23CE4-1724-4F06-BBB3-D86F0E15E752" type="address" mask="255.255.255.0" comment="BAD HOST: Corrupt Chunks "/>
+<rule address="195.14.128.0" action="deny" guid="0097B9E8-6563-4030-9BED-2437695C1A80" type="address" mask="255.255.128.0" comment="BAD HOST: bsa.lt"/>
+<rule address="38.112.161.0" action="accept" guid="254C8D12-578C-4E1D-826B-35B95FE89162" type="address" mask="255.255.255.0" comment="Never Ban: AnonX "/>
+<rule address="200.75.0.0" action="deny" guid="D50FDDF0-E149-4020-9AD1-FBB83C11088C" type="address" mask="255.255.0.0" comment="BAD HOST: imedia"/>
+<rule address="69.57.144.98" action="deny" guid="36CBEA06-49C0-46B4-909D-C096A12477A3" type="address" comment="BAD HOST: Fake ed2k server"/>
+<rule address="38.118.163.196" action="deny" guid="3FE8F1FD-1819-4889-A121-7D6468A2C1D4" type="address" mask="255.255.255.252" comment="BAD HOST: Corrupt Chunks " expire="1092076162"/>
+<rule action="deny" content="-fulldownloader 3-fulldwnloader -full-downloader -games-fulldownloader divx-fulldownloader 3-full-dwnloader- -games-fulldownloader- -games-fulldownload pack-fully-download movie-(1 mile-the __INCOMPLETE__ INCOMPLETE~ shareaza_speed_up shareaza_speed_booster .mp3.xml" guid="462DC891-FFD9-11D6-9149-52544C1A831F" type="content" match="any" comment="CONTENT BLOCK: Bogus"/>
+<rule address="38.118.155.4" action="deny" guid="0AF07C33-B677-49A2-9DCA-5E23725A4EF3" type="address" mask="255.255.255.254" comment="BAD HOST: Corrupt Chunks " expire="1092043542"/>
+<rule address="38.118.163.200" action="deny" guid="4416C820-9EC0-4231-80A5-D35459B8E6FE" type="address" mask="255.255.255.252" comment="BAD HOST: Corrupt Chunks " expire="1092043565"/>
+<rule address="212.18.32.0" action="deny" guid="66E7577A-4E9E-41D5-8CB3-145320ED1435" type="address" mask="255.255.240.0" comment="BAD HOST: bsa.si"/>
+<rule address="67.68.53.0" action="deny" guid="1A356E17-2A4D-4C14-A397-2F2F8D687C6B" type="address" mask="255.255.255.0" comment="(DBL) HSE" expire="1092154940"/>
+<rule address="200.162.125.0" action="deny" guid="E0AB9DFF-A11D-4AB5-BED7-E5A23E4EA514" type="address" mask="255.255.255.0" comment="(DBL) Unknown" expire="1092154940"/>
+<rule address="66.54.72.120" action="deny" guid="E7FF27CB-DD84-4CE0-AE61-53F47A193FD9" type="address" mask="255.255.255.254" comment="BAD HOST: fake files nhi 4P2P"/>
+<rule address="64.15.245.10" action="deny" guid="CB40157D-4113-4721-89B0-31A08D5F7B3B" type="address" mask="255.255.255.254" comment="BAD HOST: fake file company (using c and w range) 4P2P"/>
+<rule address="66.54.74.72" action="deny" guid="D3B4369B-7D56-4733-A9E2-CCA882C32848" type="address" mask="255.255.255.248" comment="BAD HOST: fake files nhi 4P2P"/>
+<rule address="64.15.245.12" action="deny" guid="ADB32FFD-0F5E-426D-89B5-D4124735068C" type="address" mask="255.255.255.254" comment="BAD HOST: fake file company (using c and w range) 4P2P"/>
+<rule address="66.54.77.72" action="deny" guid="3BA5D8A3-BB68-47B0-A974-A277DF85577E" type="address" mask="255.255.255.248" comment="BAD HOST: fake files nhi 4P2P"/>
+<rule address="207.36.233.99" action="deny" guid="5D8DB896-E3CE-4E28-B542-F08C80FB89BC" type="address" comment="BAD HOST: search field + a &quot;.jpg&quot; or a &quot;.html&quot;."/>
+<rule address="66.117.8.100" action="deny" guid="3015E544-3BAA-4F3A-8F96-563CB6012179" type="address" mask="255.255.255.252" comment="BAD HOST: fake files new horizon two 4P2P"/>
+<rule address="38.144.198.150" action="deny" guid="2A45EC7E-97F6-4F2C-ACF5-1F54678A639B" type="address" comment="BAD HOST: Replies with &lt;search&gt;..exe and !_&lt;search&gt;.exe "/>
+<rule address="82.64.73.144" action="deny" guid="5E065EC7-7EBE-47E6-889F-E2FB185ED1F7" type="address" comment="BAD HOST: Fakes Files - G2 Block Only"/>
+<rule address="66.122.215.0" action="deny" guid="45719587-4B4C-4790-A005-3E7CFFA9E415" type="address" mask="255.255.255.0" comment="(DBL) Unknown" expire="1092154940"/>
+<rule address="66.54.72.98" action="deny" guid="C8DE073A-6600-4C1C-B21C-4941284A0F34" type="address" mask="255.255.255.254" comment="BAD HOST: fake files nhi 4P2P"/>
+<rule action="deny" content="(AV CHECKED).zip" guid="85B100AD-C988-4904-A08C-AFDCDEDCF8F0" type="content" match="all" comment="CONTENT BLOCK: Virus"/>
+<rule address="66.54.77.96" action="deny" guid="F322AC91-CD4F-4347-9DBA-1986E7EDA4A1" type="address" mask="255.255.255.240" comment="BAD HOST: fake files nhi 4P2P"/>
+<rule address="66.54.72.104" action="deny" guid="D1E790F3-A0A9-4B29-9ABA-22938ABC4D1E" type="address" mask="255.255.255.248" comment="BAD HOST: fake files nhi 4P2P"/>
+<rule address="66.250.24.0" action="deny" guid="3FA01580-FFF3-11D6-9149-52544C1A831F" type="address" mask="255.255.255.248" comment="BAD HOST: Fake mp3 file server"/>
+<rule address="66.117.5.248" action="deny" guid="E28DEFFF-2466-49B2-A483-D5EA4DF53783" type="address" mask="255.255.255.254" comment="BAD HOST: fake file new horizon 4P2P"/>
+<rule action="deny" content=".jpg.exe .jpg.vbs .avi.exe .avi.vbs .mp3.exe .mp3.vbs" guid="462DC889-FFD9-11D6-9149-52544C1A831F" type="content" match="any" comment="CONTENT BLOCK: Virus"/>
+<rule address="66.117.5.230" action="deny" guid="66A42D98-24C8-4F42-87A4-3196F480F501" type="address" mask="255.255.255.254" comment="BAD HOST: fake file new horizon 4P2P"/>
+<rule address="66.117.5.229" action="deny" guid="B7C3161C-47E4-44C7-8F5D-FA7AFCB712C6" type="address" comment="BAD HOST: fake file new horizon 4P2P"/>
+<rule address="38.144.72.134" action="deny" guid="9E7543F0-3664-4B4B-8490-FA443B1FF7C1" type="address" comment="BAD HOST: Corrupt Chunks "/>
+<rule address="66.54.76.122" action="deny" guid="BEBEA172-DEAD-4BD4-A103-14A8C10C1807" type="address" comment="BAD HOST: fake files nhi 4P2P"/>
+<rule address="216.144.224.0" action="deny" guid="F2E80104-967E-4688-872A-2615383BC9BC" type="address" mask="255.255.240.0" comment="BAD HOST: Fakes SHA1 hashes"/>
+<rule address="66.54.74.68" action="deny" guid="EB94694D-8DEA-482D-A410-E240B86FFEA0" type="address" mask="255.255.255.252" comment="BAD HOST: fake files nhi 4P2P"/>
+<rule address="66.117.6.228" action="deny" guid="7483DAC4-F1C6-4E52-81E7-3FC7DE016E07" type="address" mask="255.255.255.252" comment="BAD HOST: fake files new horizon one 4P2P"/>
+<rule address="67.71.175.0" action="deny" guid="E8E4E458-9CCA-4EEC-9629-AFCD3E578D43" type="address" mask="255.255.255.0" comment="(DBL) Unknown" expire="1092154940"/>
+<rule address="68.126.211.0" action="deny" guid="A0FC01DD-F670-418F-81E4-22B6F65DB70D" type="address" mask="255.255.255.0" comment="(DBL) PacBellInternetServices" expire="1092154940"/>
+<rule address="64.246.106.0" action="deny" guid="6F13236D-6EB9-4840-B92E-F18D1DF48111" type="address" mask="255.255.255.0" comment="(DBL) AmplexElectric,Inc." expire="1092154940"/>
+<rule address="130.94.0.0" action="deny" guid="16F1ED4E-B3DF-4BE1-AC82-F3265F8E2D09" type="address" mask="255.255.0.0" comment="PG BAD HOST: Crescent Moon Studios/Miami, FL" expire="1092043604"/>
+<rule address="66.54.76.120" action="deny" guid="F24910D8-863A-4885-A8A4-6B68E9916C6F" type="address" mask="255.255.255.254" comment="BAD HOST: fake files nhi 4P2P"/>
+<rule address="66.117.6.248" action="deny" guid="E839E997-4712-40B0-829A-5EB6649F8051" type="address" mask="255.255.255.254" comment="BAD HOST: fake files new horizon one 4P2P"/>
+<rule address="162.33.154.69" action="deny" guid="462DC89D-FFD9-11D6-9149-52544C1A831F" type="address" comment="BAD HOST: Secret paysite passwords &lt;search&gt;.html"/>
+<rule address="66.71.59.175" action="deny" guid="5BECB9D3-E73F-4EEC-94AD-BE00F7BE939D" type="address" comment="BAD HOST: DOS"/>
+<rule address="66.54.76.69" action="deny" guid="F20430DB-A3ED-410F-8BCE-35E8632D2E8C" type="address" comment="BAD HOST: fake files nhi 4P2P"/>
+<rule address="195.56.225.0" action="deny" guid="381179B5-BD66-41BC-A38B-154CA0EBEF98" type="address" mask="255.255.255.0" comment="(DBL) Hungary" expire="1092154940"/>
+<rule address="66.54.77.120" action="deny" guid="40E05EFB-E14C-4BE4-A64F-B435FC472F47" type="address" mask="255.255.255.254" comment="BAD HOST: fake files nhi 4P2P"/>
+<rule address="66.117.5.240" action="deny" guid="F581828A-72B6-492A-A11E-D708E0DF860A" type="address" mask="255.255.255.248" comment="BAD HOST: fake file new horizon 4P2P"/>
+<rule address="66.54.73.112" action="deny" guid="7D4BBBED-D923-4417-9509-05AAEE3062AC" type="address" mask="255.255.255.248" comment="BAD HOST: fake files nhi 4P2P"/>
+<rule address="194.213.194.37" action="deny" guid="462DC887-FFD9-11D6-9149-52544C1A831F" type="address" comment="BAD HOST: Replies with &lt;search&gt;.url and &lt;search&gt;.mpg"/>
+<rule address="66.117.8.128" action="deny" guid="511779FB-6C7E-43E5-A4EE-746E79633D17" type="address" mask="255.255.255.192" comment="BAD HOST: fake files new horizon two 4P2P"/>
+<rule address="66.54.76.70" action="deny" guid="467A2C94-45D3-4904-9D93-A6B9AB4DEAE2" type="address" mask="255.255.255.254" comment="BAD HOST: fake files nhi 4P2P"/>
+<rule address="213.150.32.0" action="deny" guid="76449470-FEB6-4DAA-B574-1D9A5DFB5FA2" type="address" mask="255.255.224.0" comment="BAD HOST: APG "/>
+<rule address="66.54.77.68" action="deny" guid="BD59A15D-0890-428E-92FE-B2EDBDB6D484" type="address" mask="255.255.255.252" comment="BAD HOST: fake files nhi 4P2P"/>
+<rule address="66.117.8.240" action="deny" guid="1AF9DFF2-0FBF-4AAC-96EC-F1158F53FAF8" type="address" mask="255.255.255.248" comment="BAD HOST: fake files new horizon two 4P2P"/>
+<rule address="66.54.74.80" action="deny" guid="7C436DAE-90CA-42BC-B4B1-AFE74E92F72E" type="address" mask="255.255.255.240" comment="BAD HOST: fake files nhi 4P2P"/>
+<rule address="193.111.198.138" action="accept" guid="19BD4F84-6531-4516-98E8-7CC47D4C66FA" type="address" comment="Never Ban: Sock5 Server"/>
+<rule address="67.41.252.0" action="deny" guid="9056C5C4-549F-4BE7-A220-DBC69C75B1D9" type="address" mask="255.255.255.0" comment="(DBL) USWESTInternetServices" expire="1092154940"/>
+<rule address="66.117.8.97" action="deny" guid="DA6ADECE-D9B2-478A-80A9-CB1E4179986A" type="address" comment="BAD HOST: fake files new horizon two 4P2P"/>
+<rule address="66.54.77.67" action="deny" guid="B135BB18-0593-419E-BE19-A3DB78203FAC" type="address" comment="BAD HOST: fake files nhi 4P2P"/>
+<rule address="66.117.8.104" action="deny" guid="0B202D85-E299-431A-B020-AF00A591B9B4" type="address" mask="255.255.255.248" comment="BAD HOST: fake files new horizon two 4P2P"/>
+<rule address="66.54.77.112" action="deny" guid="3FD5320B-5FE0-4FF9-8BCB-2E60EF50DF59" type="address" mask="255.255.255.248" comment="BAD HOST: fake files nhi 4P2P"/>
+<rule address="207.234.131.147" action="deny" guid="CB847BC4-AB56-4F89-9552-0AD85292EB7F" type="address" comment="BAD HOST: search field + a &quot;.jpg&quot; or a &quot;.html&quot;."/>
+<rule address="66.117.8.252" action="deny" guid="E8AF0317-CD04-4C43-8527-4161A6238612" type="address" comment="BAD HOST: fake files new horizon two 4P2P"/>
+<rule address="66.54.72.112" action="deny" guid="0672470B-74FA-40F9-9065-6FE00726E96C" type="address" mask="255.255.255.248" comment="BAD HOST: fake files nhi 4P2P"/>
+<rule address="66.117.8.248" action="deny" guid="7D53A4F0-D2B9-4D07-8B35-B7DE73B67626" type="address" mask="255.255.255.252" comment="BAD HOST: fake files new horizon two 4P2P"/>
+<rule address="194.228.211.204" action="deny" guid="462DC88A-FFD9-11D6-9149-52544C1A831F" type="address" comment="BAD HOST: Replies with &lt;search&gt; .mpg .html .url"/>
+<rule address="80.135.191.0" action="deny" guid="D14341B3-21F8-4D46-8667-D0949FC460A1" type="address" mask="255.255.255.0" comment="(DBL) Deutsche Telekom AG" expire="1092154940"/>
+<rule address="210.24.174.0" action="deny" guid="E88D3994-83C8-4250-9DAB-E0547BAE4026" type="address" mask="255.255.255.0" comment="(DBL) Pacific Internet Limited" expire="1092154940"/>
+<rule address="172.191.90.0" action="deny" guid="3797B3CC-BDBB-4A6B-807D-CE316CB2DC18" type="address" mask="255.255.255.0" comment="(DBL) America Online" expire="1092154940"/>
+<rule address="203.66.92.0" action="deny" guid="EE8C2773-22C9-4346-A158-A62C1F837856" type="address" mask="255.255.255.0" comment="(DBL) Unknown" expire="1092154940"/>
+<rule address="66.54.89.2" action="deny" guid="8D2176D8-5EBF-45AA-99F5-FCF5D4FA9C27" type="address" mask="255.255.255.254" comment="BAD HOST: fake files nhi 4P2P"/>
+<rule address="81.101.16.9" action="deny" guid="218196F3-57D8-441C-81AD-34183E3926C0" type="address" comment="BAD HOST: Fakefinder"/>
+<rule address="66.117.6.226" action="deny" guid="AF9E5D3F-F659-40BD-816D-68B0F9697D20" type="address" mask="255.255.255.254" comment="BAD HOST: fake files new horizon one 4P2P"/>
+<rule address="66.54.89.8" action="deny" guid="FE74AD85-A3B4-422E-838A-81D758C9DB1E" type="address" mask="255.255.255.248" comment="BAD HOST: fake files nhi 4P2P"/>
+<rule address="62.234.82.0" action="deny" guid="E6EDCB69-9760-4CB2-83F5-8A6BA2187499" type="address" mask="255.255.255.0" comment="(DBL) Wanadoo Cable" expire="1092154940"/>
+<rule address="213.61.148.0" action="deny" guid="56873C34-D694-4E9C-9045-071CC690E35A" type="address" mask="255.255.255.0" comment="BAD HOST: Audiofon Chat &amp; Play GmbH"/>
+<rule address="209.204.128.0" action="deny" guid="FDF755BF-43D8-423F-AC58-48AF03B2874B" type="address" mask="255.255.192.0" comment="BAD HOST: (ZBL) - BayTSP"/>
+<rule address="66.54.73.80" action="deny" guid="772161FF-C43D-42A9-8811-BAAA03FD423F" type="address" mask="255.255.255.240" comment="BAD HOST: fake files nhi 4P2P"/>
+<rule address="66.54.73.68" action="deny" guid="4A3CE8AC-80DC-4E55-9B46-DEE4C3763E92" type="address" mask="255.255.255.252" comment="BAD HOST: fake files nhi 4P2P"/>
+<rule address="66.54.77.122" action="deny" guid="645B2A14-1FEA-4B64-AE6B-7EA46B9815A3" type="address" comment="BAD HOST: fake files nhi 4P2P"/>
+<rule address="69.157.33.0" action="deny" guid="0C9921FC-8E8A-4A3F-8BF3-6C25E519D279" type="address" mask="255.255.255.0" comment="(DBL) Unknown" expire="1092154940"/>
+<rule address="66.54.74.96" action="deny" guid="2E41DC8D-0AA1-4F2A-82D8-03822C58414A" type="address" mask="255.255.255.240" comment="BAD HOST: fake files nhi 4P2P"/>
+<rule address="66.54.76.96" action="deny" guid="20C113FD-42E0-4916-B60E-BD6E7E80D7E8" type="address" mask="255.255.255.240" comment="BAD HOST: fake files nhi 4P2P"/>
+<rule address="216.74.135.164" action="deny" guid="D30C2697-6C14-49E1-8C28-A6CDCB30DB68" type="address" mask="255.255.255.252" comment="BAD HOST: fake file company 4P2P"/>
+<rule address="172.153.83.0" action="deny" guid="0F2A9933-4DFA-4A18-A5D0-F2E71E0FFFCD" type="address" mask="255.255.255.0" comment="(DBL) America Online" expire="1092154940"/>
+<rule address="68.55.66.177" action="deny" guid="F1572140-0E0A-11D7-AAE6-52544C1A831F" type="address" comment="BAD HOST: Hacking Port Scaning"/>
+<rule address="66.54.73.120" action="deny" guid="34EA5629-DEC4-4113-960F-84487921841E" type="address" comment="BAD HOST: fake files nhi 4P2P"/>
+<rule address="209.204.128.0" action="deny" guid="462DC893-FFD9-11D6-9149-52544C1A831F" type="address" mask="255.255.128.0" comment="BAD HOST: www.baytsp.com"/>
+<rule address="66.117.8.224" action="deny" guid="49A60108-5ED2-41E6-B915-14EBFB1041E3" type="address" mask="255.255.255.240" comment="BAD HOST: fake files new horizon two 4P2P"/>
+<rule address="66.117.6.232" action="deny" guid="3EC3C2AC-153A-4666-AAEE-B2F37520BA01" type="address" mask="255.255.255.248" comment="BAD HOST: fake files new horizon one 4P2P"/>
+<rule address="65.118.144.0" action="deny" guid="73113401-733D-420D-A10C-6605299C7F14" type="address" mask="255.255.254.0" comment="BAD HOST: fake files atc md 4P2P"/>
+<rule address="66.117.6.240" action="deny" guid="A13413AE-BE05-41C2-945C-22B74A464879" type="address" mask="255.255.255.248" comment="BAD HOST: fake files new horizon one 4P2P"/>
+<rule address="64.152.0.0" action="deny" guid="DF383E4C-1E9D-4749-A818-145B695BCA5B" type="address" mask="255.254.0.0" comment="BAD HOST: IRMA "/>
+<rule address="66.54.89.16" action="deny" guid="C46B3FE5-10D2-4E90-875B-EA0C9B94AE45" type="address" mask="255.255.255.248" comment="BAD HOST: fake files nhi 4P2P"/>
+<rule address="64.15.245.14" action="deny" guid="E2A89427-CDEF-4C72-ACD7-60B7E1490523" type="address" comment="BAD HOST: fake file company (using c and w range) 4P2P"/>
+<rule address="67.122.151.0" action="deny" guid="EA5E06AB-7344-4DA1-9F8E-9DA24D20F790" type="address" mask="255.255.255.0" comment="(DBL) Unknown" expire="1092154940"/>
+<rule address="63.161.192.0" action="deny" guid="84229EB1-F3F3-4A39-A547-BF69F772697E" type="address" mask="255.255.255.0" comment="(DBL) Sprint" expire="1092154940"/>
+<rule address="134.174.177.0" action="deny" guid="1C076D3B-CB7D-406C-9F7B-FA36580ABA51" type="address" mask="255.255.255.0" comment="(DBL) Longwood Medical Area (NET-LMANET)" expire="1092154940"/>
+<rule address="66.54.73.72" action="deny" guid="8CC2B39F-2E5B-4661-9120-801D757060D9" type="address" mask="255.255.255.248" comment="BAD HOST: fake files nhi 4P2P"/>
+<rule address="81.0.210.152" action="deny" guid="81D98F99-3CEC-4147-8211-20741B161D43" type="address" comment="BAD HOST: Replies with search&gt;_cool.mpg "/>
+<rule address="218.66.38.138" action="deny" guid="114AE78E-4FE6-4256-A9C2-FA2D850C9E20" type="address" comment="BAD HOST: Fakes Files - G2 Block Only"/>
+<rule address="66.117.8.98" action="deny" guid="DF965E24-4CCA-429E-BD22-4DAE0AB1D8E2" type="address" mask="255.255.255.254" comment="BAD HOST: fake files new horizon two 4P2P"/>
+<rule address="66.117.8.192" action="deny" guid="E199000A-FF03-4700-9CD3-E0EE6C6D60E3" type="address" mask="255.255.255.224" comment="BAD HOST: fake files new horizon two 4P2P"/>
+<rule address="66.54.76.72" action="deny" guid="AA831794-E54D-43A7-8912-31AA9B44435D" type="address" mask="255.255.255.248" comment="BAD HOST: fake files nhi 4P2P"/>
+<rule address="218.234.22.154" action="accept" guid="7E178E95-9234-4CDB-A182-4C6B900863AE" type="address" comment="Never Ban: Sock5 Server"/>
+<rule address="216.74.135.162" action="deny" guid="FA1337BA-2282-4A66-97CB-A05A1B7E5C17" type="address" mask="255.255.255.254" comment="BAD HOST: fake file company 4P2P"/>
+<rule address="66.54.74.120" action="deny" guid="5503562F-308F-49E5-8396-2BB6495DD0CE" type="address" mask="255.255.255.254" comment="BAD HOST: fake files nhi 4P2P"/>
+<rule address="66.54.76.80" action="deny" guid="FB121784-D5CB-493E-9A7E-9C40860D51DC" type="address" mask="255.255.255.240" comment="BAD HOST: fake files nhi 4P2P"/>
+<rule address="150.209.133.0" action="deny" guid="EA949C70-BC12-4628-AC95-8A6193209C1B" type="address" mask="255.255.255.0" comment="(DBL) Hamilton College (NET-HAMILTON-B1)" expire="1092154940"/>
+<rule address="66.54.77.80" action="deny" guid="73881356-A593-4057-86AA-8BD6A96150BA" type="address" mask="255.255.255.240" comment="BAD HOST: fake files nhi 4P2P"/>
+<rule address="66.117.8.112" action="deny" guid="4E984ABC-787A-418F-ACA0-E64E919975E7" type="address" mask="255.255.255.240" comment="BAD HOST: fake files new horizon two 4P2P"/>
+<rule address="66.54.89.4" action="deny" guid="61504CEC-1DAF-42AE-978D-04A760552DD3" type="address" mask="255.255.255.252" comment="BAD HOST: fake files nhi 4P2P"/>
+<rule address="66.117.5.232" action="deny" guid="D55144E7-F3AF-4BDD-89B1-99E6AD28C0EB" type="address" mask="255.255.255.248" comment="BAD HOST: fake file new horizon 4P2P"/>
+<rule address="66.54.76.112" action="deny" guid="32022D84-D25D-44A7-92A7-F0396D410E81" type="address" mask="255.255.255.248" comment="BAD HOST: fake files nhi 4P2P"/>
+<rule address="202.44.41.84" action="deny" guid="462DC8A1-FFD9-11D6-9149-52544C1A831F" type="address" comment="BAD HOST: Secret paysite passwords &lt;search&gt;.html"/>
+<rule address="38.144.198.24" action="deny" guid="8DF1F782-ED0F-454C-905F-A68405AA6912" type="address" comment="BAD HOST: Replies with &lt;search&gt;..exe and !_&lt;search&gt;.exe"/>
+<rule address="66.111.54.160" action="deny" guid="56F32D5B-8C61-438D-A55A-897DFBFA3A3D" type="address" mask="255.255.255.240" comment="BAD HOST: Replies with &lt;search&gt; .html"/>
+<rule address="216.74.135.168" action="deny" guid="4118128E-8167-41FD-BA84-7049FFB6ACDA" type="address" mask="255.255.255.254" comment="BAD HOST: fake file company 4P2P"/>
+<rule address="66.54.89.24" action="deny" guid="1783EEE9-E86E-462F-9C4B-F142A8636998" type="address" mask="255.255.255.254" comment="BAD HOST: fake files nhi 4P2P"/>
+<rule address="12.202.141.0" action="deny" guid="30184BB4-CDA1-42D4-B2D3-F38C5634F956" type="address" mask="255.255.255.0" comment="(DBL) AT&amp;T" expire="1092154940"/>
+<rule address="66.54.73.96" action="deny" guid="CAC2DFD7-4FE9-47A6-B626-1459FF95EDB9" type="address" mask="255.255.255.240" comment="BAD HOST: fake files nhi 4P2P"/>
+<rule address="66.54.74.112" action="deny" guid="CD8CCC0F-0553-489D-844E-BC706C1CF733" type="address" mask="255.255.255.248" comment="BAD HOST: fake files nhi 4P2P"/>
+<rule address="66.54.72.100" action="deny" guid="75FC895A-F28B-4F19-9EFC-7F4556F9514B" type="address" mask="255.255.255.252" comment="BAD HOST: fake files nhi 4P2P"/>
+<rule address="66.54.74.66" action="deny" guid="58D0825E-C613-4F02-A47E-31E096FAB232" type="address" mask="255.255.255.254" comment="BAD HOST: fake files nhi 4P2P"/>
+</security>

@@ -1,0 +1,14 @@
+------------------------------------------------------------------------------
+$Id: Missing.txt,v 1.1 2004/03/22 07:14:53 Jano Exp $
+------------------------------------------------------------------------------
+
+---------------------
+-- Next milestones --
+---------------------
+      1.0   : Initial release.
+      0.6   : Searching.
+      0.5   : Crawler answering.
+      0.4   : Leaf maintenance tasks.
+      0.3   : Hub maintenance tasks.
+      0.2   : Accepting leaves.
+      0.1   : Connection to hubs.

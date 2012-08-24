@@ -1,0 +1,161 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+    <link rel="stylesheet" type="text/css" href="@_STYLE_@">
+    <title>Configuration helper</title>
+  </head>
+  <body>
+    <!--
+      Parameters:
+         ALLOWBROWSE : TRUE/FALSE
+         SHAREDPATH  : a single shared folder
+         NICK
+         UPLOADBANDWIDTH
+         INTERNETROUTE
+         ACTIVESERVERS
+         WARNING:    : TRUE/FALSE (if adagio.xml already exists)
+         G2PORT
+
+         OK          : All parameters ok, configuration done.
+         ERROR       : Some error in the params.
+
+      Error parameters [plus TXT for the error message]
+         ERRORLIBRARY: true/false
+         ERRORPROFILE
+         ERRORUPLOADS
+    -->
+    <div id="contents">
+      <div id="main">
+         <span id="title">Configuration helper</span>
+         @@IF@@ @_OK_@ = TRUE
+         <p>Configuration saved successfully.</p>
+         <p>
+         @@IF@@ @_SAVETO_@ = adagio.xml
+         You need to reboot Adagio for this configuration to work. 
+         @@ELSE@@
+         You need to reboot Adagio for this configuration to work. Additionally, you should use the <b>-f @_SAVETO_@</b> option to specify this file or rename it to the default <b>adagio.xml</b>
+         @@END_IF@@
+         </p>
+         <p>
+         Press here to <a href="command?action=shutdown">shutdown Adagio</a>. You'll need then to simply launch it again (please give a few seconds for it to shutdown properly).
+         @@ELSE@@
+            @@IF@@ @_ERROR_@ = TRUE
+            <blockquote>
+               <div class="no">There was some error in the supplied data. Please check again.</div>
+            </blockquote>
+            @@END_IF@@
+         <form action="/submit_config" method="POST">
+            <!-- Library -->
+            <div class="pane">
+               <span class="panetitle">Library</span>
+               <blockquote>
+                  @@IF@@ @_ERRORLIBRARY_@ = TRUE
+                     <div class="no">@_ERRORLIBRARYTXT_@</div>
+                  @@END_IF@@
+                  <input type="checkbox" name="ALLOWBROWSE" value="yes" 
+                  @@IF@@ @_ALLOWBROWSE_@ = TRUE
+                  checked
+                  @@END_IF@@
+                  >Allow remote browsing.<br>
+                  <input name="SHAREDPATH" value="@_SHAREDPATH_@" size="100"> Shared path.<br>
+                  <br>
+               </blockquote>
+            </div>
+            <!-- Profile -->
+            <div class="pane">
+               <span class="panetitle">User profile</span>
+               <blockquote>
+                  @@IF@@ @_ERRORPROFILE_@ = TRUE
+                     <div class="no">@_ERRORPROFILETXT_@</div>
+                  @@END_IF@@
+                  <input name="NICK" value="@_WEB_ESCAPE:NICK_@"> Your nickname.<br>
+                  <br>
+               </blockquote>
+            </div>
+            <!-- Uploads -->
+            <div class="pane">
+               <span class="panetitle">Uploads</span>
+               <blockquote>
+                  @@IF@@ @_ERRORUPLOADS_@ = TRUE
+                     <div class="no">@_ERRORUPLOADSTXT_@</div>
+                  @@END_IF@@
+                  <input name="UPLOADBANDWIDTH" value="@_UPLOADBANDWIDTH_@"> Upload bandwidth (kB/s).<br><br>
+                  You should enable one or more of the following queues to allow uploads:<BR>
+                  <input type="checkbox" name="SMALLERACTIVE" value="yes" checked>
+                  <b>Smaller first queue</b>: Rotating queue which prioritizes smaller files first.<br>
+                  <input type="checkbox" name="RAREACTIVE" value="yes" checked>
+                  <b>Rare first queue</b>: Rotating queue which prioritizes less uploaded files.<br>
+                  <input type="checkbox" name="SMALLACTIVE" value="yes" checked>
+                  <b>Small files queue</b>: Non-rotating queue for files under 1mB.<br>
+                  <input type="checkbox" name="FIFOACTIVE" value="yes" checked>
+                  <b>FIFO queue</b>: Rotating queue, ordinary first-arrived, first-served.<br>
+                  <br>
+               </blockquote>
+            </div>
+            <!-- Networks -->
+            <div class="pane">
+               <span class="panetitle">Network</span>
+               <blockquote>
+                  @@IF@@ @_ERRORNETWORK_@ = TRUE
+                     <div class="no">@_ERRORNETWORKTXT_@</div>
+                  @@END_IF@@
+                  <select name="INTERNETROUTE"> 
+                     <option value="direct" 
+                     @@IF@@ @_INTERNETROUTE_@ = DIRECT
+                     selected
+                     @@END_IF@@
+                     >Direct connection
+                     <option value="NATFORWARD" 
+                     @@IF@@ @_INTERNETROUTE_@ = NATFORWARD
+                     selected
+                     @@END_IF@@
+                     >NAT connection + Port forwarding
+                     <option value="NAT" 
+                     @@IF@@ @_INTERNETROUTE_@ = NAT
+                     selected
+                     @@END_IF@@
+                     >NAT connection
+                     <option value="none" 
+                     @@IF@@ @_INTERNETROUTE_@ = NONE
+                     selected
+                     @@END_IF@@
+                     >Firewalled connection
+                  </select> Choose your connection type.<br>
+                  <small>Explanation
+                  <ul>
+                     <li>Direct: You have a public IP able to send/receive TCP and UDP data.
+                     <li>Nat+Forward: You have not a public IP but are able to directly send/receive TCP and UDP data.
+                     <li>Nat: You have not a public IP but are able to directly send TCP and UDP data. You can't receive incoming connections nor UDP packets.
+                     <li>Firewalled</li>You only can make outbound TCP connections or only LAN connections.
+                  </ul></small>
+                  Your listening port is @_G2PORT_@. That's the one you must forward in case of NAT+Forwarding.
+                  <br>
+                  <input name="ACTIVESERVERS" value="@_ACTIVESERVERS_@" size="2"> Number of G2 servers to connect (1-2).<br>
+                  <br>
+               </blockquote>
+            </div>
+            <!-- Saving -->
+            <div class="pane">
+               <span class="panetitle">Save</span>
+               <blockquote>
+                  @@IF@@ @_ERRORSAVING_@ = TRUE
+                     <div class="no">@_ERRORSAVINGTXT_@</div>
+                  @@END_IF@@
+                  <input name="SAVETO" value="adagio.xml"> Filename for the newly created configuration.<br>
+                  The default name is the one that Adagio expects so don't change it unless you know what you are doing.<br>
+                  @@IF@@ @_WARNING_@ = TRUE
+                     <span class="no">If you have manually edited the adagio.xml file, your changes will be lost.</span><br>
+                  @@END_IF@@
+                  <input type="submit">
+               </blockquote>
+               <br>
+            </div>
+         </form>
+         @@END_IF@@
+      </div>
+      @@INCLUDE@@ footer.html
+    </div>
+  </body>
+</html>
+

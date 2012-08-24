@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<aenea>
+
+   <!-- Global settings -->
+   <globals DataFolder="data" GeoIP="../geoip/geoip.csv">
+      <shutdown active="no" deadline="24h" OnDisconnect="yes"/>
+   </globals>
+
+   <!-- Gui -->
+   <gui
+    address="127.0.0.1"
+      port="26666"
+      HideAddresses="yes"
+      HtmlRoot="aenea-crawler/html/"
+      HtmlStyle="estilo.css"
+      user="name"
+      pass="word"
+      />
+
+   <!-- Database configuration -->
+   <db>
+      <pgsql ConnectString="host=127.0.0.1 port=optional dbname=g2 user=xxxxxx password=yyyyyy sslmode=disable"/>
+   </db>
+
+   <!-- Walker configuration -->
+   <walk>
+      <!-- Time between refreshes for a hub -->
+      <RefreshUnit>5m</RefreshUnit>
+
+      <!-- Timeout for answers. Should never be less than the refresh time -->
+      <timeout>2m</timeout>
+
+      <!-- Number of pings between queries -->
+      <pings>1</pings>
+      <!-- Speed throttle. Pause between UDP sends -->
+      <delay>50ms</delay>
+
+      <!-- Allowed failures before considering the host down -->
+      <failures>1</failures>
+
+      <!-- Delay until first record is inserted to not have false lows -->
+      <InsertDelay>30h</InsertDelay>
+      <!-- Period for database insertions -->
+      <InsertPeriod>1m</InsertPeriod>
+      <!-- Abort insertions if they take longer that this -->
+      <InsertAbortPeriod>60s</InsertAbortPeriod>
+
+      <!-- Save hubs? -->
+      <SaveHubs>no</SaveHubs>
+      <!-- Period for hubs saving -->
+      <SavePeriod>1h</SavePeriod>
+
+      <!-- Period to compute best uptimes -->
+      <BestUptimesPeriod>60s</BestUptimesPeriod>
+
+      <!-- Purging of lost hubs -->
+      <purge active="yes" period="15s" age="0m" />
+
+      <!-- Samples used for averaging (taken every second) -->
+      <AveragingSamples>900</AveragingSamples>
+
+      <!-- Hardcoded starting hub -->
+      <!--<hub address="127.0.0.1:36765" />-->
+      <!-- <hub address="82.157.160.248:6346"/> -->
+
+      <!-- Force sending and postpone everything else until only these packets
+            remain to be sent -->
+      <MaxOutboundPendingPackets>128</MaxOutboundPendingPackets>
+
+      <!-- Request leaves IPs for full detail -->
+      <RequestLeaves>No</RequestLeaves>
+
+      <!-- Set the safe flag -->
+      <SafePackets>No</SafePackets>
+   </walk>
+
+   <network>
+      <!-- Gnutella2 -->
+      <Gnutella2>
+         <!-- Listener port -->
+         <port>24610</port>
+      </Gnutella2>
+
+      <!-- GWCache2 -->
+      <GWebCache2>
+         <!-- Number of hubs to get from GWC2 to start walk -->
+         <BootstrapHubs>10</BootstrapHubs>
+         <!-- Some root (non discardable) GWCaches -->
+         <root url="http://ads-clan.org/gwebcache/gcache.php"/>
+         <root url="http://g2cache.theg2.net/gwcache/lynnx.asp"/>
+      </GWebCache2>
+   </network>
+
+   <!-- DEBUG.
+         active: enabled or not
+         logfile: file to keep the log. Unbounded size.
+         netlogfile: file to keep network related log.
+         loglevel: Level of tracing: debug, informative, warning, error.
+            Below warning level, messages are not relevant to the developer.
+         ConsoleEcho: echoes traces in console.
+            NOTE: You need a console-based platform (i.e. linux). In windows
+               that will cause undefined (probably faultly) behavior.
+         DebugStatistics: shows statistics about internal status.
+         PurgeOnStartup: logfiles will be deleted in each run.
+         MemoryPeriod: lap between memory usage counting
+         CrawlerAllowed: Adagio will answer to crawler requests (this reveals
+            your IP but not your Gnutella GUID).
+   -->
+   <debug
+      active="yes"
+      logfile="log/aenea.log"
+      netlogfile="log/aenea.log"
+      loglevel="informative"
+      ConsoleEcho="yes"
+      PurgeOnStartup="yes"
+   />
+</aenea>

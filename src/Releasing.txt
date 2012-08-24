@@ -1,0 +1,7 @@
+------------------------------------------------------------------------------
+$Id: Releasing.txt,v 1.2 2003/10/17 15:56:05 Jano Exp $
+------------------------------------------------------------------------------
+
+These are my own reminders previously to a release:
+
+* Upgrade the version number in both adagio.ads and installer scripts.
