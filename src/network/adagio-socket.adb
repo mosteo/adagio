@@ -36,7 +36,7 @@ with Adagio.BW_usage;
 with Adagio.Globals.Options;
 with Adagio.Os.Socket;
 with Adagio.Security;
-with Adagio.Statistics; 
+with Adagio.Statistics;
 with Adagio.Statistics.Integers;
 with Adagio.Trace;
 
@@ -52,7 +52,7 @@ with Ada.Unchecked_deallocation;
 
 package body Adagio.Socket is
 
-   Conn_period : Duration; 
+   Conn_period : Duration;
 
    Buffer_size : Positive renames Globals.Options.Network_BufferSize;
 
@@ -100,10 +100,10 @@ package body Adagio.Socket is
       This : in out Object; Size : in Positive := Buffer_size) is
    begin
       Set_Socket_Option (
-         this.Socket, 
+         this.Socket,
          Option => (Name => Sockets.Send_buffer, Size => Size));
       Set_Socket_Option (
-         this.Socket, 
+         this.Socket,
          Option => (Name => Sockets.Receive_buffer, Size => Size));
    end Set_Buffer_size;
 
@@ -125,7 +125,7 @@ package body Adagio.Socket is
 
    -- Creates a UDP socket:
    procedure Create_datagram(this: out Object) is
-   begin 
+   begin
       Sockets.Create_socket
         (this.Socket, Mode => Sockets.Socket_datagram);
       This.Stream := new Stream_type (Sockets.Stream (This.Socket));
@@ -145,7 +145,7 @@ package body Adagio.Socket is
    begin
       Sockets.Shutdown_socket(this.Socket);
    exception
-      when Socket_error => 
+      when Socket_error =>
          null;
          -- Trace.Log ("Socket.Shutdown: " & Trace.Report (E), Trace.Debug);
          -- No report. The usual exception is SOCKET_NOT_CONNECTED.
@@ -177,7 +177,7 @@ package body Adagio.Socket is
          "Socket.Close: Closing: " & Image (Get_Peer_Name (This)), Trace.Never);
       Sockets.Close_socket(this.Socket);
    exception
-      when Socket_error => 
+      when Socket_error =>
          null;
          -- Trace.Log ("Socket.Close: " & Trace.Report (E), Trace.Debug);
          -- No report. The usual exception is SOCKET_NOT_CONNECTED.
@@ -242,7 +242,7 @@ package body Adagio.Socket is
       use Agpl.Strings.Fields;
    begin
       Connect (
-         This, 
+         This,
          Select_Field (Address, 1, ':'),
          Natural'Value (Select_Field (Address, 2, ':')));
    end Connect;
@@ -300,7 +300,7 @@ package body Adagio.Socket is
          Integer'Image (This.Refs.Val) & " references.", Trace.Never);
       -- Just in case:
       if This.Refs.Val = 0 and then This.Created.Val > 0 then
-         Trace.Log ("[Fin] Socket " & Image (Get_Peer_Name (This)) & 
+         Trace.Log ("[Fin] Socket " & Image (Get_Peer_Name (This)) &
             " is being closed automatically", Trace.Never);
          Close(this);
       end if;
@@ -326,7 +326,7 @@ package body Adagio.Socket is
       use type Ada.Streams.Stream_element_offset;
    begin
       Sockets.Receive_socket (
-         this.Socket, 
+         this.Socket,
          Item,
          Last,
          Sockets.Sock_addr_type (From));
@@ -362,7 +362,7 @@ package body Adagio.Socket is
       use Strings.Fields;
    begin
       return (
-         Family => Sockets.Family_inet, 
+         Family => Sockets.Family_inet,
          Addr => Sockets.Inet_addr (Select_field (this, 1, ':')),
          Port => Port_type'Value     (Select_field (this, 2, ':')));
    end To_address;
@@ -408,7 +408,7 @@ package body Adagio.Socket is
    -- Connection_failed                                                  --
    ------------------------------------------------------------------------
    function Connection_failed (this : in Object) return Boolean is
-      Opt_error : Sockets.Option_type := 
+      Opt_error : Sockets.Option_type :=
          Get_socket_option (This.Socket, Name => Sockets.Error);
    begin
       case Opt_error.Error is
@@ -457,7 +457,7 @@ package body Adagio.Socket is
    ------------------------------------------------------------------------
    procedure Set_send_buffer_size (This : in Object; Size : in Natural) is
    begin
-      Sockets.Set_socket_option (This.Socket, 
+      Sockets.Set_socket_option (This.Socket,
          Option => (Name => Sockets.Send_buffer, Size => Size));
    end Set_send_buffer_size;
 

@@ -33,7 +33,7 @@
 --  $Id: generic_event_queue.ads,v 1.3 2004/01/21 21:05:49 Jano Exp $
 
 -- Efficient event queue. Useful for timeouts, for example.
--- Implemented via generics. Only a kind of actions can be applied to this 
+-- Implemented via generics. Only a kind of actions can be applied to this
 --   queue.
 -- However, the Action_on_timeout can be as complicated as we could need.
 -- Better still, the context_type can have constraints (i.e. to be a variant
@@ -41,7 +41,6 @@
 
 -- DON'T USE IT ANY MORE. USE INSTEAD AGPL.EVENT_QUEUES.*
 
-with Adagio;
 with Protected_sorted_index;
 with Sequence;
 
@@ -62,7 +61,7 @@ package Generic_event_queue is
 
    -- Create an event
    procedure Create (
-      This     : in out Object; 
+      This     : in out Object;
       Event    : out    Event_type;
       Deadline : in     Time;
       Context  : in     Context_type);
@@ -103,7 +102,7 @@ private
 
    type Action_type is (New_event, Job_finished);
 
-   task type Active_object (Parent : access Object) is 
+   task type Active_object (Parent : access Object) is
       entry Reschedule (Action : in Action_type);
       entry Shutdown;
    end Active_object;
@@ -113,7 +112,7 @@ private
       entry Execute (Context : in Context_access);
    end Worker;
 
-   type Object is record
+   type Object is limited record
       List   : Event_list.Sorted_index;
       Seq    : Id_sequence.Object;
       Waiter : Active_object (Object'Access);

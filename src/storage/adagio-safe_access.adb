@@ -52,10 +52,10 @@ package body Adagio.Safe_access is
    Mutex : aliased Adagio.Monitor.Semaphore;
 
    -- Delete item:
-   procedure Free is new 
+   procedure Free is new
       Unchecked_deallocation (Item, Item_access);
 
-   procedure Free is new 
+   procedure Free is new
       Unchecked_deallocation (Tracker_type, Tracker_access);
 
    -- Helper decrementing function:
@@ -116,11 +116,11 @@ package body Adagio.Safe_access is
 
    -- Get value
    -- Of course, if the access value is copied outside, error can occur.
-   function Value (this : in Object) return Item is
-      M : Adagio.Monitor.Object (Mutex'Access);
-   begin
-      return this.Tracker.Data.all;
-   end;
+--     function Value (this : in Object) return Item is
+--        M : Adagio.Monitor.Object (Mutex'Access);
+--     begin
+--        return this.Tracker.Data.all;
+--     end;
 
    function Value (this : in Object) return Item_access is
       M : Adagio.Monitor.Object (Mutex'Access);
@@ -128,7 +128,7 @@ package body Adagio.Safe_access is
       return this.Tracker.Data;
    end;
 
-   procedure Initialize (this : in out Unconstrained_object) is 
+   procedure Initialize (this : in out Unconstrained_object) is
       M : Adagio.Monitor.Object (Mutex'Access);
    begin
       this.Tracker := new Tracker_type'(this.Data, 1);

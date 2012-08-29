@@ -13,7 +13,7 @@
 --
 with PragmARC.List_Bounded_Unprotected;
 generic -- PragmARC.Queue_Bounded_Unprotected
-   type Element is limited private;
+   type Element is private;
 
    with procedure Assign (To : out Element; From : in Element) is <>;
 package PragmARC.Queue_Bounded_Unprotected is

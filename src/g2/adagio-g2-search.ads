@@ -72,7 +72,7 @@ package Adagio.G2.Search is
    ------------------------------------------------------------------------
    -- Create_Search                                                      --
    ------------------------------------------------------------------------
-   -- Notify the creation of a new search                                
+   -- Notify the creation of a new search
    procedure Create_Search (
       This : access Object; Target : in Searches.Search_Id);
 
@@ -123,16 +123,16 @@ package Adagio.G2.Search is
    -- Set_Paused                                                         --
    ------------------------------------------------------------------------
    procedure Set_Paused (
-      This   : access Object; 
-      Target : in     Searches.Search_Id; 
+      This   : access Object;
+      Target : in     Searches.Search_Id;
       Paused : in     Boolean := true);
 
    ------------------------------------------------------------------------
    -- Set_Priority                                                       --
    ------------------------------------------------------------------------
    procedure Set_Priority (
-      This     : access Object; 
-      Target   : in     Searches.Search_Id; 
+      This     : access Object;
+      Target   : in     Searches.Search_Id;
       Priority : in     Searches.Priorities);
 
    ------------------------------------------------------------------------
@@ -155,7 +155,7 @@ package Adagio.G2.Search is
    ------------------------------------------------------------------------
    -- Sets up the searcher
    procedure Start (
-      This        : access Object; 
+      This        : access Object;
       Sender      : in G2.Packet.Queue.Object_Access;
       Transceiver : in G2.Transceiver.Object_Access);
 
@@ -184,7 +184,7 @@ private
       Next_QEvent : Calendar.Time := Past_aeons; -- Time for the next query event
       Last_access : Calendar.Time := Past_aeons; -- Last time it has been sent a msg
       Last_QA     : Calendar.Time := Past_aeons; -- Last QA received
-      Key         : Query_Key     := Null_Key; 
+      Key         : Query_Key     := Null_Key;
       Key_Time    : Calendar.Time := Past_aeons; -- Time at which we got the query key for this host.
       Unknown_leaves : Boolean    := true;       -- If we don't know how many leaves it has.
       Leaves      : Natural       := 0;
@@ -281,7 +281,7 @@ private
       function  Is_Neighbor (Address : in String) return Boolean;
       function  Must_Search return Boolean; -- True if searches enqueued
       procedure Pause_Search  (Target : in Searches.Search_Id; Paused : in Boolean);
-      procedure Perform_Searches_Rollback; -- Moves all indexes back 
+      procedure Perform_Searches_Rollback; -- Moves all indexes back
       -- The hubs are only dropped if there are running searches.
       procedure Process_Drop_Event (Address : in String);
       procedure Process_Query_Event (Address : in String);
@@ -317,14 +317,14 @@ private
 
    type Object is new Searches.Handler.Object with record
       Events      : Agpl.Event_Queues.Calendar.Object (
-                        Stack_Size => Os.Memory.Max_Stack_Size,
-                        Tracer     => Trace.General'Access);
+                        Stack_Size => Os.Memory.Max_Stack_Size);
       Safe        : Safe_Object (Object'Access);
       Sender      : G2.Packet.Queue.Object_Access;
       Transceiver : G2.Transceiver.Object_Access;
 
       Latency     : Duration := 0.0;
-      pragma Atomic (Latency);
+      --  pragma Atomic (Latency);
+      pragma Warning ("Latency must be made atomic");
    end record;
 
 end Adagio.G2.Search;

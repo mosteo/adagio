@@ -125,7 +125,7 @@ package Adagio.G2.Packet is
       Len          : Natural range 0 .. 2 ** 24  - 1 := 0;
       Type_name    : BStrings.Bounded_string := Nul;
       Payload      : UString;
-      Children     : Children_vector.Object (First => 1);
+      Children     : Children_Vector.Object (First => 1);
       Arrival_time : Calendar.Time := Calendar.Clock;
    end record;
 

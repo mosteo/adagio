@@ -18,7 +18,7 @@ project Agpl is
 
    type Build_Type   is ("Debug", "Release", "Fastest", "No_Options", "Profile");
    type Linking_Type is ("Dependencies", "Static_Library", "Dynamic_Library");
-   
+
    Build : Build_Type   := external ("Agpl_Build", "Debug");
    Link  : Linking_Type := External ("Agpl_Link",  "Dependencies");
 
@@ -40,13 +40,13 @@ project Agpl is
    --  Selective functionalities of Agpl
 
    Include_Base     : Yes_No := External ("Agpl_Include_Base",     "Yes");
-   Include_Concorde : Yes_No := External ("Agpl_Include_Concorde", "Yes");
-   Include_Gtk      : Yes_No := External ("Agpl_Include_Gtk",      "Yes"); -- Requires GtkAda
-   Include_Http     : Yes_No := External ("Agpl_Include_Http",     "No"); -- Requires AWS
+   Include_Concorde : Yes_No := External ("Agpl_Include_Concorde", "No");
+   Include_Gtk      : Yes_No := External ("Agpl_Include_Gtk",      "No"); -- Requires GtkAda
+   Include_Http     : Yes_No := External ("Agpl_Include_Http",     "Yes"); -- Requires AWS
    Include_Db       : Yes_No := External ("Agpl_Include_Db",       "No");
-   Include_Boost    : Yes_No := External ("Agpl_Include_Boost",    "Yes"); -- Requires Boost Graph
-   Include_Pngio    : Yes_No := External ("Agpl_Include_PngIO",    "Yes");
-   Include_Test     : Yes_No := External ("Agpl_Include_Test",     "Yes");
+   Include_Boost    : Yes_No := External ("Agpl_Include_Boost",    "No"); -- Requires Boost Graph
+   Include_Pngio    : Yes_No := External ("Agpl_Include_PngIO",    "No");
+   Include_Test     : Yes_No := External ("Agpl_Include_Test",     "No");
 
    Trace_Enabled    : Enabled_Disabled := External ("Agpl_Trace", "Enabled");
 
@@ -112,10 +112,10 @@ project Agpl is
 
       case Build is
          when "Profile" =>
-            for Default_Switches ("Ada") use Compiler'Default_Switches ("Ada") & 
+            for Default_Switches ("Ada") use Compiler'Default_Switches ("Ada") &
               ("-O2", "-gnato", "-fstack-check", "-gnata", "-gnatpg");
          when "Debug" =>
-            for Default_Switches ("Ada") use Compiler'Default_Switches ("Ada") & 
+            for Default_Switches ("Ada") use Compiler'Default_Switches ("Ada") &
               ("-O2", "-gnato", "-fstack-check", "-gnata");
          when "Release" =>
             --  for Default_Switches ("Ada") use Compiler'Default_Switches ("Ada") & ("-O3", "-gnatn", "-gnatp");
@@ -140,7 +140,7 @@ project Agpl is
       for Default_Switches ("Ada") use ("-g");
       for Default_Switches ("C")   use ("-g");
       for Default_Switches ("C++") use ("-g");
-      
+
       for Linker_Options use ("-lgsl", "-lgslcblas");
       --  Needed, at least, in Agpl.Drawing.Figures
 

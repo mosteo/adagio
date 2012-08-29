@@ -252,8 +252,9 @@ package body SOAP.Message.XML is
                (String'(SOAP.Parameters.Get (S.Parameters, "faultcode"))),
             Faultstring => SOAP.Parameters.Get (S.Parameters, "faultstring"));
       else
-         return Message.Response.Object'
-           (S.Name_Space, S.Wrapper_Name, S.Parameters);
+         raise Program_Error with "Don't know how to fix the following";
+--           return Message.Response.Object'
+--             (S.Name_Space, S.Wrapper_Name, S.Parameters);
       end if;
 
    exception

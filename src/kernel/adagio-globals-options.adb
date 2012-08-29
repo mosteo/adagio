@@ -41,9 +41,12 @@ with Adagio.Misc;
 with Adagio.Xml;
 with Adagio.Xml.Utils;
 
-with Agpl.Folders;
+with Agpl.Filesystem;
+-- with Agpl.Folders;
 
 package body Adagio.Globals.Options is
+
+   package Folders renames Agpl.Filesystem;
 
    -- Shortcuts
    function L (S : in String) return String renames Misc.To_lower;
@@ -341,9 +344,9 @@ package body Adagio.Globals.Options is
       -- DOWNLOAD
       download_active           := XUtils.Get_Boolean (
          "download", "active", Config, Download_Active);
-      download_incomplete       := U (Agpl.Folders.Ensure_Slash (Attr ("download",
+      download_incomplete       := U (Folders.Ensure_Slash (Attr ("download",
          "incomplete", Config, S (download_incomplete))));
-      download_finished         := U (Agpl.Folders.Ensure_Slash (Attr ("download",
+      download_finished         := U (Folders.Ensure_Slash (Attr ("download",
          "finished", Config, S (download_finished))));
       download_bandwidth        := XUtils.Get_speed ("download",
          "bandwidth", Config, download_bandwidth);

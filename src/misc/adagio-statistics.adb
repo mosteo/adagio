@@ -36,8 +36,6 @@
 
 with Adagio.Unicode;
 
-with Charles.Maps.Sorted.Strings.Unbounded;
-
 with Ada.Exceptions;
 
 package body Adagio.Statistics is
@@ -72,14 +70,14 @@ package body Adagio.Statistics is
       function Get (Key : in String) return Values'Class is
       begin
          if not Is_in (Key, Data) then
-            raise Value_not_defined; 
+            raise Value_not_defined;
          else
             return Element (Find (Data, Key)).all;
          end if;
       end Get;
 
       procedure Update (
-         Key     : in String; 
+         Key     : in String;
          Process : in Process_function;
          Extra   : in Values'Class) is
          Result  : Values'Class := Process (Get (Key), Extra);

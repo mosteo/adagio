@@ -1,4 +1,4 @@
--- Package with OS dependent functions.
+--  Package with OS dependent functions.
 
 package Adagio.Os is
 
@@ -8,7 +8,7 @@ package Adagio.Os is
 
    Version_Suffix   : constant String    := " linux";
 
-   -- Simple message box:
+   --  Simple message box:
    type Message_kind is (Message_error, Message_informative);
    procedure Message_box
      (title, text: String; Kind: Message_kind:= Message_error);

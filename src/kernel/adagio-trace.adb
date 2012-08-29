@@ -80,7 +80,7 @@ package body Adagio.Trace is
    procedure Log(
       Text    : String;
       Warning : All_levels := Debug;
-      File    : String     := "") 
+      File    : String     := "")
    is
       Msg     : Ustring;
    begin
@@ -99,15 +99,16 @@ package body Adagio.Trace is
          Text     => U (Text)));
 
       if File = "" or else File = General_File then
-         Agpl.Trace.Log (General, "[" & Adagio.Misc.Timestamp & "] " & Text, Agpl.Trace.All_Levels (Warning));
+         General.Log ("[" & Adagio.Misc.Timestamp & "] " & Text, Agpl.Trace.All_Levels (Warning));
       elsif File = Network_File then
-         Agpl.Trace.Log (Network, "[" & Adagio.Misc.Timestamp & "] " & Text, Agpl.Trace.All_Levels (Warning));
+         Network.Log ("[" & Adagio.Misc.Timestamp & "] " & Text, Agpl.Trace.All_Levels (Warning));
       else
-         Agpl.Trace.Log (Other,    "[" & Adagio.Misc.Timestamp & "] " & Text, Agpl.Trace.All_Levels (Warning));
+         Other.Log   ("[" & Adagio.Misc.Timestamp & "] " & Text, Agpl.Trace.All_Levels (Warning));
       end if;
 
       if Warning >= Error then
-         Agpl.Trace.Log (Other,    "[" & Adagio.Misc.Timestamp & "] " & Text, Agpl.Trace.All_Levels (Warning));
+         Agpl.Trace.Console_Tracer.Log ("[" & Adagio.Misc.Timestamp & "] " & Text, Agpl.Trace.All_Levels (Warning));
+         Other.Log ("[" & Adagio.Misc.Timestamp & "] " & Text, Agpl.Trace.All_Levels (Warning));
       end if;
 
    exception
@@ -141,32 +142,43 @@ package body Adagio.Trace is
    end Get_logs;
 
 begin
+   --  Global settings
+   Agpl.Trace.Set_Level (Agpl.Trace.Debug);
+
    -- Prepare debug objects:
-   Agpl.Trace.Create (
-      General, 
-      Agpl.Trace.Debug,
-      Globals.Options.Debug_ConsoleEcho,
-      S (Globals.Options.Debug_Logfile),
-      Globals.Options.Debug_Active,
-      Globals.Options.Debug_PurgeOnStartup);
+   General.Set_File (S (Globals.Options.Debug_Logfile));
+   General.Set_Level (Agpl.Trace.Debug);
+
+--     Agpl.Trace.Create (
+--        General,
+--        Agpl.Trace.Debug,
+--        Globals.Options.Debug_ConsoleEcho,
+--        S (Globals.Options.Debug_Logfile),
+--        Globals.Options.Debug_Active,
+--        Globals.Options.Debug_PurgeOnStartup);
 
    if S (Globals.Options.Debug_NetLogfile) /= S (Globals.Options.Debug_Logfile) then
-      Agpl.Trace.Create (
-         Network, 
-         Agpl.Trace.Debug,
-         Globals.Options.Debug_ConsoleEcho,
-         S (Globals.Options.Debug_NetLogfile),
-         Globals.Options.Debug_Active,
-         Globals.Options.Debug_PurgeOnStartup);
+      Network.Set_File (S (Globals.Options.Debug_NetLogfile));
+      Network.Set_Level (Agpl.Trace.Debug);
+--        Agpl.Trace.Create (
+--           Network,
+--           Agpl.Trace.Debug,
+--           Globals.Options.Debug_ConsoleEcho,
+--           S (Globals.Options.Debug_NetLogfile),
+--           Globals.Options.Debug_Active,
+--           Globals.Options.Debug_PurgeOnStartup);
    end if;
 
-   Agpl.Trace.Create (
-      Other, 
-      Agpl.Trace.Debug,
-      not Globals.Options.Debug_ConsoleEcho, -- So only general or this is seen.
-      "errors.log",
-      Globals.Options.Debug_Active,
-      Globals.Options.Debug_PurgeOnStartup);
+   Other.Set_File ("errors.log");
+   Other.Set_Level (Agpl.Trace.Debug);
+
+--     Agpl.Trace.Create (
+--        Other,
+--        Agpl.Trace.Debug,
+--        not Globals.Options.Debug_ConsoleEcho, -- So only general or this is seen.
+--        "errors.log",
+--        Globals.Options.Debug_Active,
+--        Globals.Options.Debug_PurgeOnStartup);
 
    Adagio.Debug.Tracing_finished := true; -- Remains of former implementation
 end Adagio.Trace;

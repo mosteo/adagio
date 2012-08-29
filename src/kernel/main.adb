@@ -43,7 +43,9 @@ with Adagio.Startup;
 with Adagio.Statistics;
 with Adagio.Statistics.Booleans;
 with Adagio.OS;
+pragma Warnings (Off);
 with Adagio.OS.Interrupts;
+pragma Warnings (On);
 with Adagio.OS.Memory;
 with Adagio.Trace;
 
@@ -71,7 +73,7 @@ procedure main is
          delay 1.0;
          if Debug.Debug_statistics_enabled then
             Statistics.Object.Set ("Tasking - Main",
-               Statistics.Booleans.Create (true));
+               Statistics.Booleans.Create (True));
          end if;
       end loop;
 
@@ -90,9 +92,9 @@ procedure main is
            ("Adagio",
             "Error: " & Ada.Exceptions.Exception_name(e) & ": " &
                         Ada.Exceptions.Exception_message(e));
-         -- Force shutdown whenever possible:
+         --  Force shutdown whenever possible:
          Adagio.Trace.Log("Adagio aborting...", Trace.Always);
-         -- Give some time to dump logs:
+         --  Give some time to dump logs:
          delay 2.0;
          Adagio.Trace.Log("Adagio aborted", Trace.Informative);
          Adagio.OS.Kill_me;

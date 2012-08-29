@@ -36,7 +36,6 @@
 
 with Adagio.Constants; use Adagio.Constants;
 with Adagio.Ed2k;
-with Adagio.File;
 with Adagio.File.Safe;
 with Adagio.G2.Mesh;
 with Adagio.Globals.Options;
@@ -71,6 +70,8 @@ with Dom.Core.Nodes;
 with Ada.Calendar; use Ada;
 
 package body Adagio.G2.Local_query is
+
+   Nul : Character renames Adagio.Constants.Nul;
 
    use type Types.File_Size;
 
@@ -473,6 +474,7 @@ package body Adagio.G2.Local_query is
       Child : Packet.Object;
 
       package Conv renames Network.Endian;
+
    begin
       --  Add bitprint hit
       Child := Packet.Create ("URN", "bp" & Nul &

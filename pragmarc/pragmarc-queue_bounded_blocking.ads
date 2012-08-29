@@ -17,7 +17,7 @@ with PragmARC.Queue_Bounded_Unprotected;
 
 with System;
 generic -- PragmARC.Queue_Bounded_Blocking
-   type Element is limited private;
+   type Element is private;
 
    with procedure Assign (To : out Element; From : in Element) is <>;
 package PragmARC.Queue_Bounded_Blocking is

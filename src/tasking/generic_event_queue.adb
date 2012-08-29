@@ -36,11 +36,12 @@
 
 with Ada.Unchecked_deallocation; use Ada;
 
+with Adagio;
 with Adagio.Trace; use Adagio;
 
 package body Generic_event_queue is
 
-   procedure Free is new 
+   procedure Free is new
       Unchecked_deallocation (Context_type, Context_access);
 
    -- Priority
@@ -58,7 +59,7 @@ package body Generic_event_queue is
 
    -- Create an avent
    procedure Create (
-      This     : in out Object; 
+      This     : in out Object;
       Event    : out    Event_type;
       Deadline : in     Time;
       Context  : in     Context_type) is
@@ -76,7 +77,7 @@ package body Generic_event_queue is
       Found    : Boolean;
    begin
       This.List.Get_remove (Event, Found);
-      if Found then 
+      if Found then
          Free (Event.Context);
       end if;
    end Cancel;
@@ -92,7 +93,7 @@ package body Generic_event_queue is
       This.Waiter.Shutdown;
    end Shutdown;
 
-   task body Active_object is 
+   task body Active_object is
       Next         : Event_type;
       Deadline     : Time;
       Found        : Boolean;
@@ -128,16 +129,16 @@ package body Generic_event_queue is
                   Worker_ready := true;
                end if;
             end Reschedule;
-         or 
+         or
             accept Shutdown;
             exit;
-         or 
+         or
             delay until Deadline;
          end select;
       end loop;
    end Active_object;
 
-   task body Worker is 
+   task body Worker is
       Context : Context_access;
    begin
       loop

@@ -14,7 +14,7 @@
 with Ada.Finalization;
 
 generic -- PragmARC.List_Bounded_Unprotected
-   type Element is limited private;
+   type Element is private;
 
    with procedure Assign (To : out Element; From : in Element) is <>;
 package PragmARC.List_Bounded_Unprotected is

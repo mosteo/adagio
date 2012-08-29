@@ -33,10 +33,8 @@
 
 with Ada.Exceptions; use Ada;
 
-with Interfaces.C.Strings; use Interfaces.C.Strings;
 
 with GNAT.Sockets.Constants;
-with GNAT.Sockets.Thin;          use GNAT.Sockets.Thin;
 
 with GNAT.Sockets.Linker_Options;
 pragma Warnings (Off, GNAT.Sockets.Linker_Options);
@@ -44,66 +42,27 @@ pragma Warnings (Off, GNAT.Sockets.Linker_Options);
 
 package body GNAT.Sockets.Extra is
 
-   use type C.Int;
-
-   subtype Fd_Set is C.Int;
-   Null_Fd_Set : constant := 0;
-
-   ----------------
-   -- To_Timeval --
-   ----------------
-
-   function To_Timeval (Val : Duration) return Timeval is
-      S  : constant Timeval_Unit := Timeval_Unit (Val);
-      MS : constant Timeval_Unit := Timeval_Unit (1_000_000 * (Val - Duration (S)));
-   begin
-      return (S, MS);
-   end To_Timeval;
-
+   Empty_Set : Socket_Set_Type;
 
    -----------------------
    -- Check_Read_socket --
    -----------------------
    -- True if socket is alive (readable even without data available)
    function Check_Read_Socket (Socket : in Socket_Type) return Boolean is
-      Res  : C.int;
-      Len  : aliased C.int;
-      RSet : aliased Fd_Set := Null_FD_set;
-      TVal : aliased Timeval;
-      TPtr : Timeval_Access;
-      Err  : Integer;
+      RSet : Socket_Set_Type;
+      Sel  : Selector_Type;
+      Status : Selector_Status;
    begin
+      Set (RSet, Socket);
+      Create_Selector (Sel);
 
-      -- Zero wait seconds in select call
-      TVal := To_Timeval (0.0);
-      TPtr := TVal'Unchecked_Access;
-
-      --  Set R_Socket_Set in RSet.
-      Insert_Socket_In_Set (RSet'Address, C.Int (Socket));
-
-      Last_Socket_In_Set (Rset'Address, Len'Unchecked_Access);
-      Len := Len + 1;
-
-      Res :=
-        C_Select
-         (Len,
-          RSet'Address,
-          No_Fd_Set,
-          No_Fd_Set,
-          TPtr);
-
-      if Res < 0 then
-         Err := Socket_errno;
-         if Err /= Constants.EINTR then
-            Exceptions.Raise_Exception
-              (C_Select_Error'Identity,
-               Value (Socket_error_message (Err)));
-         else
-            return false;
-         end if;
-      else
-         return Res > 0;
-      end if;
+      begin
+         Check_Selector (Sel, Rset, Empty_Set, Empty_Set, Status, Immediate);
+         return Status in Completed | Expired;
+      exception
+         when others =>
+            return False;
+      end;
    end Check_Read_Socket;
 
    ------------------------
@@ -111,44 +70,20 @@ package body GNAT.Sockets.Extra is
    ------------------------
    -- True if the socket can be written without blocking on it
    function Check_Write_Socket (Socket : in Socket_Type) return Boolean is
-      Res  : C.int;
-      Len  : aliased C.int;
-      WSet : aliased Fd_Set := Null_FD_set;
-      TVal : aliased Timeval;
-      TPtr : Timeval_Access;
-      Err  : Integer;
+      WSet : Socket_Set_Type;
+      Sel  : Selector_Type;
+      Status : Selector_Status;
    begin
+      Set (WSet, Socket);
+      Create_Selector (Sel);
 
-      -- Zero wait seconds in select call
-      TVal := To_Timeval (0.0);
-      TPtr := TVal'Unchecked_Access;
-
-      --  Set W_Socket_Set in WSet.
-      Insert_Socket_In_Set (WSet'Address, C.Int (Socket));
-
-      Last_Socket_In_Set (Wset'Address, Len'Unchecked_Access);
-      Len := Len + 1;
-
-      Res :=
-        C_Select
-         (Len,
-          No_Fd_Set,
-          WSet'Address,
-          No_Fd_Set,
-          TPtr);
-
-      if Res < 0 then
-         Err := Socket_errno;
-         if Err /= Constants.EINTR then
-            Exceptions.Raise_Exception
-              (C_Select_Error'Identity,
-               Value (Socket_error_message (Err)));
-         else
-            return false;
-         end if;
-      else
-         return Res > 0;
-      end if;
+      begin
+         Check_Selector (Sel, Empty_Set, WSet, Empty_Set, Status, Immediate);
+         return Status in Completed;
+      exception
+         when others =>
+            return False;
+      end;
    end Check_Write_Socket;
 
 end Gnat.Sockets.Extra;

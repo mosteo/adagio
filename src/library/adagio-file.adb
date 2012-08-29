@@ -38,7 +38,6 @@ with Adagio.Globals.Options;
 with Adagio.Buffered_stream;
 with Adagio.Convert;
 with Adagio.Decoupled_file_stream;
-with Adagio.Ed2k;
 with Adagio.Misc;
 with Adagio.Statistics;
 with Adagio.Statistics.Strings;
@@ -52,27 +51,25 @@ with Sha1.Streams;
 
 with Acf.Hash.Algorithms.Ed2k;
 with Acf.Hash.Algorithms.MD4;
-with Acf.Types;
 
 with Ada.Exceptions;             use Ada.Exceptions;
 with Ada.Streams.Stream_IO;      use Ada.Streams;
 with Ada.Unchecked_deallocation;
 
-use Ada;
 
-with Gnat.Directory_operations; use Gnat;
+with Gnat.Directory_operations;
 
 package body Adagio.File is
 
    TTH_levels : Natural renames Globals.Options.Library_TTHSize;
 
-   Stat_hashing_bytes : constant String := 
+   Stat_hashing_bytes : constant String :=
       "Library - Currently hashing bytes";
-   Stat_hashing_speed : constant String := 
+   Stat_hashing_speed : constant String :=
       "Library - Currently hashing average speed";
 
    Open_form : constant String := ""; -- "shared=yes";
-   -- It's evident that "shared" reduces throughput by 2, 
+   -- It's evident that "shared" reduces throughput by 2,
    -- so let's leave it out.
 
    procedure Free is new Unchecked_deallocation (
@@ -122,7 +119,7 @@ package body Adagio.File is
    end Sha;
 
    -- Ed2k hash:
-   function Ed2k (this : Object) 
+   function Ed2k (this : Object)
       return Acf.Hash.Message_digests.Message_digest is
    begin
       return V (this).ed2k;
@@ -210,24 +207,24 @@ package body Adagio.File is
       Sha1.Digest'Write     (Stream'access, Sha       (this));
       Has_ed2k := Ed2k (this) /= Adagio.Ed2k.Null_hash;
       if Has_ed2k then
-         Acf.Types.Byte_array'Write (Stream'access, 
+         Acf.Types.Byte_array'Write (Stream'access,
             Acf.Hash.Message_digests.To_byte_array (Ed2k (this)));
       else
-         Acf.Types.Byte_array'Write (Stream'access, 
+         Acf.Types.Byte_array'Write (Stream'access,
             Adagio.Ed2k.Null_hash_as_bytes);
       end if;
       Has_tth  := TTH  (this) /= TigerTree.Null_hash;
       if Has_TTH then
-         Acf.Types.Byte_array'Write (Stream'access, 
+         Acf.Types.Byte_array'Write (Stream'access,
             TigerTree.To_byte_array (TTH (this)));
       else
-         Acf.Types.Byte_array'Write (Stream'access, 
+         Acf.Types.Byte_array'Write (Stream'access,
             TigerTree.Null_hash_as_bytes);
       end if;
       Os_lib.Os_time'Output (Stream'access, Timestamp (this));
       Boolean'Output        (Stream'access, V (this).Shared);
       Boolean'Output        (Stream'access, V (this).Folder_shared);
-      Long_long_integer'Output (Stream'access, 
+      Long_long_integer'Output (Stream'access,
          Long_long_integer (Natural'(Size (this))));
       Natural'Output        (Stream'access, V (this).Uploads);
       Natural'Output        (Stream'access, V (this).Hits_total);
@@ -354,7 +351,7 @@ package body Adagio.File is
             Buffered_stream.Get_buffered_stream (bs, ds'Unchecked_Access);
             Throttle_stream.Get_throttle_stream (ts, bs'Unchecked_Access);
             V (this).Sha := Sha1.Streams.Hash
-              (ts'Unrestricted_access, 
+              (ts'Unrestricted_access,
                Sha1.Message_length (Decoupled_file_stream.Size (ds)));
          else
             raise Unimplemented;
@@ -370,7 +367,7 @@ package body Adagio.File is
                        (Globals.Hash_throttle'Access);
       use Stream_IO;
       fs: File_type;
-      
+
       Source : Stream_access;
 
       Main_context    : aliased MD4.MD4_Context;
@@ -378,10 +375,10 @@ package body Adagio.File is
       Partial_hash    : Acf.Hash.Message_digests.Message_digest;
 
       File_size       : Stream_io.Count;
-      File_pos        : Stream_io.Count; 
+      File_pos        : Stream_io.Count;
       Chunk_size      : Stream_io.Count;
       -- Progress within current ed2k block:
-      Block_done      : Stream_io.Count; 
+      Block_done      : Stream_io.Count;
 
       MD4_Block_bytes : constant := 64;
 
@@ -431,10 +428,10 @@ package body Adagio.File is
          end;
          -- End of ed2k block?
          if Block_done = Adagio.Ed2k.Hash_block_size or else
-            File_pos > File_size 
+            File_pos > File_size
          then
             Partial_hash := MD4.Hash_end (Partial_context'Access);
-            MD4.Hash_update (Main_context'Access, 
+            MD4.Hash_update (Main_context'Access,
                Acf.Hash.Message_digests.To_byte_array (Partial_hash));
             Block_done := 0;
             MD4.Hash_start (Partial_context'Access);
@@ -468,7 +465,7 @@ package body Adagio.File is
                        (Globals.Hash_throttle'Access);
       use Stream_IO;
       fs: File_type;
-      
+
       Source          : Stream_access;
       File_size       : Stream_io.Count;
       Tree            : TTree.Object;
@@ -504,9 +501,9 @@ package body Adagio.File is
 
       -- Init context
       TTree.Hash_start (
-         Tree, 
-         Size      => Natural (File_size), 
-         Leaf_size => 1024, 
+         Tree,
+         Size      => Natural (File_size),
+         Leaf_size => 1024,
          Keep      => TTH_levels);
 
       -- Read and feed
@@ -517,7 +514,7 @@ package body Adagio.File is
 
          Last := Integer'Min (1024, Integer (File_size - Pos + 1));
          Acf.Types.Byte_array'Read (Source, Bytes (1 .. Last));
-         
+
          -- Feed the bytes to context:
          TTree.Hash_update (Tree, Bytes (1 .. Last));
          Pos := Pos + Count (Last);
@@ -527,7 +524,7 @@ package body Adagio.File is
       TTree.Hash_end (Tree);
       V (This).TTH  := TTree.Root_hash (Tree);
       Free_TTH_bytes (This); -- Just in case
-      V (This).TTH_bytes := 
+      V (This).TTH_bytes :=
          new Acf.Types.Byte_array'(TTree.Get_bytes (Tree, TTH_levels));
 
       -- Finish:
@@ -546,7 +543,7 @@ package body Adagio.File is
    ------------------------------------------------------------------------
    -- Compute_hashes                                                     --
    ------------------------------------------------------------------------
-   procedure Compute_hashes (This : in out Object; Speed : Hash.Hash_speeds) 
+   procedure Compute_hashes (This : in out Object; Speed : Hash.Hash_speeds)
    is
       bs: aliased Buffered_stream.Buffered_stream (64 * 1024);
       ds: aliased Decoupled_file_stream.Decoupled_file_stream;
@@ -554,7 +551,7 @@ package body Adagio.File is
                        (Globals.Hash_throttle'Access);
       use Stream_IO;
       fs: File_type;
-      
+
       Source          : Stream_access;
       File_size       : Stream_io.Count;
 
@@ -604,9 +601,9 @@ package body Adagio.File is
       -- Init contexts
       Ed2k.Hash_start (Ed2k_context'Access);
       TTree.Hash_start (
-         Tree, 
-         Size      => Natural (File_size), 
-         Leaf_size => 1024, 
+         Tree,
+         Size      => Natural (File_size),
+         Leaf_size => 1024,
          Keep      => TTH_levels);
 
       -- Read and feed
@@ -617,7 +614,7 @@ package body Adagio.File is
 
          Last := Integer'Min (1024, Integer (File_size - Pos + 1));
          Acf.Types.Byte_array'Read (Source, Bytes (1 .. Last));
-         
+
          -- Feed the bytes to contexts:
          Sha1.Bytes.Feed (Sha1_context, Sha1.Byte_array (Bytes (1 .. Last)));
          Ed2k.Hash_update (Ed2k_context'Access, Bytes (1 .. Last));
@@ -631,7 +628,7 @@ package body Adagio.File is
             Statistics.Object.Set (
                Stat_hashing_bytes,
                Statistics.Strings.Create (
-                  Misc.To_string (Integer (Pos - 1)) & " of " & 
+                  Misc.To_string (Integer (Pos - 1)) & " of " &
                   Misc.To_string (Integer (File_size)) & " (" &
                   Misc.To_string (Float (Pos -1) / Float (File_size)*100.0,
                      1) & "%) (" &
@@ -643,7 +640,7 @@ package body Adagio.File is
          end if;
       end loop;
       Statistics.Object.Set (
-         Stat_hashing_bytes, 
+         Stat_hashing_bytes,
          Statistics.Strings.Create ("Building TigerTree..."));
       Statistics.Object.Set (
          Stat_hashing_speed, Statistics.Strings.Create ("n/a"));
@@ -654,7 +651,7 @@ package body Adagio.File is
       TTree.Hash_end (Tree);
       V (This).TTH  := TTree.Root_hash (Tree);
       Free_TTH_bytes (This); -- Just in case
-      V (This).TTH_bytes := 
+      V (This).TTH_bytes :=
          new Acf.Types.Byte_array'(TTree.Get_bytes (Tree, TTH_levels));
 
       Statistics.Object.Set (

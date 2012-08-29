@@ -10,7 +10,7 @@
 --  CREATION:   29-JUN-1987 A. Strohmeier.
 
 generic
-   type Key_Type is limited private;
+   type Key_Type is private;
    with function Less (Left, Right : Key_Type) return Boolean;
    --  Defines ordering of keys.
    with function Equals (Left, Right : Key_Type) return Boolean;
@@ -135,7 +135,7 @@ package Table_Of_Dynamic_Keys_And_Static_Values_G is
    --  if it is not empty. Otherwise, new space is taken from the system.
 
 
-   type Table_Type is limited private;
+   type Table_Type is private;
 
    Duplicate_Item_Error,
      Missing_Item_Error,

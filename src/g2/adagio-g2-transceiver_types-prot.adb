@@ -43,18 +43,16 @@ with Adagio.Security;
 with Adagio.Socket.Ip;
 with Adagio.Statistics;
 with Adagio.Statistics.Integers;
-with Adagio.Trace;
 with Adagio.Traffic;
 with Adagio.Zutil;
 
-with Agpl.Chronos;
 
 with Zlib;
 
-with Ada.Calendar;
 with Ada.Streams;  use Ada.Streams;
 with Ada.Unchecked_conversion;
 use  Ada;
+with Adagio.Trace;
 
 package body Adagio.G2.Transceiver_types.Prot is
 
@@ -164,7 +162,7 @@ package body Adagio.G2.Transceiver_types.Prot is
    -- Core_type                                                          --
    ------------------------------------------------------------------------
    protected body Core_type is
-      procedure Debug_out is
+      procedure Debug_Out is
          I : Fragment_list.Iterator_type := Fragment_list.First (Packets_out);
          J : Fragment_list.Iterator_type;
       begin
@@ -216,7 +214,6 @@ package body Adagio.G2.Transceiver_types.Prot is
          Frags : in     Natural)
       is
          It    : PLbA.Iterator_type;
-         use type Calendar.Time;
       begin
          if Available_inbound = 0 then
             -- Delete oldest:
@@ -295,7 +292,6 @@ package body Adagio.G2.Transceiver_types.Prot is
          Length : Stream_element_offset := 0;
          Item   : G2.Packet.Queue.Item_type;
 
-         use Ada.Streams;
       begin
          -- Defaults:
          Item.Source     := G2.Packet.Queue.Listener_udp;
@@ -462,10 +458,9 @@ package body Adagio.G2.Transceiver_types.Prot is
       -- Receive_packet --
       --------------------
       procedure Receive_packet is
-         use Ada.Streams;
-         use type Ada.Calendar.Time;
          Buffer : aliased Stream_element_array
-            (1 .. Max_fragment_size + Header_size);
+           (1 .. Max_fragment_size + Header_size);
+         for Buffer'Alignment use 4;
          Last   : Stream_element_offset;
          Addr   : Socket.Sock_addr_type;
          P      : Packet_access;
@@ -727,7 +722,6 @@ package body Adagio.G2.Transceiver_types.Prot is
       ----------
       procedure Send (Item : in G2.Packet.Queue.Item_type; Date : in Calendar.Time)
       is
-         use type Ada.Calendar.Time;
       begin
          if Calendar.Clock - Date > 10.0 then
             Trace.Log ("G2.Transceiver.Send: Abnormal lock wait: " &
@@ -1006,7 +1000,6 @@ package body Adagio.G2.Transceiver_types.Prot is
    ------------------------------------------------------------------------
    task body Dispatcher_task is
       Cron, Cron2, Cron3, Cron4 : Chronos.Object;
-      use type Calendar.Time;
       P : Packet_access;
       Num_alive_packets : Natural;
    begin
@@ -1099,8 +1092,8 @@ package body Adagio.G2.Transceiver_types.Prot is
    ------------------------------------------------------------------------
    -- Queue_retry                                                        --
    ------------------------------------------------------------------------
-   procedure Queue_retry (Context : in Agpl.Event_Queues.Context_access) is
-      R : constant Retry_access := Retry_access (Context);
+   procedure Queue_retry (Context : in Agpl.Event_Queues.Context_Type'Class) is
+      R : Retry_Context := Retry_Context (Context);
    begin
       R.Transceiver.Core.Retry_fragment (R.Retry);
    exception

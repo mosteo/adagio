@@ -32,7 +32,6 @@
 ------------------------------------------------------------------------------
 --  $Id: adagio-g2.adb,v 1.3 2004/01/21 21:05:26 Jano Exp $
 
-with Adagio.Globals.Options;
 with Adagio.Misc;
 with Strings.Fields;
 
@@ -63,13 +62,13 @@ package body Adagio.G2 is
    function To_address (
       this       : in String;
       Big_endian : in Boolean) return Socket.Sock_addr_type is
-      Address : String := 
+      Address : String :=
          Misc.To_string (Character'Pos (this (this'First))) & "." &
          Misc.To_string (Character'Pos (this (this'First + 1))) & "." &
          Misc.To_string (Character'Pos (this (this'First + 2))) & "." &
          Misc.To_string (Character'Pos (this (this'First + 3)));
       Port    : Network.Endian.Byte_array (1 .. 2) :=
-         (1 => Character'Pos (this (this'First + 4)), 
+         (1 => Character'Pos (this (this'First + 4)),
           2 => Character'Pos (this (this'First + 5)));
    begin
       return (
@@ -98,7 +97,7 @@ package body Adagio.G2 is
 
    -- Convert a readable address (x.x.x.x:n) into a 6 byte payload:
    function To_char_array (
-      this       : in String; 
+      this       : in String;
       Big_endian : in Boolean) return String is
    begin
       return To_char_array (Socket.To_address (this), Big_endian);

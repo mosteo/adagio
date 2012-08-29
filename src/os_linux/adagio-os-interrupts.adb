@@ -30,14 +30,13 @@ package body Adagio.Os.Interrupts is
       -- Orderly shutdowns
       procedure Int_quit is
       begin
-         Trace.Log ("Termination signal received, exiting...", 
+         Trace.Log ("Termination signal received, exiting...",
             Trace.Informative);
          Globals.Requested_exit := true;
       end Int_quit;
 
-      -- High distress protection faults! 
+      -- High distress protection faults!
       procedure Int_seg_violation is
-         use Gnat;
          Callstack : Traceback.Tracebacks_array (1 .. 20);
          Last      : Natural;
          Locs      : Ustring;

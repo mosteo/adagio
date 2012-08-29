@@ -66,14 +66,14 @@ package Adagio.Safe_access is
    Null_access : constant Object;
 
    -- Initialization:
-   -- Data should be allocated with new. 
+   -- Data should be allocated with new.
    -- If it comes from an stack object, error will happen when freeing it.
    procedure Bind (this : in out Object; Data : in Item_access);
 
    -- Get value
    -- Of course, if the access value is copied outside, error can occur.
-   function Value (this : in Object) return Item;
-   pragma Inline (Value);
+--     function Value (this : in Object) return Item;
+--     pragma Inline (Value);
    function Value (this : in Object) return Item_access;
    pragma Inline (Value);
 
@@ -115,7 +115,7 @@ private
    procedure Finalize (this : in out Object);
    pragma Inline (Adjust, Finalize);
 
-   Null_access : constant Object := 
+   Null_access : constant Object :=
       (Finalization.Controlled with Tracker => null);
 
 end Adagio.Safe_access;

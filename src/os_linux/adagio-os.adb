@@ -1,4 +1,4 @@
-with System.Error_reporting;
+with Gnat.Os_Lib;
 with Text_io;
 
 package body Adagio.Os is
@@ -8,6 +8,7 @@ package body Adagio.Os is
    ------------------------------------------------------------------------
    procedure Message_box
      (title, text: String; Kind: Message_kind:= Message_error) is
+      pragma Unreferenced (Kind);
      use Text_io;
    begin
       Put_line ("** " & Title & " **");
@@ -17,12 +18,10 @@ package body Adagio.Os is
    ------------------------------------------------------------------------
    -- Kill_me                                                            --
    ------------------------------------------------------------------------
-   -- Kill entire process inmediately:
+   --  Kill entire process inmediately:
    procedure Kill_me is
    begin
-      if System.Error_reporting.Shutdown ("Forced shutdown") then
-         null;
-      end if;
+      Gnat.Os_Lib.Os_Exit (1);
    end Kill_me;
 
 end Adagio.Os;

@@ -13,9 +13,12 @@ project Adagio is
 
    for Object_Dir use "obj_debug";
 
-   Sources := ("agpl", "aenea-crawler", "download", "ed2k", "g2", "gui", "kernel", "library", "misc", "network", 
-               "search", "storage", "tasking", "upload", 
-               "../adacf/src", "../aws", "../charles", "../pragmarc", "agpl/xmlada", "../zlibada", "../zlibc",
+   Sources := ("../agpl/src", "../agpl/3rdparty/xmlada", "../agpl/src/agpl-http", "../agpl/src/trace_true",
+               "../agpl/3rdparty/zlib_ada", "../agpl/src/agpl-zlib",
+               "compat",
+               "aenea-crawler", "download", "ed2k", "g2", "gui", "kernel", "library", "misc", "network",
+               "search", "storage", "tasking", "upload",
+               "../adacf/src", "../aws", "../charles", "../pragmarc", "../zlibc",
                "../aws/include", "../aws/soap", "../aws/src", "../aws/ssl");
 
    case OS is
@@ -29,8 +32,9 @@ project Adagio is
    package Compiler is
       for Default_Switches ("c") use ("-g");
       for Default_Switches ("c++") use ("-g");
-      for Default_Switches ("ada") use ("-O2", "-gnatf", "-gnato", "-fstack-check", "-g", "-gnata", "-gnat05", 
-                                        "-gnatwcfjmopruvz", "-gnatVa", "-gnatyaceikln");
+      for Default_Switches ("ada") use ("-O2", "-gnatf", "-gnato", "-fstack-check", "-g", "-gnata", "-gnat2012",
+                                        "-gnatwcfjmopruvz", "-gnatVa");
+                                        --  "-gnatyaceikln"); -- Too much style errors, disabled until pretty-printed
 
 
    end Compiler;

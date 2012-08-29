@@ -44,7 +44,6 @@ with Adagio.SOAP_response;
 with Adagio.Trace;
 
 with Agpl.Http.Server;
-with Agpl.Types.Ustrings; use Agpl.Types.Ustrings;
 
 with AWS.Config;
 with AWS.Config.Set;

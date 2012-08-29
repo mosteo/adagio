@@ -1,10 +1,10 @@
- 
+
 
 with Aws.Response;
 with Aws.Status;
 with Templates_parser;
 
-with Agpl.Dynamic_vector;
+with Agpl.Containers.Naked_Vectors;
 with Agpl.Types.Ustrings; use Agpl.Types.Ustrings;
 
 package Agpl.Http.Server.Sort_handler is
@@ -22,7 +22,7 @@ package Agpl.Http.Server.Sort_handler is
 
    -- Each row is an array of Data_entries:
    package Datarows is new
-      Agpl.Dynamic_vector (Data_cell, Initial_size => 20);
+      Agpl.Containers.Naked_Vectors (Data_cell, Initial_size => 20);
 
    --------------
    -- Data_row --
@@ -30,8 +30,8 @@ package Agpl.Http.Server.Sort_handler is
    type Data_row is new Datarows.Object (First => 1) with null record;
 
    -- The entire dataset is a dynamic vector of Data_rows:
-   package Datasets is new 
-      Agpl.Dynamic_vector (
+   package Datasets is new
+      Agpl.Containers.Naked_Vectors (
          Data_row, Initial_size => 100, Grow_factor => 2.0);
 
    --------------
@@ -43,7 +43,7 @@ package Agpl.Http.Server.Sort_handler is
    type Source_procedure is access procedure (Data : out Data_set);
 
    -- And also with functions that return singletons (values not in tables):
-   type Singleton_function is access 
+   type Singleton_function is access
       function return Templates_parser.Translate_table;
 
    -- The source page is simply an access to a string:
@@ -71,7 +71,7 @@ package Agpl.Http.Server.Sort_handler is
    function Get_page (
       This    : in Object;
       Request : in Aws.Status.Data) return Aws.Response.Data;
-   
+
    ------------------------------------------------------------------------
    -- Set_Lines_Per_Page                                                 --
    ------------------------------------------------------------------------

@@ -35,11 +35,10 @@
 with Adagio.G2.Packet.Queue;
 with Adagio.Os.Memory;
 with Adagio.Socket;
-with Adagio.Trace;
 
-with Interfaces; use Interfaces;
+with Interfaces;
 
-with Ada.Calendar; use Ada;
+with Ada.Calendar;
 
 package Adagio.G2.Transceiver_types.Prot is
 
@@ -255,8 +254,7 @@ private
       Dispatcher : Dispatcher_task (Object'Access);
       Sender     : Sender_task (Object'Access);
       Timeouts   : Event_queue.Object (
-         Stack_size => 128 * 1024,
-         Tracer     => Trace.General'Access);
+         Stack_size => 128 * 1024);
 
       BW_in      : Speed := Speed'Last; -- For throttling
       BW_out     : Speed := Speed'Last;
@@ -274,6 +272,6 @@ private
    ------------------------------------------------------------------------
    -- Queue_retry                                                        --
    ------------------------------------------------------------------------
-   procedure Queue_retry (Context : in Agpl.Event_Queues.Context_access);
+   procedure Queue_retry (Context : in Agpl.Event_Queues.Context_Type'Class);
 
 end Adagio.G2.Transceiver_types.Prot;

@@ -15,7 +15,7 @@ generic
    --  Defines ordering of keys.
    with function Equals (Left, Right : Key_Type) return Boolean;
 
-   type Value_Type is limited private;
+   type Value_Type is private;
    with procedure Assign (Destination : in out Value_Type;
                           Source : in Value_Type);
    --  Assigns SOURCE to DESTINATION. If needed, DESTINATION has to be

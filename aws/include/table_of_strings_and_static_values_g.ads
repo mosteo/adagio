@@ -133,7 +133,7 @@ package Table_Of_Strings_And_Static_Values_G is
    --+ if it is not empty. Otherwise, new space is taken from the system.
 
 
-   type Table_Type is limited private;
+   type Table_Type is private;
 
    Duplicate_Item_Error,
      Missing_Item_Error,

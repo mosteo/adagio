@@ -32,10 +32,11 @@
 ------------------------------------------------------------------------------
 --  $Id: adagio-trace.ads,v 1.4 2004/01/21 21:05:27 Jano Exp $
 
--- Package for help in tracing events
+--  Package for help in tracing events
 
 with Agpl.Debug;
 with Agpl.Trace;
+with Agpl.Trace.File;
 with Agpl.Types.Ustrings; use Agpl.Types.Ustrings;
 
 with Ada.Exceptions;          use Ada;
@@ -50,36 +51,36 @@ package Adagio.Trace is
 
    procedure Check_changed_level;
 
-   -- Logs a text to log file. Slow, thread safe.
-   -- Timestamp automatically prepended.
-   -- To default file if not specified, other otherwise.
+   --  Logs a text to log file. Slow, thread safe.
+   --  Timestamp automatically prepended.
+   --  To default file if not specified, other otherwise.
    procedure Log(
       Text:    String;
       Warning: All_levels := Debug;
       File:    String:= "");
 
-   -- Displays a box with info about some exception
+   --  Displays a box with info about some exception
    procedure Report(e: Ada.Exceptions.Exception_occurrence;
                     Context: String:= "");
 
-   -- Constructs a error string upon exception:
+   --  Constructs a error string upon exception:
    function Report(e: Ada.Exceptions.Exception_occurrence) return String;
 
-   -- Returns next N characters from a stream as hex
+   --  Returns next N characters from a stream as hex
    function Debug_stream (
       Stream      : access Streams.Root_stream_type'Class;
       N           : Positive := 8;
       Separator   : String := ":") return String
       renames Agpl.Debug.Hex_Dump_From_Stream;
 
-   -- Get pending logs
+   --  Get pending logs
    function Get_logs return Ustring_array;
 
    ------------------------------------------------------------------------
    -- Debug Objects                                                      --
    ------------------------------------------------------------------------
-   General : aliased Agpl.Trace.Object;
-   Network : aliased Agpl.Trace.Object;
-   Other   : aliased Agpl.Trace.Object;
+   General : aliased Agpl.Trace.File.Object;
+   Network : aliased Agpl.Trace.File.Object;
+   Other   : aliased Agpl.Trace.File.Object;
 
 end Adagio.Trace;

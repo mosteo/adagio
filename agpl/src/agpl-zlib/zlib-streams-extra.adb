@@ -1,4 +1,5 @@
- 
+with Ada.Unchecked_Deallocation;
+
 
 package body Zlib.Streams.Extra is
 
