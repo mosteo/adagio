@@ -34,7 +34,6 @@
 --  Some general constants
 
 with Adagio.Os;
-with Agpl.Types.Ustrings;
 
 with Ada.Calendar;
 

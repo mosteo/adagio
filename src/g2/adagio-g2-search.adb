@@ -47,14 +47,13 @@ with Adagio.Socket.IP;
 with Adagio.Statistics;
 with Adagio.Statistics.Integers;
 with Adagio.Statistics.Strings;
-with Adagio.Trace;
 with Sha1;
 
 with Agpl.Event_Queues;
 
 with Text_IO;
 with Ada.Unchecked_Deallocation;
-use  Ada;
+with Adagio.Trace;
 
 package body Adagio.G2.Search is
 
@@ -63,6 +62,8 @@ package body Adagio.G2.Search is
    Stat_Events       : constant String  := "Remote search - Pending events";
    Stat_Hubs         : constant String  := "Remote search - Tracked hubs";
    Stat_Latency      : constant String  := "Remote search - Latency";
+
+   Nul : Character renames Constants.Nul;
 
    package Endian renames Adagio.Network.Endian;
    package Event_Queue renames Agpl.Event_Queues.Calendar;
@@ -88,9 +89,9 @@ package body Adagio.G2.Search is
    ------------------------------------------------------------------------
    -- Purge_Event                                                        --
    ------------------------------------------------------------------------
-   procedure Purge_Event (Context : Agpl.Event_Queues.Context_Access) is
+   procedure Purge_Event (Context : Agpl.Event_Queues.Context_Type'Class) is
       Event        : Event_Queue.Event_Type;
-      Def_Context  : Default_Context_Type := Default_Context_Type (Context.all);
+      Def_Context  : Default_Context_Type := Default_Context_Type (Context);
    begin
       Trace.Log ("G2.Search.Purge_Event", Trace.Debug);
 
@@ -112,11 +113,11 @@ package body Adagio.G2.Search is
    -- Watchdog_Event                                                     --
    ------------------------------------------------------------------------
    -- Ensure that searching is attempted regularly:
-   procedure Watchdog_Event (Context : Agpl.Event_Queues.Context_Access) 
+   procedure Watchdog_Event (Context : Agpl.Event_Queues.Context_Type'Class)
    is
       Event        : Event_Queue.Event_Type;
-      Def_Context  : Default_Context_Type := 
-         Default_Context_Type (Context.all);
+      Def_Context  : Default_Context_Type :=
+         Default_Context_Type (Context);
    begin
       Trace.Log ("G2.Search.Watchdog_Event", Trace.Debug);
 
@@ -129,8 +130,8 @@ package body Adagio.G2.Search is
          Def_Context);
 
       -- Reinsert startup nodes if necessary
-      if Def_Context.Parent.Safe.Must_Search and then 
-         Def_Context.Parent.Safe.Get_Hubs < Start_Servers_Num 
+      if Def_Context.Parent.Safe.Must_Search and then
+         Def_Context.Parent.Safe.Get_Hubs < Start_Servers_Num
       then
          Def_Context.Parent.Safe.Program_Start_Nodes;
       end if;
@@ -143,8 +144,8 @@ package body Adagio.G2.Search is
    -- Query_Event                                                        --
    ------------------------------------------------------------------------
    -- Triggered when a server is to be queried
-   procedure Query_Event (Context : Agpl.Event_Queues.Context_Access) is
-      Hub_Context : Node_Context_Type := Node_Context_Type (Context.all);
+   procedure Query_Event (Context : Agpl.Event_Queues.Context_Type'Class) is
+      Hub_Context : Node_Context_Type := Node_Context_Type (Context);
    begin
       Trace.Log ("G2.Search.Query_Event", Trace.Never);
 
@@ -160,8 +161,8 @@ package body Adagio.G2.Search is
    -- Drop_Event                                                         --
    ------------------------------------------------------------------------
    -- Triggered to check if a server is to be dropped
-   procedure Drop_Event (Context : Agpl.Event_Queues.Context_Access) is
-      Hub_Context : Node_Context_Type := Node_Context_Type (Context.all);
+   procedure Drop_Event (Context : Agpl.Event_Queues.Context_Type'Class) is
+      Hub_Context : Node_Context_Type := Node_Context_Type (Context);
    begin
       Trace.Log ("G2.Search.Drop_Event", Trace.Never);
 
@@ -175,8 +176,8 @@ package body Adagio.G2.Search is
    -- Priority_Event                                                     --
    ------------------------------------------------------------------------
    -- Triggered to apply a new priority to a search:
-   procedure Priority_Change_Event (Context : Agpl.Event_Queues.Context_Access) is
-      Search_Context : Search_Context_Type := Search_Context_Type (Context.all);
+   procedure Priority_Change_Event (Context : Agpl.Event_Queues.Context_Type'Class) is
+      Search_Context : Search_Context_Type := Search_Context_Type (Context);
       Priority       : Searches.Priorities := Manager.Get_Priority (Search_Context.Search);
       PDelta         : Natural :=             Manager.Get_Priority_Delta (
          Search_Context.Search);
@@ -222,14 +223,14 @@ package body Adagio.G2.Search is
       pragma Inline (Max);
       function Max (L, R : in Calendar.Time) return Calendar.Time is
       begin
-         if L > R then 
+         if L > R then
             return L;
          else
             return R;
          end if;
       end Max;
    begin
-      return 
+      return
          (not Node.Scheduled) and then
          Now - Node.Last_Access > Globals.Options.G2_Search_PurgeAge;
    end Is_Dropable;
@@ -237,7 +238,7 @@ package body Adagio.G2.Search is
    ------------------------------------------------------------------------
    -- Create_Search                                                      --
    ------------------------------------------------------------------------
-   -- Notify the creation of a new search                                
+   -- Notify the creation of a new search
    procedure Create_Search (
       This : access Object; Target : in Searches.Search_Id)
    is
@@ -245,7 +246,7 @@ package body Adagio.G2.Search is
       use type Searches.Priorities;
    begin
       This.Safe.Create_Search (
-         Target, 
+         Target,
          Manager.Get_Payload (Target),
          Prio,
          Manager.Get_Priority_Delta (Target));
@@ -355,8 +356,8 @@ package body Adagio.G2.Search is
 
             -- Pause if necessary:
             if Pre < Globals.Options.G2_Search_Priorities_Stop_Threshold and then
-               Manager.Get_Hits (Srch) >= 
-                  Globals.Options.G2_Search_Priorities_Stop_Threshold 
+               Manager.Get_Hits (Srch) >=
+                  Globals.Options.G2_Search_Priorities_Stop_Threshold
             then
                Manager.Pause_Search (Srch);
             end if;
@@ -376,13 +377,13 @@ package body Adagio.G2.Search is
          -- AQUI HAY QUE ACTUALIZAR LA PRIORITY DELTA DE LA BÚSQUEDA
          Do_Hit;
       else
-         Trace.Log ("G2.Search: Unknown search Packet: " & G2.Packet.To_Hex (P), 
+         Trace.Log ("G2.Search: Unknown search Packet: " & G2.Packet.To_Hex (P),
             Trace.Warning);
       end if;
       Globals.Main_Throttle.End_Work;
    exception
       when E : others =>
-         Trace.Log ("G2.Search.Process_Search_Packet: " & 
+         Trace.Log ("G2.Search.Process_Search_Packet: " &
             Trace.Report (E), Trace.Error);
    end Process_Search_Packet;
 
@@ -390,8 +391,8 @@ package body Adagio.G2.Search is
    -- Set_Paused                                                         --
    ------------------------------------------------------------------------
    procedure Set_Paused (
-      This   : access Object; 
-      Target : in     Searches.Search_Id; 
+      This   : access Object;
+      Target : in     Searches.Search_Id;
       Paused : in     Boolean := true)
    is
    begin
@@ -402,8 +403,8 @@ package body Adagio.G2.Search is
    -- Set_Priority                                                       --
    ------------------------------------------------------------------------
    procedure Set_Priority (
-      This     : access Object; 
-      Target   : in Searches.Search_Id; 
+      This     : access Object;
+      Target   : in Searches.Search_Id;
       Priority : in Searches.Priorities)
    is
       use type Searches.Priorities;
@@ -451,9 +452,9 @@ package body Adagio.G2.Search is
    ------------------------------------------------------------------------
    -- Sets up the searcher
    procedure Start (
-      This        : access Object; 
+      This        : access Object;
       Sender      : in G2.Packet.Queue.Object_Access;
-      Transceiver : in G2.Transceiver.Object_Access) 
+      Transceiver : in G2.Transceiver.Object_Access)
    is
       Event : Event_Queue.Event_Type;
    begin
@@ -468,7 +469,7 @@ package body Adagio.G2.Search is
          Calendar.Clock + Globals.Options.G2_Search_WatchdogPeriod,
          Watchdog_Event'Access,
          Default_Context_Type'(
-            Agpl.Event_Queues.Context_Type 
+            Agpl.Event_Queues.Context_Type
             with Parent => Object_access (This)));
       -- Create Purge Event
       Event_Queue.Create (
@@ -477,7 +478,7 @@ package body Adagio.G2.Search is
          Calendar.Clock + Globals.Options.G2_Search_PurgePeriod,
          Purge_Event'Access,
          Default_Context_Type'(
-            Agpl.Event_Queues.Context_Type 
+            Agpl.Event_Queues.Context_Type
             with Parent => Object_access (This)));
       Trace.Log ("G2 search engine started", Trace.Informative);
    end Start;
@@ -503,8 +504,8 @@ package body Adagio.G2.Search is
          Add_New_Hub (Address, Just_Searched, Dummy);
       end Add_New_Hub;
       procedure Add_New_Hub (
-         Address        : in  String; 
-         Just_Searched  : in  Boolean := false; 
+         Address        : in  String;
+         Just_Searched  : in  Boolean := false;
          Hub            : out Node_Access)
       is
          use Hub_List;
@@ -537,10 +538,10 @@ package body Adagio.G2.Search is
       -- Create_Search --
       -------------------
       procedure Create_Search (
-         Target   : in Adagio.Searches.Search_Id; 
+         Target   : in Adagio.Searches.Search_Id;
          Payload  : in Adagio.Searches.Payload;
          Priority : in Adagio.Searches.Priorities;
-         PDelta   : in Natural) 
+         PDelta   : in Natural)
       is
          use Search_List;
          New_Search   : G2_Search_Access := new G2_Search'(
@@ -548,7 +549,7 @@ package body Adagio.G2.Search is
             Leaf_Accesses  => 0,
             Payload        => new Adagio.Searches.Payload'(Payload),
             Priority       => Priority,
-            Priority_Delta => PDelta,           
+            Priority_Delta => PDelta,
             Guid           => Guid.To_Char_Array (Guid.Create_Guid),
             Search         => Target,
             Paused         => false,
@@ -568,8 +569,8 @@ package body Adagio.G2.Search is
 
          -- Add
          Insert (
-            Searches, 
-            Index, 
+            Searches,
+            Index,
             New_Search);
 
          Guid_List.Insert (
@@ -668,7 +669,7 @@ package body Adagio.G2.Search is
                Trace.Log ("Imposed ban from " & Address & ":" & Ban'Img, Trace.Debug);
             end if;
          exception
-            when others => 
+            when others =>
                Trace.Log ("G2.Search: /QA/RA too large: " & G2.Packet.To_Hex (
                   G2.Packet.Get_Child (Item.Packet, "RA")), Trace.Warning);
          end;
@@ -684,8 +685,8 @@ package body Adagio.G2.Search is
             for I in Hubs'range loop
                Add_new_hub (
                   Address => G2.To_Address (
-                     G2.Packet.Payload (Hubs (I)), 
-                     G2.Packet.Big_Endian (Item.Packet)), 
+                     G2.Packet.Payload (Hubs (I)),
+                     G2.Packet.Big_Endian (Item.Packet)),
                   Hub => Added_Hub);
             end loop;
          end;
@@ -722,7 +723,7 @@ package body Adagio.G2.Search is
                      Added_Hub := Hub;
                   end if;
                   -- If we have added it (enough leaves) add stats:
-                  if Added_Hub /= null then 
+                  if Added_Hub /= null then
                      Leaves           := Leaves + Node_Leaves;
                      Leaves           := Leaves - Added_Hub.Leaves;
                      Added_Hub.Leaves := Node_Leaves;
@@ -770,7 +771,7 @@ package body Adagio.G2.Search is
             -- or which is remote (no directly accesible).
             declare
                New_Hub : Node_Type := Create_Node (
-                  S (Address), 
+                  S (Address),
                   Last_Access => Past_Aeons,
                   Key         => G2.Packet.Payload (
                                     G2.Packet.Get_Child (Item.packet, "QK")));
@@ -829,7 +830,7 @@ package body Adagio.G2.Search is
          while I /= Back (Searches) loop
             if Element (I).Search = Target then
                Srch := Element (I);
-               return 
+               return
                   "Hubs:" & Srch.Hub_Accesses'Img & "; Leaves:" & Srch.Leaf_Accesses'Img;
             end if;
             I := Succ (I);
@@ -996,7 +997,7 @@ package body Adagio.G2.Search is
       -- Pause_Search --
       ------------------
       procedure Pause_Search (
-         Target : in Adagio.Searches.Search_Id; Paused : in Boolean) 
+         Target : in Adagio.Searches.Search_Id; Paused : in Boolean)
       is
          use Search_List;
          I : Iterator_Type := First (Searches);
@@ -1034,7 +1035,7 @@ package body Adagio.G2.Search is
 
          Hub := Get_Access (I);
 
-         -- Being not scheduled means: searches are stopped or, 
+         -- Being not scheduled means: searches are stopped or,
          -- the query round is started but no QA has still received
          if not Hub.Scheduled then
             Discount_Hub_Data (Hub);
@@ -1067,7 +1068,7 @@ package body Adagio.G2.Search is
 
          if Hub.Next_QEvent > Now then
             --Trace.Log ("WASTED EVENT query for " & S (Hub.Address), Trace.Always);
-            --Trace.Log ("DROPPED QUERY FOR " & S (Hub.Address) & " UNTIL " & 
+            --Trace.Log ("DROPPED QUERY FOR " & S (Hub.Address) & " UNTIL " &
             --   Misc.Image (Hub.Next_QEvent - Now), Trace.Always);
             return; -- <-- EARLY EXIT IF A LATER EVENT IS SCHEDULED
          end if;
@@ -1079,11 +1080,11 @@ package body Adagio.G2.Search is
          end if;
 
          -- If too few leaves, don't query it:
-         if (not Hub.Unknown_Leaves) and then 
+         if (not Hub.Unknown_Leaves) and then
             Hub.Leaves < Globals.Options.G2_Search_MinimumLeaves and then
             not Hub.Growing
          then
-            Trace.Log ("G2.Search.Process_Query_Event: Not enough leaves for " & 
+            Trace.Log ("G2.Search.Process_Query_Event: Not enough leaves for " &
                S (Hub.Address), Trace.Debug);
             Hub.Growing := true;
             Program_Node_Query (
@@ -1106,8 +1107,8 @@ package body Adagio.G2.Search is
 
          -- Check for antiquity of the key, go to query or else request key:
          -- If neighbor, direct query too.
-         if Hub.Key /= Null_Key and then Now - Hub.Key_Time < 
-            Globals.Options.G2_Search_KeyDuration 
+         if Hub.Key /= Null_Key and then Now - Hub.Key_Time <
+            Globals.Options.G2_Search_KeyDuration
          then
 
             -- Reuse cached kuery qey.
@@ -1169,7 +1170,7 @@ package body Adagio.G2.Search is
          end if;
       exception
          when E : others =>
-            Trace.Log ("G2.Search.Query_Event: " & Trace.Report (E), 
+            Trace.Log ("G2.Search.Query_Event: " & Trace.Report (E),
                Trace.Error);
       end Process_Query_Event;
 
@@ -1182,7 +1183,7 @@ package body Adagio.G2.Search is
          For_Time : in     Calendar.Time)
       is
          Event : Event_Queue.Event_Type;
-         Drift : Duration := 
+         Drift : Duration :=
             G2.Transceiver.Get_Outbound_Udp_Delay (Parent.Transceiver.all);
          True_For_Time : Calendar.Time := For_Time;
          Now           : Calendar.Time := Calendar.Clock;
@@ -1232,7 +1233,7 @@ package body Adagio.G2.Search is
                Agpl.Event_Queues.Context_Type with
                   Parent  => Object_Access (Parent),
                   Address => Hub.Address));
-         Statistics.Object.Set (Stat_Events, 
+         Statistics.Object.Set (Stat_Events,
             Statistics.Integers.Create (Event_Queue.Length (parent.Events)));
       end Program_Node_Query;
 
@@ -1243,7 +1244,7 @@ package body Adagio.G2.Search is
       -- be queried.
       -- Adds too regular cached hubs to complete 10 starting hubs.
       -- Tries first with the search cache and then with the global cache.
-      -- The global cache is currently disabled because it causes problems 
+      -- The global cache is currently disabled because it causes problems
       --    with neighbor hubs.
       procedure Program_Start_Nodes is
          use Hub_List;
@@ -1315,7 +1316,7 @@ package body Adagio.G2.Search is
          Select_Search_For (Hub, Srch);
 
          if Srch = null then
-            Trace.Log ("G2.Search: No candidate searches for " & S (Hub.Address), 
+            Trace.Log ("G2.Search: No candidate searches for " & S (Hub.Address),
                Trace.Debug);
             -- Reprogram it!
             if not Hub.Scheduled then
@@ -1334,8 +1335,8 @@ package body Adagio.G2.Search is
             -- If firewalled, send it via neighbor:
             Get_Next_Queue (Queue);
             if Queue.Address /= Null_Ustring then
-               C := G2.Packet.Create ("UDP", 
-                  To_Char_Array (S (Queue.Address), G2.Packet.Big_Endian (P)) & 
+               C := G2.Packet.Create ("UDP",
+                  To_Char_Array (S (Queue.Address), G2.Packet.Big_Endian (P)) &
                   Hub.Key);
                G2.Packet.Add_Child (P, C);
             else
@@ -1344,13 +1345,13 @@ package body Adagio.G2.Search is
          else
             -- Regular direct reply by udp
             if Internet_Route = Nat then
-               C := G2.Packet.Create ("UDP", 
+               C := G2.Packet.Create ("UDP",
                   To_Char_Array (
                      Network_Settings.Get_NATF_Address & ":" &
                      Misc.To_String (Globals.Options.G2_port),
                      G2.Packet.Big_Endian (P)) & Hub.Key);
             else
-               C := G2.Packet.Create ("UDP", 
+               C := G2.Packet.Create ("UDP",
                   To_Char_Array (
                      Socket.IP.Get_IP (Public => true) & ":" &
                      Misc.To_String (Globals.Options.G2_port),
@@ -1363,7 +1364,7 @@ package body Adagio.G2.Search is
          case Srch.Payload.Kind is
             when Adagio.Searches.Sha1_Digest =>
                C := G2.Packet.Create ("URN", "sha1" & Nul &
-                  Sha1.To_Char_Array (Srch.Payload.Digest));  
+                  Sha1.To_Char_Array (Srch.Payload.Digest));
             when Adagio.Searches.Keywords =>
                C := G2.Packet.Create ("DN", S (Srch.Payload.Words));
          end case;
@@ -1428,7 +1429,7 @@ package body Adagio.G2.Search is
             end loop;
          end Purge_Search;
       begin
-         if not Must_Search then 
+         if not Must_Search then
             return;
          end if;
 
@@ -1551,7 +1552,7 @@ package body Adagio.G2.Search is
       -- Set_Priority --
       ------------------
       procedure Set_Priority (
-         Target   : in Adagio.Searches.Search_Id; 
+         Target   : in Adagio.Searches.Search_Id;
          Priority : in Adagio.Searches.Priorities;
          PDelta   : in Natural)
       is
@@ -1611,7 +1612,7 @@ package body Adagio.G2.Search is
       -----------
       procedure Start is
       begin
-         Queues := 
+         Queues :=
             new Packet.Queue.Address_Queue_Array (
                1 .. Globals.Options.G2_ActiveServers);
       end Start;

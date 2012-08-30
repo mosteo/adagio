@@ -39,8 +39,6 @@ with Acf.Types;
 use  Acf.Types;
 
 with Ada.Finalization;
-with Ada.Streams;
-use  Ada.Streams;
 use  Ada;
 
 generic
@@ -62,7 +60,7 @@ generic
    with procedure Start_root_hash (Context : in out Hash_context);
    -- Converter for hashes:
    with function  To_byte_array (Hash : in Hash_type) return Byte_array;
-package HashTree is 
+package HashTree is
 
    Default_leaf_size : constant := 1024;
 
@@ -78,7 +76,7 @@ package HashTree is
    -- Use these procedures to iteratively build a tree.
    -- An object can be reused.
    procedure Hash_start (
-      This      : in out Object; 
+      This      : in out Object;
       Size      : in     Natural;  -- Of the data to hash
       Leaf_size : in     Natural  := Default_leaf_size;
       Keep      : in     Positive := 10);
@@ -114,7 +112,7 @@ package HashTree is
    -- Get the first N levels of tree bytes in breadth first order:
    -- If it has less levels, returns entire tree.
    -- If less levels have been kept, raises Constraint_error.
-   function Get_bytes (This : in Object; Levels : in Positive) 
+   function Get_bytes (This : in Object; Levels : in Positive)
       return Byte_array;
 
 private
@@ -202,7 +200,7 @@ private
    function Parent_of (Coords : in Coords_type) return Coords_type;
    pragma Inline (Parent_of);
    -- Get parent node:
-   function Parent_of (This : in Object; Node : access Node_type) 
+   function Parent_of (This : in Object; Node : access Node_type)
       return Node_access;
    pragma Inline (Parent_of);
    -- Get left child coordinates:

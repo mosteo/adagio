@@ -32,12 +32,10 @@
 ------------------------------------------------------------------------------
 --  $Id: adagio-http-header-parser.adb,v 1.5 2004/02/29 20:36:45 Jano Exp $
 
-with Adagio.Socket;
 with Adagio.Trace;
 
 with Agpl.Streams.Memory_Arrays;
 
-with Ada.Streams; use Ada.Streams;
 
 package body Adagio.Http.Header.Parser is
 
@@ -55,12 +53,12 @@ package body Adagio.Http.Header.Parser is
    procedure Check (This : in out Object; Sock : in Socket.Object) is
    begin
       if not Socket.Is_alive (Sock) then
-         Raise_exception (Socket.Socket_error'Identity, 
+         Raise_exception (Socket.Socket_error'Identity,
             "Http.Header.Parser.Check: Connection reset by peer");
       end if;
       while Socket.Available (Sock) > 0 and not Completed (This) loop
          Stream_element'Read (
-            Socket.Stream (Sock), 
+            Socket.Stream (Sock),
             This.Buffer (This.Next));
          This.Next := This.Next + 1;
       end loop;
@@ -73,15 +71,15 @@ package body Adagio.Http.Header.Parser is
 
    -- Check but subject to a throttle:
    procedure Check (
-      This     : in out Object; 
-      Sock     : in     Socket.Object; 
+      This     : in out Object;
+      Sock     : in     Socket.Object;
       Throttle : in     Agpl.Bandwidth_Throttle.Object_Access)
    is
       Req : Stream_Element_Count;
       use type Agpl.Bandwidth_Throttle.Object_Access;
    begin
       if not Socket.Is_alive (Sock) then
-         Raise_exception (Socket.Socket_error'Identity, 
+         Raise_exception (Socket.Socket_error'Identity,
             "Http.Header.Parser.Check: Connection reset by peer");
       end if;
       while Socket.Available (Sock) > 0 and not Completed (This) loop
@@ -96,7 +94,7 @@ package body Adagio.Http.Header.Parser is
          end if;
 
          Stream_element'Read (
-            Socket.Stream (Sock), 
+            Socket.Stream (Sock),
             This.Buffer (This.Next));
          This.Next := This.Next + 1;
 

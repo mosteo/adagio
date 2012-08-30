@@ -272,7 +272,7 @@ package body Agpl.Containers.Naked_Vectors is
       end loop;
    end Read;
 
-   function To_Vector (This : in Item_Array) return Object is
+   function To_Vector (This : in Item_Array) return Object'Class is
       Result : Object (First => This'First);
    begin
       for I in This'Range loop

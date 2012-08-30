@@ -126,7 +126,7 @@ package Agpl.Containers.Naked_Vectors is
    for Object'Read use Read;
 
    --  Conversion utilities
-   function To_Vector (This : in Item_Array) return Object;
+   function To_Vector (This : in Item_Array) return Object'Class;
 
    function To_Array (This : in Object) return Item_Array;
 

@@ -39,7 +39,6 @@ with Adagio.G2.Transceiver;
 with Adagio.Os.Memory;
 with Adagio.Searches.Handler;
 with Adagio.Searches;
-with Adagio.Trace;
 
 with Agpl.Event_Queues.Calendar;
 with Agpl.Http.Server.Sort_Handler;

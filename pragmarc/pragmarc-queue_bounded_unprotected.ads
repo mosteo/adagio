@@ -11,6 +11,9 @@
 -- 2001 Jun 01     J. Carter          V1.1--Added Peek
 -- 2000 May 01     J. Carter          V1.0--Initial release
 --
+
+pragma Ada_95;
+
 with PragmARC.List_Bounded_Unprotected;
 generic -- PragmARC.Queue_Bounded_Unprotected
    type Element is limited private;

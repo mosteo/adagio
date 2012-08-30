@@ -33,7 +33,6 @@
 --  $Id: adagio-gwcache2.adb,v 1.7 2004/02/04 16:20:14 Jano Exp $
 
 with Adagio.Chronos;
-with Adagio.Globals.Options;
 with Adagio.Http;
 with Adagio.Misc;
 with Adagio.Trace;
@@ -42,7 +41,6 @@ with Adagio.Xml;
 
 with Agpl.Strings;
 
-with System;
 
 with Charles.Hash_string;
 with Charles.Maps.Hashed.Strings.Unbounded;
@@ -361,7 +359,7 @@ package body Adagio.GWCache2 is
          return (1 => (U ("127.0.0.1"), Globals.Options.GWC2_LocalTest_port));
       end if;
       if Desired < 1 then
-         return Result;
+         return Result (1 .. 0);
       end if;
       if Net.Nodes.Length < Result'Length then
          -- Pre-fetch some more:
@@ -415,6 +413,7 @@ package body Adagio.GWCache2 is
    function Get_Search_Handler (This : in Network_Type)
       return Searches.Handler.Object_Access
    is
+      pragma Unreferenced (This);
    begin
       return null;
    end Get_Search_Handler;
@@ -450,6 +449,7 @@ package body Adagio.GWCache2 is
 
    -- Get network it belongs:
    function Net(this: in Server_type) return String is
+      pragma Unreferenced (this);
    begin
       return Network_id;
    end Net;

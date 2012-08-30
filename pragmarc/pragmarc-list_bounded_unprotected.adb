@@ -7,6 +7,8 @@
 -- 2002 May 01     J. Carter          V1.0--Initial release
 --
 
+pragma Ada_95;
+
 with System;
 package body PragmARC.List_Bounded_Unprotected is
    Invalid_Pos : constant Position := (ID => Invalid_ID, Pos => Null_Position);

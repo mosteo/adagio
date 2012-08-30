@@ -45,9 +45,10 @@ package body Adagio.G2.Mesh_element is
    -- Receives an "x.x.x.x:port [yyyy-mm-ddThh:mmZ]"
    function Create (
       Resource : in String;
-      Location : in String; 
+      Location : in String;
       Verified : in Boolean := false) return Object
    is
+      pragma Unreferenced (Verified);
       use Strings.Fields;
    begin
       return (
@@ -79,7 +80,7 @@ package body Adagio.G2.Mesh_element is
    -- L "better" than R
    function Better (L, R : in Object) return boolean is
    begin
-      return 
+      return
          (L.Verified and not R.Verified) or else
          (L.Verified = R.Verified and L.Since > R.Since);
    end Better;
