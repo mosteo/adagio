@@ -11,6 +11,9 @@
 -- 2001 Jun 01     J. Carter          V1.1--Added Peek
 -- 2000 May 01     J. Carter          V1.0--Initial release
 --
+
+pragma Ada_95;
+
 with PragmARC.Queue_Bounded_Unprotected;
 
 with System;

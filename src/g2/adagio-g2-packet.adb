@@ -39,12 +39,15 @@ with Adagio.Misc;
 with Adagio.Network.Endian;
 with Adagio.Socket;
 with Adagio.Trace;
+with Adagio.XML;
 
 with Agpl.Protected_Values.Integers;
 with Agpl.Types.Ustrings; use Agpl.Types.Ustrings;
 
 with Ada.Unchecked_conversion;
-with Ada.Unchecked_deallocation;    use Ada;
+with Ada.Unchecked_deallocation;
+
+with Adagio.Unicode;
 
 package body Adagio.G2.Packet is
 
@@ -57,7 +60,7 @@ package body Adagio.G2.Packet is
    package Child_vector is new Agpl.Dynamic_vector (Object);
 
    -- Lazyness:
-   function V (this : in Object) return Child_access 
+   function V (this : in Object) return Child_access
       renames Safe_child.Value;
 
    function Length (this : in Children_vector.Object) return Integer
@@ -70,7 +73,7 @@ package body Adagio.G2.Packet is
 
    -- Create a packet with given name and payload:
    -- Returns an allocated object
-   function Create (Name : in String; Payload : in String := "") 
+   function Create (Name : in String; Payload : in String := "")
       return Object is
       C : Child_access := new Child;
       P : Object;
@@ -101,7 +104,7 @@ package body Adagio.G2.Packet is
       Stream       : access Streams.Root_stream_type'Class;
       this         : out Control_byte_type) is
 
-      function To_control is new 
+      function To_control is new
          Unchecked_conversion (Byte, Control_byte_type);
       B : Byte;
 
@@ -131,7 +134,7 @@ package body Adagio.G2.Packet is
    begin
       null;
 --      Statistics.Object.Update (
---         Stat_num_children, 
+--         Stat_num_children,
 --         Statistics.Integers.Increment'Access,
 --         Statistics.Integers.Create (1));
    end Initialize;
@@ -143,7 +146,7 @@ package body Adagio.G2.Packet is
          Free (this.Children.Vector (N));
       end loop;
 --      Statistics.Object.Update (
---         Stat_num_children, 
+--         Stat_num_children,
 --         Statistics.Integers.Increment'Access,
 --         Statistics.Integers.Create (-1));
    end Finalize;
@@ -179,7 +182,7 @@ package body Adagio.G2.Packet is
    -- Adds a child to a packet:
    -- May raise exception if too many childs
    procedure Add_child (
-      Parent    : in Child_access; 
+      Parent    : in Child_access;
       New_child : in out Child_access) is
    begin
       -- Check null:
@@ -213,7 +216,7 @@ package body Adagio.G2.Packet is
    --    control byte, len, name, children, payload.
    function Full_size (this : in Child_access) return Natural is
    begin
-      return 
+      return
          1 +                              -- Control_byte
          this.Control_byte.Len_len +      -- Len
          this.Control_byte.Name_len + 1 + -- Name
@@ -268,9 +271,9 @@ package body Adagio.G2.Packet is
    begin
       return V (this).Control_byte.Big_endian;
    end Big_endian;
-      
+
    -- Hex representation of a packet:
-   function To_hex (this : in Object; Interleaving : String := " ") 
+   function To_hex (this : in Object; Interleaving : String := " ")
       return String is
 
       function To_char is new Unchecked_conversion
@@ -279,7 +282,7 @@ package body Adagio.G2.Packet is
       Result : UString;
 
       C : Child_access := V (this);
-      
+
    begin
 
       -- Control byte:
@@ -301,15 +304,15 @@ package body Adagio.G2.Packet is
       end;
 
       return S (Result);
-      
+
    end To_hex;
 
    -- Enumeration of children in a packet:
    function To_Text (
-      This : in Object; Show_Payloads : in Boolean := false) return String 
+      This : in Object; Show_Payloads : in Boolean := false) return String
    is
 
-      function To_Text (This : in Child_Access; Show_Payloads : in Boolean) return String 
+      function To_Text (This : in Child_Access; Show_Payloads : in Boolean) return String
       is
          Line : Ustring := U (S (This.Type_Name));
       begin
@@ -341,7 +344,7 @@ package body Adagio.G2.Packet is
    -- Should have initial / (i.e: /PI/UDP)
    function Is_a (this : in Child_access; Kind : in String) return Boolean is
    begin
-      if Kind = "" then 
+      if Kind = "" then
          return true;
       end if;
       if Head (Kind) /= S (this.Type_name) then
@@ -351,7 +354,7 @@ package body Adagio.G2.Packet is
       declare
          T : String := Tail (Kind);
       begin
-         if T = "" then 
+         if T = "" then
             return true;
          else
             for N in 1 .. Length (this.Children) loop
@@ -368,7 +371,7 @@ package body Adagio.G2.Packet is
    -- Get a given child from an object
    -- Name is in the form "xx/yy/zz"
    -- Must be unique
-   function Get_child (this : in Child_access; Name : in String) 
+   function Get_child (this : in Child_access; Name : in String)
       return Child_access is
       H     : String := Head ("/" & Name);
       T     : String := Tail (Name);
@@ -421,7 +424,7 @@ package body Adagio.G2.Packet is
    -- Get_children                                                       --
    ------------------------------------------------------------------------
    -- Get children of a given type. Inmediate depth only.
-   function Get_children (this : in Object; Name : in String) 
+   function Get_children (this : in Object; Name : in String)
    return Object_array is
       -- R : Child_vector.Object (First => 1);
       R : Object_Array (1 .. MAX_CHILDREN);
@@ -444,7 +447,7 @@ package body Adagio.G2.Packet is
    end Get_children;
 
    -- Returns the expected length of child + payload
-   -- That's the length of CHILDREN + \0 SEPARATOR IF NEEDED + PAYLOAD 
+   -- That's the length of CHILDREN + \0 SEPARATOR IF NEEDED + PAYLOAD
    function Computed_length (this : in Child) return Natural is
       Result : Natural := 0;
       Len    : Natural := Length (this.Children); -- The number of children,
@@ -476,10 +479,10 @@ package body Adagio.G2.Packet is
    -- That's the FULL LENGTH OF THIS CHILD, HEADERS PLUS ITS CHILDREN
    function Full_length (this : in Child) return Natural is
    begin
-      return 
-         1 + 
-         Len_len (Computed_length (this)) + 
-         Computed_length (this) + 
+      return
+         1 +
+         Len_len (Computed_length (this)) +
+         Computed_length (this) +
          this.Control_byte.Name_len + 1;
    end Full_length;
 
@@ -516,10 +519,10 @@ package body Adagio.G2.Packet is
 
       Control_byte : Control_byte_type := this.Control_byte;
       Length       : Natural := Computed_length (this);
-      Length_array : Network.Endian.Byte_array := 
+      Length_array : Network.Endian.Byte_array :=
          Network.Endian.Convert (Length, Control_byte.Big_endian);
          -- Preserve endianness, in case payload needs it.
-      
+
    begin
       Control_byte.Len_len := Length_array'Length;
       -- Watch to not send a \0:
@@ -550,9 +553,9 @@ package body Adagio.G2.Packet is
    -- Atomic writing to a socket stream. It guarantees that the entire
    --    packet is written (or not a byte) in a non-blocking socket stream.
    procedure Atomic_Write (
-      Stream  : access Streams.Root_stream_type'Class; 
+      Stream  : access Streams.Root_stream_type'Class;
       This    : in     Object;
-      Success : out    Boolean) 
+      Success : out    Boolean)
    is
       use Streams;
       Buffer  : aliased Stream_element_array (
@@ -609,6 +612,23 @@ package body Adagio.G2.Packet is
 
       return "";
    end Tail;
+
+   -- Create a /UPROD/XML packet with gprofile.xsd conformat payload.
+   function Create_UPROD return Packet.Object is
+      P : Packet.Object := Packet.Create ("UPROD");
+      C : Packet.Object;
+   begin
+      -- Add XML payload
+      C := Packet.Create ("XML",
+            Unicode.G2_to_string (
+            Xml.Compress (Xml.To_string (
+            Xml.Get ("gProfile", Globals.Config))),
+               Packet.Big_endian (P)));
+
+      Packet.Add_child (P, C);
+
+      return P;
+   end Create_UPROD;
 
 begin
 --   Statistics.Object.Set (

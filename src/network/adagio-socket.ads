@@ -71,7 +71,13 @@ package Adagio.Socket is
 	procedure Write(
       Stream : in out Stream_type;
       Item   : in Ada.Streams.Stream_Element_Array);
+
    function Available (This : in Stream_type) return Natural;
+
+      -- Helper
+   function Available_Socket (
+      This : access Ada.Streams.Root_stream_type'class) return Natural;
+   pragma Inline (Available_socket);
 
    type Error_Type is (
       Operation_Would_block,
@@ -171,7 +177,7 @@ package Adagio.Socket is
    -- Connection_failed                                                  --
    ------------------------------------------------------------------------
    function Connection_failed (this : in Object) return Boolean;
-      
+
    -----------
    -- debug --
    -----------
@@ -197,8 +203,8 @@ private
 
    Stream_id : aliased String := "Network - Alive socket streams";
 
-   type Stream_type (Sock_stream : Sockets.Stream_access) 
-   is new Ada.Streams.Root_stream_type with 
+   type Stream_type (Sock_stream : Sockets.Stream_access)
+   is new Ada.Streams.Root_stream_type with
    record
       Sock         : Sockets.Socket_type;
       Parent_Freed : Boolean := false;

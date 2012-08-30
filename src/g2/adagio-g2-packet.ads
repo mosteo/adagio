@@ -280,6 +280,9 @@ package Adagio.G2.Packet is
    -- Deep copy: Clone an object and all its children
    function Clone (this : in Object) return Object;
 
+   -- Create a /UPROD/XML packet with gprofile.xsd conformat payload.
+   function Create_UPROD return Packet.Object;
+
 private
 
    Null_payload : Constant UString := U ("");

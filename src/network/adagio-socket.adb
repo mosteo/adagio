@@ -487,6 +487,15 @@ package body Adagio.Socket is
       return Available (This.Sock);
    end Available;
 
+   ----------------------
+   -- Available_socket --
+   ----------------------
+   function Available_Socket (
+      This : access Ada.Streams.Root_stream_type'class) return Natural is
+   begin
+      return Socket.Available (Socket.Stream_access (This).all);
+   end Available_socket;
+
 begin
    -- Initialization of the Gnat library:
    Sockets.Initialize;

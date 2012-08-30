@@ -94,7 +94,7 @@ package Adagio.G2 is
 
    -- Convert a readable address (x.x.x.x:n) into a 6 byte payload:
    function To_char_array (
-      this       : in String; 
+      this       : in String;
       Big_endian : in Boolean) return String;
 
    -- Convert a 6-byte payload to a readable address:

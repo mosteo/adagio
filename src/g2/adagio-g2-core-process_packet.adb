@@ -34,10 +34,10 @@
 
 separate (Adagio.G2.Core)
 procedure Process_packet (
-   Net    : in Network_access; 
+   Net    : in Network_access;
    Source : in Server_access;
    Item   : in Packet.Queue.Item_type) is
-   
+
    P     : G2.Packet.Object renames Item.Packet;
    Serv  : Server_access;
 
@@ -54,7 +54,7 @@ procedure Process_packet (
    -- Echoes a packet to all connected servers except supplied one:
    -- R = In_response_to
    procedure Broadcast_packet (
-      P      : in Packet.Object; 
+      P      : in Packet.Object;
       R      : in Packet.Object := Packet.Null_packet;
       Server : in Server_access := null) is
 
@@ -110,7 +110,7 @@ procedure Process_packet (
    begin
       if Packet.Is_a (Item.Packet, "/KHL/TS") then
          Has_times := true;
-         Remote_time := To_time_t (Packet.Payload (Packet.Get_child ( 
+         Remote_time := To_time_t (Packet.Payload (Packet.Get_child (
                Item.Packet, "TS")), Packet.Big_endian (
                   Packet.Get_child (Item.Packet, "TS")));
       end if;
@@ -124,12 +124,12 @@ procedure Process_packet (
                raise Unimplemented; -- Not an IPv4 address
             end if;
             Sock := To_address (
-               Address (Address'First .. Address'First + 5), 
+               Address (Address'First .. Address'First + 5),
                Packet.Big_endian (Item.Packet));
 
             Server := new Server_type;
             Server.Score := 250.0; -- Below GWebCached2 ones but above CH
-            Create (Server.all, Net, Socket.Image (Sock.Addr), 
+            Create (Server.all, Net, Socket.Image (Sock.Addr),
                Natural (Sock.Port));
             if Reachable (Server.all) then
                Adagio.Server.List.Add (Adagio.Server.Object_access (Server));
@@ -160,10 +160,10 @@ procedure Process_packet (
                raise Unimplemented; -- Not an IPv4 address
             end if;
             Sock := To_address (
-               Address (Address'First .. Address'First + 5), 
+               Address (Address'First .. Address'First + 5),
                Packet.Big_endian (Item.Packet));
             if Has_times then
-               Seen2 := 
+               Seen2 :=
                   Calendar.Clock - Time_t.To_duration (Remote_time - Seen);
             else
                Seen2 := Calendar.Clock;
@@ -171,7 +171,7 @@ procedure Process_packet (
 
             Server := new Server_type;
             Server.Score := 200.0; -- Below GWebCached2 ones and NH ones
-            Create (Server.all, Net, Socket.Image (Sock.Addr), 
+            Create (Server.all, Net, Socket.Image (Sock.Addr),
                Natural (Sock.Port), Seen2);
             if Reachable (Server.all) then
                Adagio.Server.List.Add (Adagio.Server.Object_access (Server));
@@ -187,10 +187,10 @@ procedure Process_packet (
                   Trace.Report (E), Trace.Warning);
          end;
       end loop;
-      Trace.Log ("G2.Core.Process_packet.Process_KHL: Added" & 
-         Natural'Image (Hubs'Length + Hubs2'Length - Discarded) & 
+      Trace.Log ("G2.Core.Process_packet.Process_KHL: Added" &
+         Natural'Image (Hubs'Length + Hubs2'Length - Discarded) &
          " servers from KHL.");
-      Trace.Log ("G2.Core.Process_packet.Process_KHL: Discarded" & 
+      Trace.Log ("G2.Core.Process_packet.Process_KHL: Discarded" &
          Natural'Image (Discarded) & " servers from KHL.");
    end Process_KHL;
 
@@ -203,7 +203,7 @@ procedure Process_packet (
       Tcp_queue : Packet.Queue.Object_access;
    begin
       if Item.Source = Packet.Queue.Listener_UDP then
-         Trace.Log ("G2.Core.Process_packet: Query received via UDP", 
+         Trace.Log ("G2.Core.Process_packet: Query received via UDP",
             Trace.Warning);
          return; -- Only hubs should receive that.
       end if;
@@ -219,7 +219,7 @@ procedure Process_packet (
             Unicode.G2_to_string (Packet.Payload (Packet.Get_child (
                Item.Packet, "DN")), Packet.Big_endian (Item.Packet)),
             Item,
-            Net.Outbound'Access, 
+            Net.Outbound'Access,
             Tcp_queue,
             Net.Port,
             Neighbours (1 .. Last));
@@ -227,7 +227,7 @@ procedure Process_packet (
       -- URN queries:
       if Packet.Is_a (Item.Packet, "/Q2/URN") then
          G2.Local_query.URN (
-            Item, 
+            Item,
             Net.Outbound'Access,
             Tcp_queue,
             Net.Port,
@@ -236,7 +236,7 @@ procedure Process_packet (
       -- MD queries:
       if Packet.Is_a (Item.Packet, "/Q2/MD") then
          G2.Local_query.MD (
-            Item, 
+            Item,
             Net.Outbound'Access,
             Tcp_queue,
             Net.Port,
@@ -263,7 +263,7 @@ begin
    -- /?/TO --
    -----------
    if Packet.Get_child (P, "TO") /= Packet.Null_packet and then
-      Guid.To_char_array (Guid.My_guid) /= 
+      Guid.To_char_array (Guid.My_guid) /=
          Packet.Payload (Packet.Get_child (P, "TO")) then
       Trace.Log ("G2.Core.Process_packet: /?/TO received for " &
          Packet.Payload (Packet.Get_child (P, "TO")));
@@ -281,8 +281,8 @@ begin
             Send (Source, Po, Item.Packet);
          else
             Packet.Queue.Send (
-               Net.Outbound, 
-               Po, 
+               Net.Outbound,
+               Po,
                Item.Udp_source,
                Safe => true,
                In_response_to => Item.Packet);
@@ -300,7 +300,7 @@ begin
       elsif not Packet.Is_a (P, "/PI/UDP") then
          null; -- regular PI
       else -- other combinations not valid:
-         Trace.Log ("G2.Core.Process_packet: Invalid packet received:", 
+         Trace.Log ("G2.Core.Process_packet: Invalid packet received:",
             Trace.Informative);
          Trace.Log (Packet.To_hex (P));
          Packet.Parsing.Trace_tree (P);
@@ -347,7 +347,7 @@ begin
       declare
          I     : Packet.Queue.Item_type := Item;
       begin
-         I.Packet          := Core.Create_UPROD;
+         I.Packet          := Packet.Create_UPROD;
          I.In_response_to  := Item.Packet;
          I.Udp_destination := Item.Udp_source;
          Send (Source, I.Packet, Item.Packet);
@@ -423,13 +423,13 @@ begin
    -- UNKNOWN --
    -------------
    else
-      Trace.Log ("Discarded unknown packet: " & G2.Packet.To_hex (P), 
+      Trace.Log ("Discarded unknown packet: " & G2.Packet.To_hex (P),
          Trace.Informative);
       Packet.Parsing.Trace_tree (P);
    end if;
 exception
    when E: others =>
       Trace.Log ("G2.Core.Process_packet: " & Trace.Report (E), Trace.Error);
-      Trace.Log ("G2.Core.Process_packet: " & Packet.To_hex (Item.Packet), 
+      Trace.Log ("G2.Core.Process_packet: " & Packet.To_hex (Item.Packet),
          Trace.Error);
 end Process_packet;

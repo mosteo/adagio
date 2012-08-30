@@ -51,6 +51,12 @@ with Adagio.Trace;
 
 use Adagio;
 
+--  Force compilation of needed AWS link files:
+pragma Warnings (Off);
+with Ssl.Thin;
+with Ssl.Wrappers;
+pragma Warnings (On);
+
 procedure main is
 
 

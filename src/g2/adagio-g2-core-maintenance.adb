@@ -86,8 +86,7 @@ procedure Maintenance (This : Server_access) is
          Server.QRT_timestamp    := Calendar.Clock;
          -- Send table
          declare
-            use Ada.Streams;
-            Table  : String (1 .. 2 ** Library.QRP_size / 8) := 
+            Table  : String (1 .. 2 ** Library.QRP_size / 8) :=
                Library.Object.Get_QRP;
             Patch  : Stream_element_array (1 .. 2 ** Library.QRP_size / 8);
             for Patch'Address use Table'Address;
@@ -95,7 +94,7 @@ procedure Maintenance (This : Server_access) is
             ZPatch : Stream_element_array := Zutil.Deflate (Patch);
             Num_frags : Natural := (ZPatch'Length + 1) / Patch_size + 1;
             Send   : Send_payload;
-            SMap   : Mmap.Strings.Object := 
+            SMap   : Mmap.Strings.Object :=
                Mmap.Strings.Create (Send'Address);
             Pos    : Stream_element_offset := ZPatch'First;
          begin
@@ -117,10 +116,10 @@ procedure Maintenance (This : Server_access) is
             Send.Fragment_count := Byte (Num_frags);
             for N in 1 .. Num_frags loop
                Send.Fragment_no := Byte (N);
-               P := Packet.Create ("QHT", 
+               P := Packet.Create ("QHT",
                   SMap.all (1 .. Send_payload'Size / 8) &
                   Misc.To_string (ZPatch (Pos .. Stream_element_offset'Min (
-                     Pos + Stream_element_offset (Patch_size) - 1, 
+                     Pos + Stream_element_offset (Patch_size) - 1,
                      ZPatch'Last))));
                Pos := Pos + Stream_element_offset (Patch_size);
                Core.Send (Server, P);
@@ -142,15 +141,15 @@ begin
       ---------------------------------
       -- Check connection starvation --
       ---------------------------------
-      if Now - Serv.Last_packet_time > 
+      if Now - Serv.Last_packet_time >
          Globals.Options.G2_PingTimeout
       then
          -- Disconnect from server:
          Disconnect (Serv.all);
          Trace.Log ("G2.Core.Maintenance: Dropping server " &
-            Id (Serv.all) & " because of timeout", 
+            Id (Serv.all) & " because of timeout",
             Trace.Informative);
-      elsif Now - Serv.Last_packet_time > 
+      elsif Now - Serv.Last_packet_time >
          Globals.Options.G2_PingDelay then
          if Now - Serv.Last_ping_time > 5.0 then
             -- Mark time
@@ -166,7 +165,7 @@ begin
                   Net.Outbound,
                   P,
                   Socket.To_address (
-                     S (Serv.Address) & ":" & 
+                     S (Serv.Address) & ":" &
                      Misc.To_string (Serv.Port)),
                   Safe => true);
             end;
@@ -186,7 +185,7 @@ begin
       -- Request profile --
       ---------------------
       if not Serv.Profile_requested then
-         declare 
+         declare
             P    : Packet.Object := Packet.Create ("UPROC");
          begin
             Send (Serv, P);
@@ -200,8 +199,8 @@ begin
          Reset_QRT (Serv);
          Serv.QRT_Reset := true;
       end if;
-      if Now - Serv.Checked_QRP > 
-         Globals.Options.G2_QRTUpdatePeriod and then 
+      if Now - Serv.Checked_QRP >
+         Globals.Options.G2_QRTUpdatePeriod and then
          Now - Serv.Connection_start > Globals.Options.G2_QRTDelay
       then
          Serv.Checked_QRP := Now;
@@ -212,7 +211,7 @@ begin
       --------------------
       if Globals.Options.Download_Active and then
          (not Serv.Apt_For_Search) and then
-         Now - Serv.Connection_Start > 15.0 
+         Now - Serv.Connection_Start > 15.0
       then
          Serv.Apt_For_Search := true;
          G2.Search.Set_Queues (Net.Searcher, Net.Servers.Get_Queues_And_Addresses);

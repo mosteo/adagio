@@ -32,8 +32,7 @@
 ------------------------------------------------------------------------------
 --  $Id: adagio-g2-chat_peer.adb,v 1.8 2004/04/01 22:11:24 Jano Exp $
 
-with Adagio.G2.Core;
-with Adagio.G2.Packet;
+--  with Adagio.G2.Core;
 with Adagio.Globals.Options;
 with Adagio.GUID;
 with Adagio.Misc;
@@ -55,7 +54,7 @@ package body Adagio.G2.Chat_peer is
    ------------------------------------------------------------------------
    -- Creation takes a connected socket and a header object with the
    -- request already read, so our response is due.
-   function Create (From : in Socket.Object; Request : in Http.Header.Set) 
+   function Create (From : in Socket.Object; Request : in Http.Header.Set)
       return Object_access is
       Peer : Object_access;
    begin
@@ -89,8 +88,8 @@ package body Adagio.G2.Chat_peer is
    ------------------------------------------------------------------------
    -- Its chance to do something.
    procedure Process (
-      This    : in out Object; 
-      Context : in out Connect.Peer.Context_type) 
+      This    : in out Object;
+      Context : in out Connect.Peer.Context_type)
    is
    begin
       Context.Sleep := 0.5;
@@ -107,7 +106,7 @@ package body Adagio.G2.Chat_peer is
 
       -- Check for closing:
       if not Socket.Is_alive (This.Socket) then
-         Trace.Log ("G2 chat connection ended by remote party.", 
+         Trace.Log ("G2 chat connection ended by remote party.",
             Trace.Informative);
          Finalize (This);
          Context.Is_done := true;
@@ -141,7 +140,7 @@ package body Adagio.G2.Chat_peer is
    ------------------------------------------------------------------------
    -- Do the handshaking
    procedure Handshake (
-      This    : in out Object; 
+      This    : in out Object;
       Context : in out Connect.Peer.Context_type)
    is
       pragma Unreferenced (Context);
@@ -154,7 +153,7 @@ package body Adagio.G2.Chat_peer is
          Http.Header.Add (Response, "User-Agent",   User_agent);
          begin
             Http.Header.Write (
-               Response, 
+               Response,
                This.Link.all,
                Send_response => true,
                Send_crlf     => true);
@@ -191,9 +190,9 @@ package body Adagio.G2.Chat_peer is
                raise Unknown_protocol;
             else
                G2.Packet.Parsing.Create (
-                  This.Incoming, 
+                  This.Incoming,
                   Adagio.Streams.Stream_access (Socket.Stream (This.Socket)),
-                  Core.Available_socket'Access);
+                  Socket.Available_socket'Access);
                This.Handshake_stage := Four;
                Trace.Log ("G2.Chat_peer.Stage_three: Handshaking completed.");
 
@@ -235,7 +234,7 @@ package body Adagio.G2.Chat_peer is
          -- Send CHATREQ
          if not This.Chatreq_sent and false then
             Pout := Packet.Create ("CHATREQ");
-            Paux := Packet.Create ("USERGUID", 
+            Paux := Packet.Create ("USERGUID",
                Guid.To_char_array (Guid.My_guid));
             Packet.Add_child (Pout, Paux);
             Send_packet (This, Pout, Success);
@@ -243,12 +242,12 @@ package body Adagio.G2.Chat_peer is
          end if;
          -- Send UPROD
          if This.Uproc_rcv and not This.Uprod_sent then
-            Pout := Core.Create_uprod;
+            Pout := Packet.Create_uprod;
             Send_packet (This, Pout, Success);
             This.Uprod_sent := Success;
          end if;
          -- Send CHATANS
-         if This.Chatreq_rcv and not This.Chatans_sent 
+         if This.Chatreq_rcv and not This.Chatans_sent
          then
             Pout := Packet.Create ("CHATANS");
             Paux := Packet.Create ("USERGUID", This.Guid);
@@ -281,7 +280,7 @@ package body Adagio.G2.Chat_peer is
    ------------------------------------------------------------------------
    -- Do the rejections
    procedure Reject (
-      This    : in out Object; 
+      This    : in out Object;
       Context : in out Connect.Peer.Context_type)
    is
       Response : Http.Header.Set;
@@ -289,7 +288,7 @@ package body Adagio.G2.Chat_peer is
       Http.Header.Set_response (Response, "HTTP/1.1 404 Chat disabled");
       begin
          Http.Header.Write (
-            Response, 
+            Response,
             This.Link.all,
             Send_response => true,
             Send_crlf => true);
@@ -315,7 +314,7 @@ package body Adagio.G2.Chat_peer is
    ------------------------------------------------------------------------
    -- Send a timeout message.
    procedure Do_timeout (
-      This    : in out Object; 
+      This    : in out Object;
       Context : in out Connect.Peer.Context_type)
    is
       Success : Boolean;
@@ -333,7 +332,7 @@ package body Adagio.G2.Chat_peer is
    ------------------------------------------------------------------------
    -- Normal chat workings
    procedure Do_chat (
-      This    : in out Object; 
+      This    : in out Object;
       Context : in out Connect.Peer.Context_type)
    is
       pragma Unreferenced (Context);
@@ -357,7 +356,7 @@ package body Adagio.G2.Chat_peer is
    -- Send a text
    -- If success is false then the link is saturated; retry later.
    procedure Send_phrase (
-      This    : in out Object; 
+      This    : in out Object;
       Text    : in     String;
       Success : out    Boolean)
    is
@@ -368,7 +367,7 @@ package body Adagio.G2.Chat_peer is
       Packet.Atomic_write (This.Link, P, Success);
       if Log_chat and then Success then
          Trace.Log (
-            "CHAT/Me: " & Text, Trace.Informative, 
+            "CHAT/Me: " & Text, Trace.Informative,
             File => S (Globals.Options.Chat_logfile));
       end if;
    end Send_phrase;
@@ -397,11 +396,12 @@ package body Adagio.G2.Chat_peer is
                Packet.Payload (Packet.Get_child (P, "BODY")),
                Packet.Big_endian (P)));
             Last := Integer'Min (ASU.Length (Read), Text'Last);
-            Text (1 .. Last) := ASU.Slice (Read, 1, Last);
+            pragma Assert (Text'First = 1);
+            Text (Text'First .. Last) := ASU.Slice (Read, 1, Last);
             if Log_chat then
                Trace.Log (
-                  "CHAT/He: " & S (Read), 
-                  Trace.Informative, 
+                  "CHAT/He: " & S (Read),
+                  Trace.Informative,
                   File => S (Globals.Options.Chat_logfile));
             end if;
          end if;
@@ -415,7 +415,7 @@ package body Adagio.G2.Chat_peer is
    ------------------------------------------------------------------------
    -- Tries to send a packet
    procedure Send_packet (
-      This    : in out Object; 
+      This    : in out Object;
       Packet  : in     G2.Packet.Object;
       Success : out    Boolean) is
    begin
@@ -429,7 +429,7 @@ package body Adagio.G2.Chat_peer is
          case Socket.Get_error (E) is
             when Socket.Operation_would_block =>
                Success := false;
-            when others => 
+            when others =>
                raise;
          end case;
    end Send_packet;

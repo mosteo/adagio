@@ -32,17 +32,12 @@
 ------------------------------------------------------------------------------
 --  $Id: adagio-g2-core.adb,v 1.26 2004/03/29 19:13:30 Jano Exp $
 
-with Adagio.Chronos;
 with Adagio.Connect.Peer_Manager;
 with Adagio.Debug;
 with Adagio.G2.Bandwidth;
 with Adagio.G2.Local_query;
 with Adagio.G2.Mesh;
-with Adagio.G2.Packet.Parsing;
-with Adagio.G2.Packet.Queue;
 with Adagio.GUID;
-with Adagio.Globals;
-with Adagio.Globals.Options;
 with Adagio.GWCache2;
 with Adagio.Library;
 with Adagio.Mmap.Strings;
@@ -77,6 +72,7 @@ with Ada.Streams;                use Ada.Streams;
 use Ada;
 
 with Text_io;
+with Adagio.Xml.Utils;
 
 package body Adagio.G2.Core is
 
@@ -90,7 +86,7 @@ package body Adagio.G2.Core is
    -- Auxiliaries for average uptime queue:
    function Average (Left : in Duration; Right : in Integer) return float is
    begin
-      if Right = 0 then 
+      if Right = 0 then
          return 0.0;
       else
          return float (Left) / float (Right);
@@ -142,7 +138,7 @@ package body Adagio.G2.Core is
          BW_in  => Globals.Options.G2_UdpBandwidthIn,
          BW_out => Globals.Options.G2_UdpBandwidthOut);
       G2.Transceiver.Start (
-         this.Transceiver.all, 
+         this.Transceiver.all,
          G2.Listener.Get_udp (this.Listener),
          this.Inbound'Unrestricted_access);
 
@@ -154,7 +150,7 @@ package body Adagio.G2.Core is
       if Globals.Options.Download_Active then
          This.Searcher := new G2.Search.Object;
          G2.Search.Start (
-            This.Searcher, 
+            This.Searcher,
             This.Outbound'Unchecked_Access,
             This.Transceiver);
       end if;
@@ -170,7 +166,7 @@ package body Adagio.G2.Core is
 
       -- Listener shutdown:
       G2.Listener.Shutdown(this.Listener);
-      
+
       -- Ensure all tasks termination:
       this.Servers.Disconnect_all;
 
@@ -196,8 +192,8 @@ package body Adagio.G2.Core is
 
    -- Obtain search handler. Can return null if the network is not to be
    -- searched:
-   function Get_Search_Handler (This : in Network_Type) 
-      return Searches.Handler.Object_Access 
+   function Get_Search_Handler (This : in Network_Type)
+      return Searches.Handler.Object_Access
    is
    begin
       return Searches.Handler.Object_Access (This.Searcher);
@@ -236,12 +232,12 @@ package body Adagio.G2.Core is
       if UA = U ("") then
          UA := U ("unknown agent");
       end if;
-      return Id (this) & "; Nick: " & 
-         Xml.Get_attribute ("identity/handle", "primary", 
-         this.User_profile, "Anonymous") & " (" 
+      return Id (this) & "; Nick: " &
+         Xml.Get_attribute ("identity/handle", "primary",
+         this.User_profile, "Anonymous") & " ("
          & S (UA) & "); Load:" &
-         this.Num_leaves'Img & "/" & Misc.To_string (this.Max_leaves) & 
-         "; QRT: " & QRT_status & 
+         this.Num_leaves'Img & "/" & Misc.To_string (this.Max_leaves) &
+         "; QRT: " & QRT_status &
          "; Rating: " & Misc.To_string (Rate (This), 2);
    end Describe;
 
@@ -296,7 +292,7 @@ package body Adagio.G2.Core is
       use Strings.Fields;
       Discarded  : Natural := 0;
    begin
-      if S'Length < 1 then 
+      if S'Length < 1 then
          return;
       end if;
       if S (S'Last) = ',' then
@@ -310,7 +306,7 @@ package body Adagio.G2.Core is
          begin
             New_server := new Server_type;
             Create (
-               New_server.all, 
+               New_server.all,
                Net,
                Select_field (Ultrapeer, 1, ':'),
                Natural'Value (
@@ -329,15 +325,15 @@ package body Adagio.G2.Core is
          end;
       end loop;
       if Count_fields (S, ',') > 0 then
-         Trace.Log ("Added" & 
+         Trace.Log ("Added" &
             Natural'Image (Count_Fields (S, ',') - Discarded)
             & " servers from X-Try-Ultrapeers header.");
-         Trace.Log ("Discarded" & Discarded'Img 
+         Trace.Log ("Discarded" & Discarded'Img
             & " servers from X-Try-Ultrapeers header.");
       end if;
    exception
       when E : others =>
-         Trace.Log ("G2.Core.Parse_ultrapeers: " & Trace.Report (E), 
+         Trace.Log ("G2.Core.Parse_ultrapeers: " & Trace.Report (E),
             Trace.Error);
    end Parse_ultrapeers;
 
@@ -392,7 +388,7 @@ package body Adagio.G2.Core is
          when Starting =>
             This.Last_try_connect := Calendar.Clock;
             This.Connection_stage := Connecting;
-            Trace.Log ("G2.Server.Connect: connecting to " & Id(this) & 
+            Trace.Log ("G2.Server.Connect: connecting to " & Id(this) &
                " (rating: " & Misc.To_string (Float (Rate (this))) & ")...");
 
             -- Initialization of vars:
@@ -419,21 +415,21 @@ package body Adagio.G2.Core is
                   else
                      Fail (this);
                      Clear (this);
-                     this.Network.Servers.Set_status 
+                     this.Network.Servers.Set_status
                        (this'Unrestricted_access, Disconnected);
                      raise;
                   end if;
                when Socket.Security_ban =>
                   Fail (this);
                   Clear (this);
-                  this.Network.Servers.Set_status 
+                  this.Network.Servers.Set_status
                     (this'Unrestricted_access, Disconnected);
                   Trace.Log ("Connection with " & Id (This) & " failed " &
                      "[security ban]", Trace.Informative);
-               when E : others => 
+               when E : others =>
                   Fail (this);
                   Clear (this);
-                  this.Network.Servers.Set_status 
+                  this.Network.Servers.Set_status
                     (this'Unrestricted_access, Disconnected);
                   Trace.Log ("Connection with " & Id (This) & " failed: " &
                      Trace.Report (E), Trace.Error);
@@ -445,29 +441,29 @@ package body Adagio.G2.Core is
             then
                Fail (this);
                Clear (this);
-               this.Network.Servers.Set_status 
+               this.Network.Servers.Set_status
                  (this'Unrestricted_access, Disconnected);
-               Trace.Log ("Connection with " & Id (This) & 
+               Trace.Log ("Connection with " & Id (This) &
 	       	  " failed [timeout].");
                return;
-            end if;        
+            end if;
             -- success
             if Socket.Is_writable (This.Slot.Socket) then
                -- Step to handshaking:
                This.Handshake_start  := Calendar.Clock;
                This.Connection_stage := Handshake_preparing;
-               this.Network.Servers.Set_status 
+               this.Network.Servers.Set_status
                  (this'Unrestricted_access, Handshaking);
                Trace.Log ("Connection with " & Id (This) & " started.");
             -- Failure
             elsif (not Socket.Is_alive (This.Slot.Socket)) or else
-               Socket.Connection_failed (This.Slot.Socket) 
+               Socket.Connection_failed (This.Slot.Socket)
             then
                Fail (this);
                Clear (this);
-               this.Network.Servers.Set_status 
-                 (this'Unrestricted_access, Disconnected); 
-               Trace.Log ("Connection with " & Id (This) & 
+               this.Network.Servers.Set_status
+                 (this'Unrestricted_access, Disconnected);
+               Trace.Log ("Connection with " & Id (This) &
 	          " failed [refused].");
                return;
             end if;
@@ -486,7 +482,7 @@ package body Adagio.G2.Core is
       Head : Http.Header.Set renames This.Slot.Head;
       procedure Drop(Reason: String) is
       begin
-         String'Write(this.Slot.Stream, Ack & " 500 " & Reason & 
+         String'Write(this.Slot.Stream, Ack & " 500 " & Reason &
             Http.CRLF & Http.CRLF);
          Disconnect(this);
       end Drop;
@@ -497,7 +493,7 @@ package body Adagio.G2.Core is
          Fail (This);
          Disconnect (This);
          return;
-      end if;  
+      end if;
       if not Socket.Is_alive (This.Slot.Socket) then
          Fail (This);
          Disconnect (This);
@@ -509,21 +505,21 @@ package body Adagio.G2.Core is
             this.Last_seen := Calendar.Clock;
             this.Network.Servers.Set_status (
                this'Unrestricted_access, Handshaking);
-            this.Slot.Stream := 
+            this.Slot.Stream :=
                Tcp_slot.Stream_access (Socket.Stream (this.Slot.Socket));
             -- Prepare headers:
             Http.Header.Clear (Head);
             case Socket.IP.Kind(To_string(this.Address)) is
                when Socket.IP.Local =>
-                  Http.Header.Add(Head, "Listen-IP", 
+                  Http.Header.Add(Head, "Listen-IP",
                      "127.0.0.1:" & Misc.To_string(this.Local_port));
                when Socket.IP.Internal =>
-                  Http.Header.Add(Head, "Listen-IP", 
-                     Socket.IP.Get_IP(false) & ":" & 
+                  Http.Header.Add(Head, "Listen-IP",
+                     Socket.IP.Get_IP(false) & ":" &
                      Misc.To_string(this.Local_port));
                when Socket.IP.Public =>
-                  Http.Header.Add(Head, "Listen-IP", 
-                     Socket.IP.Get_IP(Internet_route = Direct) & ":" & 
+                  Http.Header.Add(Head, "Listen-IP",
+                     Socket.IP.Get_IP(Internet_route = Direct) & ":" &
                      Misc.To_string(this.Local_port));
             end case;
             Http.Header.Add (Head, "Remote-IP", To_string(this.Address));
@@ -541,14 +537,14 @@ package body Adagio.G2.Core is
             if Socket.Is_writable (This.Slot.Socket) then
                begin
                   Http.Header.Write (Head, this.Slot.Stream.all, true, true);
-                  Trace.Log("G2.Handshaking (1): Sent: " & 
+                  Trace.Log("G2.Handshaking (1): Sent: " &
                      Http.Header.Write(Head), File => To_string(Logfile));
                   This.Connection_stage := Handshake_receiving;
                   Http.Header.Parser.Reset (This.Slot.Http_parser);
                exception
                   when E : Socket.Socket_error =>
-                     if Socket.Get_error (E) /= 
-                        Socket.Operation_would_block 
+                     if Socket.Get_error (E) /=
+                        Socket.Operation_would_block
                      then
                         raise;
                      end if;
@@ -565,16 +561,16 @@ package body Adagio.G2.Core is
             -- Check for completion
             if Http.Header.Parser.Completed (This.Slot.Http_parser) then
                Http.Header.Parser.Get_headers (This.Slot.Http_parser, Head);
-               Trace.Log("G2.Handshaking (2): Read: " & 
+               Trace.Log("G2.Handshaking (2): Read: " &
                   Http.Header.Write(Head), File => To_string(Logfile));
-            else 
+            else
                return;  --<---------------------- EARLY EXIT POINT!
             end if;
 
             -- Parse ultrapeers:
             if ACH.To_lower (Http.Header.Get (Head, "Content-Type")) =
-               G2.Content_type 
-               or else 
+               G2.Content_type
+               or else
                Misc.Contains (Misc.To_lower(
                   Http.Header.Get (Head, "User-Agent")), "Shareaza")
             then
@@ -584,7 +580,7 @@ package body Adagio.G2.Core is
 
             -- Check for G2:
             if ACH.To_lower (Http.Header.Get (Head, "Content-Type")) /=
-               G2.Content_type 
+               G2.Content_type
             then
                Trace.Log ("G2.Handshake: Dropping: Content-Type: " &
                   Http.Header.Get (Head, "Content-Type"));
@@ -604,7 +600,7 @@ package body Adagio.G2.Core is
 
             -- If not success, disconnect:
             if Http.Header.Get_response (Head)(14 .. 16) /= "200" then
-               Trace.Log("G2.Handshake: Disconnecting from " & Id(this) & 
+               Trace.Log("G2.Handshake: Disconnecting from " & Id(this) &
                   " because: " & Http.Header.Get_response (Head));
                Fail       (this);
                Disconnect (this);
@@ -614,7 +610,7 @@ package body Adagio.G2.Core is
             Trace.Log ("G2.Handshake: " & Http.Header.Get(Head, "Listen-IP") &
                " is a " & Http.Header.Get(Head, "User-Agent"));
             -- Check for ultrapeer:
-            if ACH.To_lower (Http.Header.Get(Head, "X-Ultrapeer")) /= "true" 
+            if ACH.To_lower (Http.Header.Get(Head, "X-Ultrapeer")) /= "true"
             then
                Trace.Log ("G2.Handshake: Dropping: X-Ultrapeer: " &
                   Http.Header.Get (Head, "X-Ultrapeer"));
@@ -656,7 +652,7 @@ package body Adagio.G2.Core is
                begin
                   Http.Header.Write (Head, this.Slot.Stream.all, true, true);
                   -- Beyond this point, we have sucessfully sent the headers
-                  Trace.Log("G2.Handshaking (3): Sent: " & 
+                  Trace.Log("G2.Handshaking (3): Sent: " &
                      Http.Header.Write(Head), File => To_string(Logfile));
                   Http.Header.Clear (Head);
 
@@ -669,7 +665,7 @@ package body Adagio.G2.Core is
                   this.Slot.Outbound.Clear;
 
                   G2.Packet.Parsing.Create (
-                     this.Slot.Packet_parser, 
+                     this.Slot.Packet_parser,
                      this.Slot.CStream_in'Access,
                      Available_cstream'Access);
 
@@ -686,18 +682,18 @@ package body Adagio.G2.Core is
                         Zlib.Streams.Out_stream,
                         This.Slot.CStream_out'Access,
                         Back_compressed => true);
-                     Trace.Log ("Connection with " & Id (This) & 
+                     Trace.Log ("Connection with " & Id (This) &
                         " is compressed (deflate)");
                   end if;
 
                   -- Connected!
-                  this.Network.Servers.Set_status 
+                  this.Network.Servers.Set_status
                      (this'Unrestricted_access, Connected);
                   this.Network.Status := Network.Connected;
                exception
                   when E : Socket.Socket_error =>
                      if Socket.Get_error (E) /=
-                        Socket.Operation_would_block 
+                        Socket.Operation_would_block
                      then
                         raise;
                      end if;
@@ -724,11 +720,11 @@ package body Adagio.G2.Core is
       Disconnect2 (This);
    end Disconnect;
    procedure Disconnect2(
-      this: in out Server_type; Spare : in Boolean := false) 
+      this: in out Server_type; Spare : in Boolean := false)
    is
       Uptime : Duration := Calendar.Clock - this.Connection_start;
    begin
-      This.Network.Servers.Set_status 
+      This.Network.Servers.Set_status
          (this'Unrestricted_access, Disconnecting);
 
       Clear (This);
@@ -736,20 +732,20 @@ package body Adagio.G2.Core is
       if not Spare then
          Average_uptime.Push (this.Uptimes, Uptime);
       end if;
-      
+
       this.Last_try   := this.Last_try_connect;
-      
+
       begin
          Trace.Log ("Disconnected from " & Id (this));
          Trace.Log ("  -- Uptime:" & Misc.Image (Uptime));
-         Trace.Log ("  -- Avg up:" & 
+         Trace.Log ("  -- Avg up:" &
             Misc.Image (Duration (Average_uptime.Average (this.Uptimes))));
       exception
          when Average_uptime.No_data =>
             null;
       end;
 
-      This.Network.Servers.Set_status 
+      This.Network.Servers.Set_status
          (this'Unrestricted_access, Disconnected);
    exception
       when others =>
@@ -804,11 +800,11 @@ package body Adagio.G2.Core is
    -- Dropable                                                           --
    ------------------------------------------------------------------------
    -- True when the server is to be purged:
-   function Dropable (this : in Server_type) return Boolean is 
+   function Dropable (this : in Server_type) return Boolean is
    begin
-      return 
+      return
          (not This.Is_root) and then
-         Calendar.Clock - this.Last_seen > 
+         Calendar.Clock - this.Last_seen >
             Globals.Options.G2_ConfidencePeriod and then
          this.Failures >= Globals.Options.G2_Retries;
    end Dropable;
@@ -822,7 +818,7 @@ package body Adagio.G2.Core is
       if this.Failures >= Globals.Options.G2_Retries then
          return false;
       elsif this.Failures > 0 and then
-         Calendar.Clock - this.Last_try < Globals.Options.G2_RestPeriod 
+         Calendar.Clock - this.Last_try < Globals.Options.G2_RestPeriod
       then
          return false;
       else
@@ -853,7 +849,7 @@ package body Adagio.G2.Core is
    -- Dump:
    procedure Serialize
      (Stream: access Streams.Root_stream_type'Class;
-      this: in Server_type) is 
+      this: in Server_type) is
    begin
       String'Output                (Stream, To_string(this.Address));
       Natural'Output               (Stream, this.Port);
@@ -898,7 +894,7 @@ package body Adagio.G2.Core is
       Allow : Natural;
       use type G2.Packet.Object;
 
-      -- Get available bandwidth for reading 
+      -- Get available bandwidth for reading
       function Get_bandwidth return Natural is
          Aw, Awx : Natural := 0;
          Needed  : Natural;
@@ -950,14 +946,14 @@ package body Adagio.G2.Core is
          end if;
 
          Allow := Get_bandwidth;
-         if Allow = 0 then 
+         if Allow = 0 then
             return; -- <-- EARLY EXIT BY BANDWIDTH THROTTLE
-         end if; 
+         end if;
          Avail := Stream_element_count (Allow);
 
          -- Try to pass compressed data to the uncompressed stream:
          if This.Slot.Deflate then
-            if Circular_stream.Available_write (This.Slot.CStream_in) < 
+            if Circular_stream.Available_write (This.Slot.CStream_in) <
                Natural'(Packet.Max_packet_size)
             then
                null; -- Can't read still...
@@ -990,7 +986,7 @@ package body Adagio.G2.Core is
                end if;
             end;
          end if;
-         
+
          -- Try to acquire packets:
          G2.Packet.Parsing.Check (this.Slot.Packet_parser, Result => P);
 
@@ -1022,7 +1018,7 @@ package body Adagio.G2.Core is
       end loop;
    exception
       when E : others =>
-         Trace.Log ("G2.Core.Check_pipes [" & S (This.Slot.User_agent) & "]: " & 
+         Trace.Log ("G2.Core.Check_pipes [" & S (This.Slot.User_agent) & "]: " &
             Trace.Report (E),
             Trace.Error);
          Disconnect (this);
@@ -1059,7 +1055,7 @@ package body Adagio.G2.Core is
          end if;
       end if;
 
-      while 
+      while
          This.Slot.OBuffer_used or else
          Circular_stream.Available_read (This.Slot.CStream_out) > Natural'(0)
       loop
@@ -1079,7 +1075,7 @@ package body Adagio.G2.Core is
             end if;
             begin
                Write (
-                  This.Slot.Stream.all, 
+                  This.Slot.Stream.all,
                   This.Slot.OBuffer (1 .. This.Slot.OLast));
                -- Write successful:
                This.Slot.OBuffer_used := false;
@@ -1095,8 +1091,8 @@ package body Adagio.G2.Core is
                   end case;
             end;
          end if;
-         if Circular_stream.Available_read (This.Slot.CStream_out) > 
-               Natural'(0) 
+         if Circular_stream.Available_read (This.Slot.CStream_out) >
+               Natural'(0)
             and then not This.Slot.OBuffer_used
          then
             -- Bandwidth things:
@@ -1104,9 +1100,9 @@ package body Adagio.G2.Core is
             if Awarded > 0 then
                -- Reading:
                Circular_stream.Read (
-                  This.Slot.CStream_out, 
+                  This.Slot.CStream_out,
                   This.Slot.OBuffer (
-                     1 .. Ada.Streams.Stream_element_offset (Awarded)), 
+                     1 .. Ada.Streams.Stream_element_offset (Awarded)),
                   This.Slot.OLast);
                This.Slot.OBuffer_used := true;
             else
@@ -1121,11 +1117,11 @@ package body Adagio.G2.Core is
          Disconnect (this);
    end Send_pending;
 
-   -- Create a new server from a dotted adress:port 
+   -- Create a new server from a dotted adress:port
    procedure Create (
-      this     : out Server_type; 
+      this     : out Server_type;
       Net      : in  Network_access;
-      Address  : in  String; 
+      Address  : in  String;
       Port     : in  Natural;
       Seen     : in  Calendar.Time := Calendar.Clock) is
    begin
@@ -1145,15 +1141,7 @@ package body Adagio.G2.Core is
    begin
       return Circular_stream.Available_read (
          Circular_stream.Object_access (This).all);
-   end Available_cstream; 
-   ----------------------
-   -- Available_socket --
-   ----------------------
-   function Available_Socket (
-      This : access Ada.Streams.Root_stream_type'class) return Natural is
-   begin
-      return Socket.Available (Socket.Stream_access (This).all);
-   end Available_socket;
+   end Available_cstream;
 
    ------------------
    -- Surveillance --
@@ -1195,12 +1183,12 @@ package body Adagio.G2.Core is
                -- Get new servers and try to connect:
                declare
                   -- Cached:
-                  Cached : Server.Object_access_array := 
+                  Cached : Server.Object_access_array :=
                      Server.List.Get_best
                        (Network_id, Try_servers - Net.Servers.Count);
                   -- From webcache only if we had not enough cached ones:
                   GWCached : GWCache2.Network_node_array :=
-                     GWCache2.Query_any (Network_id, 
+                     GWCache2.Query_any (Network_id,
                         Try_servers - Net.Servers.Count - Cached'Length);
                   New_server : Server_access;
                   Discarded  : Natural := 0;
@@ -1223,7 +1211,7 @@ package body Adagio.G2.Core is
                   -- Create new G2 servers and add to cache:
                   for n in GWCached'Range loop
                      New_server := new Server_type;
-                     Create (New_server.all, Net, 
+                     Create (New_server.all, Net,
                         To_string (GWCached (n).Address), GWCached (n).Port);
                      begin
                         Server.List.Add (Server.Object_access (New_server));
@@ -1234,9 +1222,9 @@ package body Adagio.G2.Core is
                   end loop;
                   if GWCached'Length > 0 then
                      Trace.Log ("Added" & Natural'Image (
-                        GWCached'Length - Discarded) & 
+                        GWCached'Length - Discarded) &
                         " servers from GWebCache2");
-                     Trace.Log ("Discarded" & Discarded'Img & 
+                     Trace.Log ("Discarded" & Discarded'Img &
                         " servers from GWebCache2");
                   end if;
                exception
@@ -1254,14 +1242,14 @@ package body Adagio.G2.Core is
             end loop;
          exception
             when E: others =>
-               Trace.Log ("G2.Connector_type [Main loop]: " & 
+               Trace.Log ("G2.Connector_type [Main loop]: " &
                   Trace.Report (E), Trace.Error);
          end;
       end loop Main;
       Trace.Log ("G2.Connector_type exited");
    exception
       when E: others =>
-         Trace.Log ("G2.Connector_type [Body]: " & Trace.Report (E), 
+         Trace.Log ("G2.Connector_type [Body]: " & Trace.Report (E),
             Trace.Error);
    end Connector_type;
 
@@ -1276,7 +1264,6 @@ package body Adagio.G2.Core is
       Connected_servers : Natural renames Globals.Options.G2_ActiveServers;
       Must_drop         : Boolean;
 
-      use type Calendar.Time;
    begin
       accept Start (this : in Network_access) do
          Net := this;
@@ -1293,7 +1280,7 @@ package body Adagio.G2.Core is
             -------------
             -- SERVERS --
             -------------
-            Must_drop := 
+            Must_drop :=
                Connected_servers <= Net.Servers.Status_count(Connected);
             Net.Servers.Get_first (Serv);
             while Serv /= null loop
@@ -1343,7 +1330,7 @@ package body Adagio.G2.Core is
             end loop;
          exception
             when E: others =>
-               Trace.Log ("G2.Polling_type [Main loop]: " & Trace.Report (E), 
+               Trace.Log ("G2.Polling_type [Main loop]: " & Trace.Report (E),
                   Trace.Error);
                if Serv /= null then
                   Trace.Log ("G2.Polling_type [Main loop]: " & Id (Serv.all) &
@@ -1356,7 +1343,7 @@ package body Adagio.G2.Core is
          -- Sleep
          delay P;
          if Debug.Debug_statistics_enabled then
-            Statistics.Object.Set ("Tasking - Server poll", 
+            Statistics.Object.Set ("Tasking - Server poll",
                Statistics.Booleans.Create (true));
          end if;
       end loop Main;
@@ -1390,7 +1377,7 @@ package body Adagio.G2.Core is
    -- Processing packets --
    ------------------------
    procedure Process_packet (
-      Net    : in Network_access; 
+      Net    : in Network_access;
       Source : in Server_access;
       Item   : in Packet.Queue.Item_type)
    is separate;
@@ -1448,23 +1435,6 @@ package body Adagio.G2.Core is
       return P;
    end Create_LNI;
 
-   -- Create a /UPROD/XML packet with gprofile.xsd conformat payload.
-   function Create_UPROD return Packet.Object is
-      P : Packet.Object := Packet.Create ("UPROD");
-      C : Packet.Object;
-   begin
-      -- Add XML payload
-      C := Packet.Create ("XML", 
-            Unicode.G2_to_string (
-            Xml.Compress (Xml.To_string (
-            Xml.Get ("gProfile", Globals.Config))), 
-               Packet.Big_endian (P)));
-
-      Packet.Add_child (P, C);
-
-      return P;
-   end Create_UPROD;
-
    ------------------------------------------------------------------------
    -- Create_KHL                                                         --
    ------------------------------------------------------------------------
@@ -1473,13 +1443,13 @@ package body Adagio.G2.Core is
       P       : Packet.Object := Packet.Create ("KHL");
       C       : Packet.Object;
       Data    : Ustring;
-      Servers : Server.Object_access_array := 
-         Server.List.Get_best (G2.Network_id, 20); 
+      Servers : Server.Object_access_array :=
+         Server.List.Get_best (G2.Network_id, 20);
    begin
       for N in Servers'Range loop
          Server.List.Check_in (Servers (N));
       end loop;
-      C := Packet.Create ("TS", 
+      C := Packet.Create ("TS",
          To_string (Time_t.Clock, Packet.Big_endian (P)));
       Packet.Add_child (P, C);
       for N in Servers'Range loop -- NO SERVERS REPORTED!!!
@@ -1488,7 +1458,7 @@ package body Adagio.G2.Core is
                Server_access (Servers (N)).Address))));
          Data := Data &
             To_string (Network.Endian.Convert (
-               Server_access (Servers (N)).Port, 2, 
+               Server_access (Servers (N)).Port, 2,
                Packet.Big_endian (P))) &
             String'(1 .. 4 => Character'Val (0));
          C := Packet.Create ("CH", S (Data));
@@ -1516,7 +1486,6 @@ package body Adagio.G2.Core is
 
       I : Packet.Queue.Item_type;
       use Packet.Safe_child;
-      use type Packet.Object;
    begin
       if This = null then
          return;
@@ -1532,7 +1501,7 @@ package body Adagio.G2.Core is
       if this.Slot /= null then
          this.Slot.Outbound.Put (I);
       end if;
-   end Send; 
+   end Send;
 
    ------------------------------------------------------------------------
    -- Finalize                                                           --
@@ -1543,7 +1512,7 @@ package body Adagio.G2.Core is
       null;
 --      begin
 --         Statistics.Object.Update (
---            Stat_servers, 
+--            Stat_servers,
 --            Statistics.Integers.Increment'Access,
 --            Statistics.Integers.Create (1));
 --      exception
@@ -1556,7 +1525,7 @@ package body Adagio.G2.Core is
       null;
 --      begin
 --         Statistics.Object.Update (
---            Stat_servers, 
+--            Stat_servers,
 --            Statistics.Integers.Increment'Access,
 --            Statistics.Integers.Create (1));
 --      exception
@@ -1573,7 +1542,7 @@ package body Adagio.G2.Core is
 --     Trace.Log ("<----");
 --      begin
 --         Statistics.Object.Update (
---            Stat_servers, 
+--            Stat_servers,
 --            Statistics.Integers.Increment'Access,
 --            Statistics.Integers.Create (-1));
 --      exception
@@ -1594,7 +1563,7 @@ package body Adagio.G2.Core is
    -- Hubs_http_handler                                                  --
    ------------------------------------------------------------------------
    procedure Hubs_http_handler (
-      Data : out Agpl.Http.Server.Sort_Handler.Data_set) 
+      Data : out Agpl.Http.Server.Sort_Handler.Data_set)
    is
       Serv  : Server_access;
       Score : Natural;
@@ -1626,7 +1595,7 @@ package body Adagio.G2.Core is
                Append (Row, (
                   U (Agpl.Geoip.Country_name_from_code (CC)),
                   U (Agpl.Geoip.Country_name_from_code (CC))));
-            else 
+            else
                Append (Row, (
                   U (Agpl.Geoip.Country_name_from_code (CC)),
                   U ("Zz")));
@@ -1639,9 +1608,9 @@ package body Adagio.G2.Core is
                U (Server_status'Image (The_network.Servers.Status (Serv)))));
             -- Nick
             Append (Row, (
-               U (Xml.Get_attribute ("identity/handle", "primary", 
+               U (Xml.Get_attribute ("identity/handle", "primary",
                   Serv.User_profile, "Anonymous")),
-               U (Xml.Get_attribute ("identity/handle", "primary", 
+               U (Xml.Get_attribute ("identity/handle", "primary",
                   Serv.User_profile, "Anonymous"))));
             -- User_agent
             Append (Row, (Serv.Slot.User_agent, Serv.Slot.User_agent));
@@ -1656,7 +1625,7 @@ package body Adagio.G2.Core is
                   U (Serv.QRT_status'Img), U (Serv.QRT_status'Img)));
             else
                Append (Row, (
-                  U (Serv.QRT_status'Img & " (" & 
+                  U (Serv.QRT_status'Img & " (" &
                      Misc.To_string (Serv.QRT_packets_sent) & "/" &
                      Misc.To_string (Serv.QRT_packets + 1) & ")"),
                   U (Serv.QRT_status'Img & S (RPad (Serv.QRT_packets_sent))))
@@ -1687,11 +1656,11 @@ package body Adagio.G2.Core is
    end Hubs_http_handler;
 
 begin
-   
+
    The_network := new G2.Core.Network_type;
    Network.List.Add (Network.Object_access (The_network));
 
-   Trace.Log ("G2_server size: " & 
+   Trace.Log ("G2_server size: " &
       Integer'Image (Server_type'size / 8));
 
 --   Statistics.Object.Set (Stat_servers,
@@ -1720,7 +1689,7 @@ begin
                   Server.List.Add (Server.Object_access (Serv));
                   Trace.Log ("Added root Gnutella2 server: " & Full_addr);
                else
-                  Trace.Log ("Cannot add invalid Gnutella2 server: " & 
+                  Trace.Log ("Cannot add invalid Gnutella2 server: " &
                      Full_addr, Trace.Warning);
                end if;
             end;

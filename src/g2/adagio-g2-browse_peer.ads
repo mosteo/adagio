@@ -34,9 +34,6 @@
 
 with Adagio.Chronos;
 with Adagio.Connect.Peer;
-with Adagio.File;
-with Adagio.G2.Packet;
-with Adagio.G2.Packet.Parsing;
 with Adagio.Http.Header;
 with Adagio.Http.Header.Parser;
 with Adagio.Library;
@@ -52,7 +49,7 @@ package Adagio.G2.Browse_peer is
    ------------------------------------------------------------------------
    -- Exceptions                                                         --
    ------------------------------------------------------------------------
-   Unknown_protocol : exception; 
+   Unknown_protocol : exception;
 
    ------------------------------------------------------------------------
    -- Object                                                             --
@@ -66,7 +63,7 @@ package Adagio.G2.Browse_peer is
    -- Creation takes a connected socket and a header object with the
    -- request already read, so our response is due.
    -- May raise exception if some problems arise.
-   function Create (From : in Socket.Object; Request : in Http.Header.Set) 
+   function Create (From : in Socket.Object; Request : in Http.Header.Set)
       return Object_access;
 
    ------------------------------------------------------------------------
@@ -81,7 +78,7 @@ package Adagio.G2.Browse_peer is
    ------------------------------------------------------------------------
    -- Its chance to do something.
    procedure Process (
-      This    : in out Object; 
+      This    : in out Object;
       Context : in out Connect.Peer.Context_type);
 
    ------------------------------------------------------------------------
@@ -95,7 +92,7 @@ package Adagio.G2.Browse_peer is
    ------------------------------------------------------------------------
    -- Do the handshaking
    procedure Handshake (
-      This    : in out Object; 
+      This    : in out Object;
       Context : in out Connect.Peer.Context_type);
 
    ------------------------------------------------------------------------
@@ -103,7 +100,7 @@ package Adagio.G2.Browse_peer is
    ------------------------------------------------------------------------
    -- Do the rejections
    procedure Reject (
-      This    : in out Object; 
+      This    : in out Object;
       Context : in out Connect.Peer.Context_type);
 
 private

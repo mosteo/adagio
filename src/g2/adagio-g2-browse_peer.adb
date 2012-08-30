@@ -33,22 +33,16 @@
 --  $Id: adagio-g2-browse_peer.adb,v 1.3 2004/01/21 21:05:25 Jano Exp $
 
 with Adagio.Convert;
-with Adagio.File;
-with Adagio.G2.Core;
+--  with Adagio.G2.Core;
 with Adagio.G2.Local_query;
 with Adagio.G2.Packet;
 with Adagio.Globals.Options;
-with Adagio.GUID;
-with Adagio.Library;
 with Adagio.Memory_stream_constrained;
 with Adagio.Misc;
 with Adagio.Trace;
-with Adagio.Unicode;
 with Adagio.Zutil;
-with Dynamic_vector;
+with Adagio.File;
 
-with Ada.Calendar;
-use  Ada;
 
 package body Adagio.G2.Browse_peer is
 
@@ -64,7 +58,7 @@ package body Adagio.G2.Browse_peer is
    ------------------------------------------------------------------------
    -- Creation takes a connected socket and a header object with the
    -- request already read, so our response is due.
-   function Create (From : in Socket.Object; Request : in Http.Header.Set) 
+   function Create (From : in Socket.Object; Request : in Http.Header.Set)
       return Object_access is
       Peer : Object_access;
    begin
@@ -99,7 +93,7 @@ package body Adagio.G2.Browse_peer is
    -- Unique id
    function Id (This : in Object) return String is
    begin
-      return "BROWSE/" & 
+      return "BROWSE/" &
          Socket.Image (Socket.Get_peer_name (This.Socket).Addr);
    end Id;
 
@@ -108,11 +102,10 @@ package body Adagio.G2.Browse_peer is
    ------------------------------------------------------------------------
    -- Its chance to do something.
    procedure Process (
-      This    : in out Object; 
+      This    : in out Object;
       Context : in out Connect.Peer.Context_type) is
-      use Calendar;
 
-      
+
    begin
       Context.Sleep := 0.1;
       -- Check for timeout
@@ -155,14 +148,13 @@ package body Adagio.G2.Browse_peer is
    ------------------------------------------------------------------------
    -- Do the handshaking
    procedure Handshake (
-      This    : in out Object; 
+      This    : in out Object;
       Context : in out Connect.Peer.Context_type)
    is
       -- Build the response
       procedure Stage_two is
          use Memory_stream_constrained;
          use type File.Object;
-         use type Packet.Object;
          use Library.File_list;
          M    : aliased Memory_stream_constrained.Stream_type;
          P, H : Packet.Object;
@@ -182,7 +174,7 @@ package body Adagio.G2.Browse_peer is
       begin
          -- UPROD
          if not This.Uprod_sent then
-            P := Core.Create_uprod;
+            P := Packet.Create_uprod;
             Add_packet (P);
             This.Uprod_sent := true;
             Library.Object.Get_all_files (This.Files);
@@ -190,7 +182,7 @@ package body Adagio.G2.Browse_peer is
          end if;
          -- HITS
          if This.Curr_file /= Back (This.Files) then
-            P := Local_query.Create_simple_hit_skeleton;
+            P := Local_query.Create_Simple_Hit_Skeleton;
          else
             P := Packet.Null_packet;
          end if;
@@ -223,12 +215,12 @@ package body Adagio.G2.Browse_peer is
          -- Deflation?
          if This.Deflate then
             This.ZBuffer := new Ada.Streams.Stream_element_array (
-               1 .. 
+               1 ..
                Ada.Streams.Stream_element_offset (Last (This.Data)) + 1024);
             Zutil.Deflate (
                Ada.Streams.Stream_element_array (
                   This.Data.Vector (1 .. Last (This.Data))),
-               This.ZBuffer.all, 
+               This.ZBuffer.all,
                This.Last);
             Trace.Log ("G2.Browse_peer: Payload ready; Size (deflated): " &
                Convert.To_size (Natural (This.Last)));
@@ -236,7 +228,7 @@ package body Adagio.G2.Browse_peer is
             Trace.Log ("G2.Browse_peer: Payload ready; Size: " &
                Convert.To_size (Last (This.Data)));
          end if;
-         
+
          This.Handshake_stage := Three;
       end Stage_two;
 
@@ -248,14 +240,14 @@ package body Adagio.G2.Browse_peer is
          Http.Header.Add (Response, "Content-Type", Browse_content_type);
          Http.Header.Add (Response, "Server",       User_agent);
          Http.Header.Add (Response, "Connection",   "close");
-         Http.Header.Add (Response, "Content-Length", 
+         Http.Header.Add (Response, "Content-Length",
             Misc.To_string (Last (This.Data)));
          if This.Deflate then
             Http.Header.Add (Response, "Content-Encoding", "deflate");
          end if;
          begin
             Http.Header.Write (
-               Response, 
+               Response,
                This.Link.all,
                Send_response => true,
                Send_crlf     => true);
@@ -334,7 +326,7 @@ package body Adagio.G2.Browse_peer is
    ------------------------------------------------------------------------
    -- Do the rejections
    procedure Reject (
-      This    : in out Object; 
+      This    : in out Object;
       Context : in out Connect.Peer.Context_type)
    is
       Response : Http.Header.Set;
@@ -342,7 +334,7 @@ package body Adagio.G2.Browse_peer is
       Http.Header.Set_response (Response, "HTTP/1.1 404 Browse disabled");
       begin
          Http.Header.Write (
-            Response, 
+            Response,
             This.Link.all,
             Send_response => true,
             Send_crlf => true);

@@ -49,7 +49,6 @@ with Adagio.Server;
 with Adagio.Tcp_slot;
 with Adagio.User_profile;
 with Adagio.Xml;
-with Adagio.Xml.Utils;
 
 with Average_queue;
 with Circular_stream;
@@ -62,10 +61,8 @@ with Ada.Calendar;   use Ada;
 with Ada.Streams;
 with System;
 
-with Charles.Maps.Hashed.Strings.Unbounded;
 with Charles.Maps.Sorted.Strings.Unbounded;
 
-pragma Elaborate_all (Adagio.Xml.Utils);
 pragma Elaborate_all (Average_queue);
 
 package Adagio.G2.Core is
@@ -97,7 +94,7 @@ package Adagio.G2.Core is
 
    -- Obtain search handler. Can return null if the network is not to be
    -- searched:
-   function Get_Search_Handler (This : in Network_type) 
+   function Get_Search_Handler (This : in Network_type)
       return Searches.Handler.Object_Access;
 
    ------------------
@@ -144,8 +141,8 @@ package Adagio.G2.Core is
 
    -- Dump:
    procedure Serialize
-     (Stream: access Ada.Streams.Root_stream_type'Class; 
-      this: in Server_type); 
+     (Stream: access Ada.Streams.Root_stream_type'Class;
+      this: in Server_type);
    for Server_type'Output use Serialize;
 
    -- True when the server is to be purged:
@@ -168,11 +165,11 @@ package Adagio.G2.Core is
    -- Send pending compressed data:
    procedure Send_pending (this : in out Server_type);
 
-   -- Create a new server from a dotted adress:port 
+   -- Create a new server from a dotted adress:port
    procedure Create (
-      this     : out Server_type; 
+      this     : out Server_type;
       Net      : in  Network_access;
-      Address  : in  String; 
+      Address  : in  String;
       Port     : in  Natural;
       Seen     : in Calendar.Time := Calendar.Clock);
 
@@ -252,7 +249,7 @@ package Adagio.G2.Core is
    ------------------------
    -- Source will be null for UDP packets
    procedure Process_packet (
-      Net    : in Network_access; 
+      Net    : in Network_access;
       Source : in Server_access;
       Item   : in Packet.Queue.Item_type);
 
@@ -261,11 +258,8 @@ package Adagio.G2.Core is
    ----------------------
    -- Create a LNI packet with info about us, in respect to the given server.
    function Create_LNI (
-      Net         : in Network_access; 
+      Net         : in Network_access;
       Destination : in Server_access) return Packet.Object;
-
-   -- Create a /UPROD/XML packet with gprofile.xsd conformat payload.
-   function Create_UPROD return Packet.Object;
 
    -- Create a KHL packet
    function Create_KHL (Net : in Network_access) return Packet.Object;
@@ -283,11 +277,6 @@ package Adagio.G2.Core is
    ------------
    function Report (Net : Network_type) return Report_array;
 
-   -- Helper
-   function Available_Socket (
-      This : access Ada.Streams.Root_stream_type'class) return Natural;
-   pragma Inline (Available_socket);
-
    --------------------
    -- Connected hubs --
    --------------------
@@ -302,7 +291,6 @@ package Adagio.G2.Core is
 private
 
    use type Ada.Streams.Stream_element_count;
-   use type Ada.Streams.Stream_element_offset;
 
    Protocol_descr : constant Ustring := U ("G2 TCP");
 
@@ -322,7 +310,7 @@ private
 
    type G2_tcp_slot is new Tcp_slot.Object with record
       Index         : Natural := 0; -- Should not be modified.
-      Outbound      : aliased G2.Packet.Queue.Object; 
+      Outbound      : aliased G2.Packet.Queue.Object;
       -- Queue for outbound messages.
       -- Aliased in queries (process_packet and local_query packages)
       Head          : Http.Header.Set; -- Headers for connection
@@ -330,7 +318,7 @@ private
       Http_parser   : Http.Header.Parser.Object (
          Ada.Streams.Stream_element_offset (Globals.Options.G2_MaxHeaders));
       Packet_parser : G2.Packet.Parsing.Object; -- For pipes checking.
-      
+
       -- Deflate related:
       Deflate       : Boolean := false;
       -- Compressed inbound/outbound stream: go to the circular streams:
@@ -383,11 +371,11 @@ private
 
       -- Get a server by Id.
       procedure Get (
-         Id     : in  String; 
+         Id     : in  String;
          Status : in  Server_status;
          Server : out Server_access);
       procedure Get (
-         Id     : in  UString; 
+         Id     : in  UString;
          Status : in  Server_status;
          Server : out Server_access);
 
@@ -403,7 +391,7 @@ private
       procedure Get_newest (Server : out Server_access);
 
       -- Get a connected server by Id or null if not found:
-      function Get (Id : in UString; Status : in Server_status) 
+      function Get (Id : in UString; Status : in Server_status)
          return Server_access;
 
       -- Get all servers in a given status as array
@@ -439,7 +427,7 @@ private
 
       -- Set status:
       procedure Set_status (
-         Server : in Server_access; 
+         Server : in Server_access;
          Status : in Server_status);
       pragma Inline (Set_status);
 
@@ -463,7 +451,7 @@ private
    package Cluster_list is new
       Charles.Maps.Sorted.Strings.Unbounded (Server_access, "<", Equal);
 
-   type Network_type is new Adagio.Network.Object with 
+   type Network_type is new Adagio.Network.Object with
       record
          Status      :  Network.Network_status := Network.Disconnected;
          Connector   :  Connector_access;          -- Task which connects us.
@@ -473,17 +461,17 @@ private
 
          Port        :  Natural:= 4610;            -- Port for this instance
 
-         Inbound     :  aliased Packet.Queue.Object;       
-         Outbound    :  aliased Packet.Queue.Object;       
+         Inbound     :  aliased Packet.Queue.Object;
+         Outbound    :  aliased Packet.Queue.Object;
                                                    -- Queues for G2 packets
 
          Listener    :  G2.Listener.Object;        -- Listener for incomings.
          Send_udp    :  Sender_udp_access;         -- Outbound packets.
 
-         Transceiver :  G2.Transceiver.Object_access;     
+         Transceiver :  G2.Transceiver.Object_access;
                                                    -- Semi-reliable yaddayadda
 
-         Searcher    : G2.Search.Object_access; 
+         Searcher    : G2.Search.Object_access;
             -- Create only if downloading enabled
       end record;
 
@@ -500,10 +488,10 @@ private
    ------------------
    type QRT_status_type is (Not_sent, Sending, Sent);
    type Connection_stages is (
-      Starting, 
-      Connecting, 
-      Handshake_preparing, 
-      Handshake_sending_first, 
+      Starting,
+      Connecting,
+      Handshake_preparing,
+      Handshake_sending_first,
       Handshake_receiving,
       Handshake_sending_last);
 
@@ -529,9 +517,9 @@ private
 
       Last_packet_time : Calendar.Time;            -- For keep-alive.
       Last_ping_time   : Calendar.Time;            -- To not flood.
-      Last_update      : Calendar.Time := 
+      Last_update      : Calendar.Time :=
          Calendar.Time_of (1976, 9, 6);            -- LNI sends
-      Last_seen        : Calendar.Time := Calendar.Clock;            
+      Last_seen        : Calendar.Time := Calendar.Clock;
                                                    -- Last succesful com.
       Delayed_send     : Calendar.Time := Past_aeons;
       Last_delay       : Duration := 0.75;
@@ -561,7 +549,7 @@ private
       Packets_in       : Natural := 0; -- Sent and received packets
       Packets_out      : Natural := 0;
    end record;
-   
+
    ----------------------
    -- Network instance --
    ----------------------

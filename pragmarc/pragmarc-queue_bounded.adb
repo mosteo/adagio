@@ -7,6 +7,9 @@
 -- 2000 Dec 01     J. Carter          V1.1--Revised implementation of Iterate
 -- 2000 May 01     J. Carter          V1.0--Initial release
 --
+
+pragma Ada_95;
+
 package body PragmARC.Queue_Bounded is
    protected body Handle is
       procedure Clear is
