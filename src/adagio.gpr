@@ -13,13 +13,17 @@ project Adagio is
 
    for Object_Dir use "obj_debug";
 
-   Sources := ("../agpl/src", "../agpl/3rdparty/xmlada", "../agpl/src/agpl-http", "../agpl/src/trace_true",
-               "../agpl/3rdparty/zlib_ada", "../agpl/src/agpl-zlib",
+   Sources := ("3rdparty/agpl/src", "3rdparty/agpl/3rdparty/xmlada",
+               "3rdparty/agpl/src/agpl-http", "3rdparty/agpl/src/trace_true",
+               "3rdparty/agpl/3rdparty/zlib_ada", "3rdparty/agpl/src/agpl-zlib",
                "compat",
-               "aenea-crawler", "download", "ed2k", "g2", "gui", "kernel", "library", "misc", "network",
-               "search", "storage", "tasking", "upload",
-               "../adacf/src", "../aws", "../charles", "../pragmarc", "../zlibc",
-               "../aws/include", "../aws/soap", "../aws/src", "../aws/ssl");
+               "aenea-crawler",
+               "download", "ed2k", "g2", "gui", "kernel", "library", "misc",
+               "network", "search", "storage", "tasking", "upload",
+               "3rdparty/adacf/src", "3rdparty/aws", "3rdparty/charles",
+               "3rdparty/pragmarc", "3rdparty/zlibc",
+               "3rdparty/aws/include", "3rdparty/aws/soap", "3rdparty/aws/src",
+               "3rdparty/aws/ssl");
 
    case OS is
       when "Win32" =>
