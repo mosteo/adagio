@@ -11,10 +11,11 @@
 -- 2002 Oct 01     J. Carter          V1.1--Added Context to Iterate; protect list IDs; use mode out to allow scalars
 -- 2002 May 01     J. Carter          V1.0--Initial release
 --
+
 with Ada.Finalization;
 
 generic -- PragmARC.List_Bounded_Unprotected
-   type Element is private;
+   type Element is limited private;
 
    with procedure Assign (To : out Element; From : in Element) is <>;
 package PragmARC.List_Bounded_Unprotected is

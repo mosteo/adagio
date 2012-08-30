@@ -32,10 +32,12 @@ project Adagio is
    package Compiler is
       for Default_Switches ("c") use ("-g");
       for Default_Switches ("c++") use ("-g");
-      for Default_Switches ("ada") use ("-O2", "-gnatf", "-gnato", "-fstack-check", "-g", "-gnata", "-gnat2012",
+      for Default_Switches ("ada") use ("-gnat2012",
+                                        "-O2", "-gnatf", "-gnato", "-fstack-check", "-g", "-gnata",
                                         "-gnatwcfjmopruvz", "-gnatVa");
                                         --  "-gnatyaceikln"); -- Too much style errors, disabled until pretty-printed
-
+      for Switches ("agpl*")     use ("-gnat2012");
+      for Switches ("pragmarc*") use ("-gnat95");
 
    end Compiler;
 
