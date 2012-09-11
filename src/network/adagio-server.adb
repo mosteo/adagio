@@ -31,23 +31,24 @@
 --  harass or legally prosecute these users.                                --
 ------------------------------------------------------------------------------
 --  $Id: adagio-server.adb,v 1.4 2004/02/05 18:31:22 Jano Exp $
-with Adagio.Globals;
-with Adagio.Misc;
-with Adagio.Statistics;
-with Adagio.Statistics.Integers;
-with Adagio.Trace;
+With
+Adagio.Globals,
+Adagio.Misc,
+Adagio.Statistics,
+Adagio.Statistics.Integers,
+Adagio.Trace,
+Agpl.Strings,
+Agpl.Types.Ustrings,
+Ada.Calendar,
+Ada.Exceptions,
+Ada.Streams.Stream_IO,
+Ada.Unchecked_deallocation,
+Gnat.Os_lib,
+Charles.Multimaps.Sorted.Unbounded;
 
-with Agpl.Strings;
-with Agpl.Types.Ustrings; use Agpl.Types.Ustrings;
-
-with Ada.Calendar;   use Ada;
-with Ada.Exceptions;
-with Ada.Streams.Stream_IO;
-with Ada.Unchecked_deallocation;
-
-with Gnat.Os_lib;    use Gnat;
-
-with Charles.Multimaps.Sorted.Unbounded;
+Use
+GNAT,
+Agpl.Types.Ustrings;
 
 package body Adagio.Server is
 

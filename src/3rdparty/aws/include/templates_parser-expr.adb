@@ -28,7 +28,6 @@
 
 --  $Id: templates_parser-expr.adb,v 1.2 2004/02/24 15:40:19 Jano Exp $
 
-with Ada.Text_IO;
 
 separate (Templates_Parser)
 
@@ -134,7 +133,6 @@ package body Expr is
       ---------------
 
       function Get_Token return String is
-         use Strings;
          K, I  : Natural;
       begin
          if Index > Expression'Last then

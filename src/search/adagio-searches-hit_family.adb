@@ -34,23 +34,26 @@
 
 --  Root package for all search packages
 
-with Adagio.Convert;
-with Adagio.Download.Manager;
-with Adagio.Download.Source;
-with Adagio.Exceptions;
-with Adagio.G2.Hit;
-with Adagio.Misc;
-with Adagio.Trace;
+With
+Adagio.Convert,
+Adagio.Download.Manager,
+Adagio.Download.Source,
+Adagio.Exceptions,
+Adagio.G2.Hit,
+Adagio.Misc,
+Adagio.Trace,
+Agpl.Counter.Multi,
+Agpl.Magnet,
+Agpl.Sequence,
+Agpl.Strings,
+Aws.Url,
+Ada.Tags,
+Ada.Unchecked_Deallocation,
+Adagio.Types;
 
-with Agpl.Counter.Multi;
-with Agpl.Magnet;
-with Agpl.Sequence;
-with Agpl.Strings;
-
-with Aws.Url;
-
-with Ada.Tags; use Ada.Tags;
-with Ada.Unchecked_Deallocation;
+Use
+Ada.Tags,
+Adagio.Types;
 
 package body Adagio.Searches.Hit_Family is
 
@@ -210,7 +213,7 @@ package body Adagio.Searches.Hit_Family is
       end if;
       Magnet.Add_Attribute (Result, Magnet.Name_Attr, Get_Name (This));
       Magnet.Add_Attribute (
-         Result, Magnet.User_Defined_Prefix & "sz", 
+         Result, Magnet.User_Defined_Prefix & "sz",
          Agpl.Strings.Trim (Types.File_Size'Image (Get_Size (This))));
       for I in Hashes'Range loop
          if S (Hashes (I).Key) = "sha1" and not Secure then
@@ -348,7 +351,7 @@ package body Adagio.Searches.Hit_Family is
    -- Http_Report                                                        --
    ------------------------------------------------------------------------
    procedure Http_Report (
-      This : in out Object; Data : in out Data_Set; Srch : in Search_Id) 
+      This : in out Object; Data : in out Data_Set; Srch : in Search_Id)
    is
       use Hit_Map;
       I      : Iterator_Type   := First (This.Hits);
@@ -418,15 +421,15 @@ package body Adagio.Searches.Hit_Family is
          Append (Row, (Extra, Extra & U (Prefix)));
          -- Hit?
          Append (Row, (
-            U (Boolean'Image (false)), 
+            U (Boolean'Image (false)),
             U (Boolean'Image (false) & Prefix)));
          -- Expanded?
          Append (Row, (
-            U (Boolean'Image (This.Expanded)), 
+            U (Boolean'Image (This.Expanded)),
             U (Boolean'Image (This.Expanded) & Prefix)));
          -- Id
          Append (Row, (
-            U (Misc.To_String (Natural (This.Id))), 
+            U (Misc.To_String (Natural (This.Id))),
             U (Misc.To_String (Natural (This.Id)) & Prefix)));
          -- Magnet
          Append (Row, (
@@ -434,7 +437,7 @@ package body Adagio.Searches.Hit_Family is
             U (Get_Link (This) & Prefix)));
          -- Srch id
          Append (Row, (
-            U (To_String (Srch)), 
+            U (To_String (Srch)),
             U (To_String (Srch) & Prefix)));
          -- Secure
          Append (Row, (
@@ -461,12 +464,12 @@ package body Adagio.Searches.Hit_Family is
                   -- New hits
                   Append (Row, (
                      U (Misc.To_String (Nums (Hit.Is_New (H)))),
-                     U (S (Rpad (Num_New_Hits (This))) & 
+                     U (S (Rpad (Num_New_Hits (This))) &
                         Prefix & S (Rpad (Nums (Hit.Is_New (H)), 2)))));
                   -- Fwd hits
                   Append (Row, (
                      U (Misc.To_String (Nums (Hit.Is_Firewalled (H)))),
-                     U (S (Rpad (Num_Firewalled_Hits (This))) & 
+                     U (S (Rpad (Num_Firewalled_Hits (This))) &
                         Prefix & S (Rpad (Nums (Hit.Is_Firewalled (H)), 2)))));
                   -- Name
                   Append (Row, (
@@ -482,16 +485,16 @@ package body Adagio.Searches.Hit_Family is
                      Extra & Prefix & Hit.Get_Extra (H)));
                   -- Hit?
                   Append (Row, (
-                     U (Boolean'Image (true)), 
+                     U (Boolean'Image (true)),
                      U (Boolean'Image (false) & Prefix & Boolean'Image (true))));
                   -- Expanded?
                   Append (Row, (
-                     U (Boolean'Image (This.Expanded)), 
-                     U (Boolean'Image (This.Expanded) & Prefix & 
+                     U (Boolean'Image (This.Expanded)),
+                     U (Boolean'Image (This.Expanded) & Prefix &
                         Boolean'Image (This.Expanded))));
                   -- Id
                   Append (Row, (
-                     U (Misc.To_String (Natural (This.Id))), 
+                     U (Misc.To_String (Natural (This.Id))),
                      U (Misc.To_String (Natural (This.Id)) & Prefix)));
                   -- Magnet
                   Append (Row, (
@@ -499,12 +502,12 @@ package body Adagio.Searches.Hit_Family is
                      U (Get_Link (This) & Prefix)));
                   -- Srch id
                   Append (Row, (
-                     U (To_String (Srch)), 
+                     U (To_String (Srch)),
                      U (To_String (Srch) & Prefix)));
                   -- Secure?
                   Append (Row, (
                      U (Misc.To_String (Nums (Hit.Is_Secure (H)))),
-                     U (S (Rpad (Num_Secure_Hits (This))) & 
+                     U (S (Rpad (Num_Secure_Hits (This))) &
                         Prefix & S (Rpad (Nums (Hit.Is_Secure (H)), 2)))));
 
                   Append (Data, Row);

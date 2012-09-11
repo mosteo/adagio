@@ -32,16 +32,16 @@
 ------------------------------------------------------------------------------
 --  $Id: adagio-server.ads,v 1.7 2004/02/05 18:31:22 Jano Exp $
 
-with Ada.Calendar; use Ada;
-with Ada.Finalization;
-with Ada.Streams;
+With
+Ada.Calendar,
+Ada.Finalization,
+Ada.Streams,
+Agpl.Http.Server.Sort_handler,
+Charles.Hash_string,
+Charles.Maps.Hashed.Strings.Unbounded;
 
-with Agpl.Http.Server.Sort_handler;
-
-with Charles.Hash_string;
-with Charles.Maps.Hashed.Strings.Unbounded;
-
-use Ada;
+Use
+Ada;
 
 package Adagio.Server is
 
@@ -120,14 +120,14 @@ package Adagio.Server is
       -- If already there: Will be freed, This <-- null,
       --    and Server_already_cached raised
       procedure Add (
-         this  : in out Object_access; 
+         this  : in out Object_access;
          Since : in     Calendar.Time := Calendar.Clock);
 
       -- Remove a server
       -- Caller is always responsible of deletion of memory (freeing it)
       procedure Delete(this: in Object_access);
 
-      -- Drop a server by Id. It's freed and deleted. If checked out, 
+      -- Drop a server by Id. It's freed and deleted. If checked out,
       --    success will be false. Also if not found.
       procedure Drop (This : in String; Success : out Boolean);
 
@@ -175,7 +175,7 @@ package Adagio.Server is
 
 private
 
-   type Object is abstract new Finalization.Controlled 
+   type Object is abstract new Finalization.Controlled
       with null record;
 --      Initialized : Boolean := false;
 --   end record;

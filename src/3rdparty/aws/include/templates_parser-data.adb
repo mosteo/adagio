@@ -28,7 +28,6 @@
 
 --  $Id: templates_parser-data.adb,v 1.2 2004/02/24 15:40:18 Jano Exp $
 
-with Ada.Text_IO;
 
 separate (Templates_Parser)
 

@@ -38,23 +38,26 @@
 --  can have the same client_id. The same queue_id can't appear more than
 --  once in the same queue.
 
-with Adagio.File;
-with Adagio.Misc;
-with Adagio.Types; use Adagio.Types;
-with Adagio.Upload.Client;
-with Adagio.Upload.Ratings;
-with Adagio.Upload.Resource;
-with Adagio.Xml;
-with Adagio.Xml.Utils;
-with Agpl.Http.Server.Sort_handler;
-with Dynamic_vector;
+With
+Adagio.File,
+Adagio.Misc,
+Adagio.Types,
+Adagio.Upload.Client,
+Adagio.Upload.Ratings,
+Adagio.Upload.Resource,
+Adagio.Xml,
+Adagio.Xml.Utils,
+Agpl.Http.Server.Sort_handler,
+Dynamic_vector,
+Agpl.Types.Ustrings,
+Charles.Maps.Sorted.Strings.Unbounded,
+Ada.Calendar,
+System;
 
-with Agpl.Types.Ustrings; use Agpl.Types.Ustrings;
-
-with Charles.Maps.Sorted.Strings.Unbounded;
-
-with Ada.Calendar; use Ada;
-with System;
+Use
+Adagio.Types,
+Agpl.Types.Ustrings,
+Ada;
 
 package Adagio.Upload.Queue is
 

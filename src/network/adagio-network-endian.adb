@@ -40,8 +40,8 @@ package body Adagio.Network.Endian is
    function to_Unsigned_32 is new Unchecked_conversion (Integer, Unsigned_32);
    function to_Integer is new Unchecked_conversion (Unsigned_32, Integer);
 
+
    function Is_little_endian return boolean is
-      use type Interfaces.Unsigned_8;
       var1: Interfaces.Unsigned_16:= 16#abcd#;
       var2: Array(1..2) of Interfaces.Unsigned_8;
       for var2'address use var1'address;
@@ -57,7 +57,7 @@ package body Adagio.Network.Endian is
       Big_endian  : Boolean := true) return Integer is
 
       Aux      : Unsigned_32 := 0;
-      
+
    begin
       if From'length > 4 then
          raise Constraint_error;
@@ -76,7 +76,7 @@ package body Adagio.Network.Endian is
       end if;
 
       return Integer (Aux);
-         
+
    end Convert;
 
    function Convert_L (
@@ -84,7 +84,7 @@ package body Adagio.Network.Endian is
       Big_endian  : Boolean := true) return Long_Long_Integer is
 
       Aux      : Unsigned_64 := 0;
-      
+
    begin
       if From'length > 8 then
          raise Constraint_error;
@@ -103,19 +103,19 @@ package body Adagio.Network.Endian is
       end if;
 
       return Long_Long_Integer (Aux);
-         
+
    end Convert_L;
 
    -- Converts an integer to an array of bytes, in the desired endianness.
    function Convert (
       From        : Long_Long_Integer;
       Big_endian  : Boolean := false) return Byte_array is
-      
+
       Aux    : Unsigned_64 := Unsigned_64 (From);
       Size   : Natural := 0;
       Result : Byte_array (1 .. 8);
       Invert : Byte_array (1 .. 8);
-      
+
    begin
       while Aux /= 0 loop
          Size := Size + 1;
@@ -207,9 +207,14 @@ package body Adagio.Network.Endian is
 
       return To;
    end;
-   
+
+
+    --	UNREFERENCED ITEMS
+	pragma Unreferenced (to_Unsigned_32);
+	pragma Unreferenced (to_Integer);
+
 begin
 
    Little_endian:= Is_little_endian;
-   
+
 end Adagio.Network.Endian;

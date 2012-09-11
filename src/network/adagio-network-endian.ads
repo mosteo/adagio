@@ -43,7 +43,7 @@ package Adagio.Network.Endian is
    type Byte_array is array (integer range <>) of Byte;
    pragma Pack (Byte_array);
 
-   -- Endingness of machine (determined at elaboration time): 
+   -- Endingness of machine (determined at elaboration time):
    Little_endian: boolean;
 
    -- Convert an arbitrary long byte array in any endingness to integer
@@ -51,12 +51,10 @@ package Adagio.Network.Endian is
    function Convert (
       From        : Byte_array;
       Big_endian  : Boolean := true) return Integer;
-   pragma Inline (Convert);
 
    function Convert_L (
       From        : Byte_array;
       Big_endian  : Boolean := true) return Long_Long_Integer;
-   pragma Inline (Convert);
 
    -- Converts an integer to an array of bytes, in the desired endianness.
    -- Optimally returns the shortest possible array:
@@ -64,7 +62,6 @@ package Adagio.Network.Endian is
    function Convert (
       From        : Long_Long_Integer;
       Big_endian  : Boolean := false) return Byte_array;
-   pragma Inline (Convert);
 
    -- Converts an integer to an array of bytes, in the desired endianness.
    -- Size specified (in bytes):
@@ -72,7 +69,6 @@ package Adagio.Network.Endian is
       From        : Long_Long_Integer;
       Size        : Natural;
       Big_endian  : Boolean := false) return Byte_array;
-   pragma Inline (Convert);
 
    -- Converts an integer to an array of bytes, in the desired endianness.
    -- Optimally returns the shortest possible array:
@@ -80,7 +76,6 @@ package Adagio.Network.Endian is
    function Convert (
       From        : Integer;
       Big_endian  : Boolean := false) return Byte_array;
-   pragma Inline (Convert);
 
    -- Converts an integer to an array of bytes, in the desired endianness.
    -- Size specified (in bytes):
@@ -88,7 +83,6 @@ package Adagio.Network.Endian is
       From        : Integer;
       Size        : Natural;
       Big_endian  : Boolean := false) return Byte_array;
-   pragma Inline (Convert);
 
    -- Converts a byte array into a string of same bytes:
    function To_string (From : Byte_array) return String;
@@ -101,6 +95,7 @@ package Adagio.Network.Endian is
 
 private
 
+    Pragma Inline( Convert );
    function Is_little_endian return boolean;
 
 end Adagio.Network.Endian;

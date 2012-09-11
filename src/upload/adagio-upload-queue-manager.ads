@@ -32,18 +32,21 @@
 ------------------------------------------------------------------------------
 --  $Id: adagio-upload-queue-manager.ads,v 1.7 2004/02/03 22:52:16 Jano Exp $
 
-with Adagio.Chronos;
-with Adagio.Globals;
-with Adagio.Globals.Options;
-with Adagio.Types; use Adagio.Types;
-with Adagio.Upload.Client.Pool;
-with Agpl.Http.Server.Sort_handler;
-with Dynamic_vector;
+With
+Adagio.Chronos,
+Adagio.Globals,
+Adagio.Globals.Options,
+Adagio.Types,
+Adagio.Upload.Client.Pool,
+Agpl.Http.Server.Sort_handler,
+Dynamic_vector,
+Agpl.Types.Ustrings,
+Charles.Hash_string,
+Charles.Maps.Hashed.Strings.Unbounded;
 
-with Agpl.Types.Ustrings; use Agpl.Types.Ustrings;
 
-with Charles.Hash_string;
-with Charles.Maps.Hashed.Strings.Unbounded;
+Use
+Agpl.Types.Ustrings;
 
 package Adagio.Upload.Queue.Manager is
 

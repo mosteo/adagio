@@ -32,19 +32,24 @@
 ------------------------------------------------------------------------------
 --  $Id: adagio-g2.ads,v 1.4 2004/01/28 15:33:18 Jano Exp $
 
-with Adagio.Constants;  use Adagio.Constants;
-with Adagio.Exceptions; use Adagio.Exceptions;
-with Adagio.Globals.Options;
-with Adagio.Network.Endian;
-with Adagio.Socket;
-with Adagio.Time_t;
-with Adagio.Types; use Adagio.Types;
+With
+Adagio.Constants,
+Adagio.Exceptions,
+Adagio.Globals.Options,
+Adagio.Network.Endian,
+Adagio.Socket,
+Adagio.Time_t,
+Adagio.Types,
+Agpl.Types.Ustrings,
+Ada.Exceptions,
+Interfaces;
 
-with Agpl.Types.Ustrings; use Agpl.Types.Ustrings;
-
-with Ada.Exceptions; use Ada.Exceptions;
-
-with Interfaces;
+Use
+Adagio.Constants,
+Adagio.Exceptions,
+Ada.Exceptions,
+Agpl.Types.Ustrings,
+Adagio.Types;
 
 package Adagio.G2 is
 

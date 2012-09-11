@@ -52,7 +52,7 @@ use  Ada;
 
 package Adagio.Searches.Hit_Family is
 
-   No_Such_Hash : exception; 
+   No_Such_Hash : exception;
 
    ------------------------------------------------------------------------
    -- Object                                                             --
@@ -86,7 +86,7 @@ package Adagio.Searches.Hit_Family is
    -- Create                                                             --
    ------------------------------------------------------------------------
    -- A seed hit is needed
-   procedure Create (This : out object; From : in Hit.Object'Class);  
+   procedure Create (This : out object; From : in Hit.Object'Class);
 
    ------------------------------------------------------------------------
    -- Equal                                                              --
@@ -170,7 +170,7 @@ package Adagio.Searches.Hit_Family is
    -- Num_Secure_Hits                                                    --
    ------------------------------------------------------------------------
    function Num_Secure_Hits (This : in Object) return Natural;
-   
+
    ------------------------------------------------------------------------
    -- Set_Expanded                                                       --
    ------------------------------------------------------------------------
@@ -198,7 +198,7 @@ private
    type Object is new Finalization.Limited_Controlled with record
       Id       : Family_Id;  -- Unique ID
       Name     : Ustring;  -- The most used name between all hits belonging to this family.
-      Size     : File_Size; -- Most seen size (should be only one if no buggy clients!)
+      Size     : Adagio.Types.File_Size; -- Most seen size (should be only one if no buggy clients!)
       Hashes   : Hash_Dictionary.Object;
       Hits     : Hit_Map.Container_Type;
       Expanded : Boolean := false; -- Just for the GUI
