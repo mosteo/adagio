@@ -7,6 +7,9 @@
 
 -- See private part (!) for maximum allowed modulus.
 
+With Interfaces;
+Use Interfaces;
+
 generic
    type Num is Mod <>;
 package Bit_arrays.Modular is

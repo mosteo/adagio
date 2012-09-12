@@ -31,9 +31,9 @@
 --  harass or legally prosecute these users.                                --
 ------------------------------------------------------------------------------
 
-with Ada.Containers;
-with Ada.Containers.Hashed_Maps;
-with Ada.Strings.Hash;
+With
+Ada.Containers,
+Ada.Containers.Hashed_Maps;
 
 package Adagio.Download.Source.Maps is new Ada.Containers.Hashed_Maps (
       Source_Id, Object_Access, Hash, "=", "=");

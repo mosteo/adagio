@@ -34,13 +34,13 @@
 
 -- G2 listeners: TCP and UDP
 
-with Adagio.Connect.Peer_Manager;
-with Adagio.Globals;
-with Adagio.Misc;
-with Adagio.Resolver_Tcp;
-with Adagio.Routing;
-with Adagio.Socket;
-with Adagio.Trace;
+With
+Adagio.Connect.Peer_Manager,
+Adagio.Globals,
+Adagio.Misc,
+Adagio.Resolver_Tcp,
+Adagio.Routing,
+Adagio.Trace;
 
 package body Adagio.G2.Listener is
 
@@ -79,7 +79,7 @@ package body Adagio.G2.Listener is
       procedure Connect is
       begin
          -- Tcp listener:
-         Trace.Log ("G2.Listener ready at 0.0.0.0:" & 
+         Trace.Log ("G2.Listener ready at 0.0.0.0:" &
             Misc.To_String (Listening_Port), Trace.Informative);
          Socket.Create_stream (Parent.Tcp);
          Socket.Bind          (Parent.Tcp, "0.0.0.0", Listening_port);

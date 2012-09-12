@@ -94,7 +94,7 @@ package body Adagio.Xml.Utils is
       Path    : in String;
       Attr    : in String;
       Parent  : in Document;
-      Default : in Boolean) return Boolean 
+      Default : in Boolean) return Boolean
    is
       S : String := Misc.To_lower (Get_attribute (Path, Attr, Parent,
          Boolean'Image (Default)));
@@ -105,9 +105,9 @@ package body Adagio.Xml.Utils is
    function Get_boolean (
       From    : in Node;
       Attr    : in String;
-      Default : in Boolean) return Boolean 
+      Default : in Boolean) return Boolean
    is
-      S : String := 
+      S : String :=
          Misc.To_lower (Get_attribute (From, Attr, Boolean'Image (Default)));
    begin
       return S = "yes" or else S = "true";
@@ -125,11 +125,11 @@ package body Adagio.Xml.Utils is
       S : String := Get_attribute (Path, Attr, Parent,
          File_size'Image (Default));
    begin
-      return File_size (Misc.Parse_size (S));
+      return Misc.Parse_size( S );
    end Get_size;
 
    function Get_size (
-      Path    : in String; 
+      Path    : in String;
       Attr    : in String;
       Parent  : in Document;
       Default : in Natural) return Natural is
@@ -144,7 +144,7 @@ package body Adagio.Xml.Utils is
       S : String :=
          Get_attribute (From, Attr, File_size'Image (Default));
    begin
-      return File_size (Misc.Parse_size (S));
+      return Misc.Parse_size( S );
    end Get_size;
 
    ------------------------------------------------------------------------

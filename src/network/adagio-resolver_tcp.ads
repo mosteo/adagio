@@ -34,14 +34,16 @@
 
 --  Will handshake with a unknown TCP source until its purpose is know.
 
-with Adagio.Connect.Peer;
-with Adagio.Globals.Options;
-with Adagio.Http;
-with Adagio.Http.Header.Parser;
-with Adagio.Socket;
+With
+Adagio.Connect.Peer,
+Adagio.Globals.Options,
+Adagio.Http,
+Adagio.Http.Header.Parser,
+Adagio.Socket,
+Ada.Streams;
 
-with Ada.Streams;
-use  Ada;
+Use
+Ada;
 
 package Adagio.Resolver_Tcp is
 
@@ -61,7 +63,7 @@ package Adagio.Resolver_Tcp is
    -- Create_Pushed                                                      --
    ------------------------------------------------------------------------
    -- Creates a resolver which will push to the given address
-   function Create_pushed (Addr : in Socket.Sock_addr_type) 
+   function Create_pushed (Addr : in Socket.Sock_addr_type)
       return Object_Access;
 
    ------------------------------------------------------------------------
@@ -82,7 +84,7 @@ package Adagio.Resolver_Tcp is
    ------------------------------------------------------------------------
    -- Its chance to do something.
    procedure Process (
-      This    : in out Object; 
+      This    : in out Object;
       Context : in out Connect.Peer.Context_type);
 
    ------------------------------------------------------------------------
@@ -100,7 +102,7 @@ package Adagio.Resolver_Tcp is
 
 private
 
-   type Object is new Adagio.Connect.Peer.Object with 
+   type Object is new Adagio.Connect.Peer.Object with
       record
          Link    : Socket.Object;
          Request : Http.Header.Parser.Object (

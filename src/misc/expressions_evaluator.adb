@@ -198,7 +198,6 @@ package body Expressions_Evaluator is
                      procedure Read_Number (S : in     String;
                                             P : in out Positive)
                      is
-                        use Ada;
                         First, Last : Positive;
                         Tmp         : Natural;
                      begin
@@ -739,7 +738,7 @@ package body Expressions_Evaluator is
                       return Values
    is
 
-      Have_Been_Evaluated : array (Variables) of Boolean := 
+      Have_Been_Evaluated : array (Variables) of Boolean :=
          (E => true, P => true, others => False);
 
       ----------

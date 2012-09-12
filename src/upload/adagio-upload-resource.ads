@@ -34,14 +34,14 @@
 
 --  Uploadable resources.
 
-with Adagio.Safe_access;
-with Adagio.Types; use Adagio.Types;
+With
+Adagio.Safe_access,
+Ada.Finalization,
+Ada.Streams;
 
-with Agpl.Types.Ustrings; use Agpl.Types.Ustrings;
-
-with Ada.Finalization;
-with Ada.Streams; use Ada.Streams;
-use  Ada;
+Use
+Ada,
+Ada.Streams;
 
 package Adagio.Upload.Resource is
 
@@ -83,14 +83,14 @@ package Adagio.Upload.Resource is
    ------------------------------------------------------------------------
    -- Set the starting position for its data. Call it before Stream.
    -- First byte is at 1.
-   procedure Set_position (This : in out Object; Position : in Natural) 
+   procedure Set_position (This : in out Object; Position : in Natural)
       is abstract;
 
    ------------------------------------------------------------------------
    -- Stream                                                             --
    ------------------------------------------------------------------------
    -- Get an stream for the resource binary data
-   procedure Stream (This : in out Object; Result : out Stream_access) 
+   procedure Stream (This : in out Object; Result : out Stream_access)
    is abstract;
 
    ------------------------------------------------------------------------
@@ -98,7 +98,7 @@ package Adagio.Upload.Resource is
    ------------------------------------------------------------------------
    -- Get the corresponding Content-Type: http header for the resource.
    function Content_type (This : in Object) return String is abstract;
-      
+
    ------------------------------------------------------------------------
    -- Name                                                               --
    ------------------------------------------------------------------------
@@ -110,7 +110,7 @@ package Adagio.Upload.Resource is
    ------------------------------------------------------------------------
    -- Size in bytes of the resource.
    function Size (This : in Object) return Natural is abstract;
-      
+
    ------------------------------------------------------------------------
    -- Qualify                                                            --
    ------------------------------------------------------------------------
@@ -118,9 +118,9 @@ package Adagio.Upload.Resource is
    function Qualify (This : in Object; Criteria : in String) return Boolean
    is abstract;
 
-private 
+private
 
-   type Object is abstract new 
+   type Object is abstract new
       Finalization.Limited_controlled with null record;
 
    package Safe_object is new Safe_access (

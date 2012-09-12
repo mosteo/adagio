@@ -32,33 +32,30 @@
 ------------------------------------------------------------------------------
 --  $Id: adagio-library.adb,v 1.10 2004/01/28 15:33:32 Jano Exp $
 
-with Adagio.Chronos;
-with Adagio.Convert;
-with Adagio.Ed2k;
-with Adagio.Globals;
-with Adagio.Misc;
-with Adagio.Os;
-with Adagio.Statistics;
-with Adagio.Statistics.Integers;
-with Adagio.Statistics.Floats;
-with Adagio.Statistics.Strings;
-with Adagio.Trace;
-with Sha1;
-with Strings.Fields;
-with Strings.Utils;
-with TigerTree;
+With
+Adagio.Chronos,
+Adagio.Convert,
+Adagio.Ed2k,
+Adagio.Globals,
+Adagio.Misc,
+Adagio.Os,
+Adagio.Statistics,
+Adagio.Statistics.Integers,
+Adagio.Statistics.Floats,
+Adagio.Statistics.Strings,
+Adagio.Trace,
+Sha1,
+Strings.Fields,
+Strings.Utils,
+TigerTree,
+Acf.Types,
+Ada.Exceptions,
+Ada.Streams.Stream_IO,
+Gnat.Directory_operations,
+Gnat.Os_lib;
 
-with Acf.Types;
-
-with Ada.Calendar;
-with Ada.Exceptions;
-with Ada.Streams.Stream_IO;
-
-with Gnat.Directory_operations;
-with Gnat.Os_lib;
-
-use Ada;
-use Gnat;
+use
+GNAT;
 
 package body Adagio.Library is
 
@@ -478,7 +475,7 @@ package body Adagio.Library is
       -- Serialize  --
       ----------------
       -- Dump to disk:
-      procedure Serialize(Stream: in out Ada.Streams.Root_stream_type'class) 
+      procedure Serialize(Stream: in out Ada.Streams.Root_stream_type'class)
       is
          I : Folder_list.Iterator_type := Folder_list.First (Folders);
       begin
@@ -620,7 +617,7 @@ package body Adagio.Library is
       end Add_keywords;
 
       -- Saves only TTHs not dropped in changes of shared files.
-      procedure Check_dropped_TTHs is 
+      procedure Check_dropped_TTHs is
          use File_list;
          I : Iterator_type := First (Files_by_TTH);
       begin
@@ -687,7 +684,7 @@ package body Adagio.Library is
             File.Free_TTH_bytes (This); -- Necessary to prevent leaks for
                                         -- duplicated files.
             -- To pending!
-            if Hashing_file /= File.Null_file and then 
+            if Hashing_file /= File.Null_file and then
                File.Same_file (Hashing_file, This)
             then
                null; -- Nothing to do, is currently being hashed
@@ -798,7 +795,7 @@ package body Adagio.Library is
       -- characters (spaces, colons, whatever)
       procedure Query_word (
          Word : in String; Result : in out File_set.Container_type) is
-         Results : File.Object_array_access := 
+         Results : File.Object_array_access :=
             File.Object_array_access (
                Word_Dictionary.Find (Files_by_word, Word));
       begin
@@ -904,12 +901,12 @@ package body Adagio.Library is
       -- Export a file tigertree from library:
       -- Gives a file opened for read:
       procedure Export_tth (
-         this : in  File.Object; 
+         this : in  File.Object;
          Data : out Adagio.Streams.Element_array_access) is
          Last   : Ada.Streams.Stream_element_offset;
       begin
          Filepack.Open (
-            TTH_pack, 
+            TTH_pack,
             TigerTree.To_base32 (File.TTH (This)));
          Data := new Ada.Streams.Stream_element_array (
             1 .. Streams.Stream_element_offset (Filepack.Size (TTH_pack)));

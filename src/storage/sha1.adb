@@ -1,7 +1,12 @@
-with Bit_arrays;
-with Bit_arrays.Modular;
-with Bit_arrays.Numbers;
-with Bit_arrays.Strings;
+
+Pragma Warnings( Off );
+with
+Bit_arrays,
+Bit_arrays.Modular,
+Bit_arrays.Numbers,
+Bit_arrays.Strings;
+Pragma Warnings( On );
+
 
 package body Sha1 is
 
@@ -103,7 +108,7 @@ package body Sha1 is
       for t in t_range loop
          index:= Word(t) and Mask;
          if t >= 16 then
-            W(integer(index)):= 
+            W(integer(index)):=
                S(W(integer((index + 13) and Mask)) xor
                  W(integer((index + 8) and Mask)) xor
                  W(integer((index + 2) and Mask)) xor
@@ -132,8 +137,8 @@ package body Sha1 is
          raise Constraint_error;
       end if;
       for i in Result'range loop
-         Result(i):= 
-            Shift_left(Word(B(Pos + 0)), 24) or 
+         Result(i):=
+            Shift_left(Word(B(Pos + 0)), 24) or
             Shift_left(Word(B(Pos + 1)), 16) or
             Shift_left(Word(B(Pos + 2)), 8) or
             Shift_left(Word(B(Pos + 3)), 0);
@@ -158,7 +163,7 @@ package body Sha1 is
 
    -- Data supplying:
    procedure Feed
-         (C: in out Context; B: Byte_array; Count_size: boolean:= true) 
+         (C: in out Context; B: Byte_array; Count_size: boolean:= true)
    is
       Byte_aux       : Bit_array(1..8);
       Original_size  : constant Message_length:= C.Length;
@@ -177,7 +182,7 @@ package body Sha1 is
             while B_pos <= B'Last loop
                Span := Integer'Min (
                   B'Last - B_pos, C.Byte_data'Last - C.Pos);
-               C.Byte_data (C.Pos .. C.Pos + Span) := 
+               C.Byte_data (C.Pos .. C.Pos + Span) :=
                   B (B_pos .. B_pos + Span);
                B_pos := B_pos + Span + 1;
                C.Pos := C.Pos + Span + 1;
@@ -206,14 +211,14 @@ package body Sha1 is
                         when Space_efficient =>
                            Method2(To_block(C.Bit_data), C.H);
                      end case;
-                     C.Pos:= 0; 
+                     C.Pos:= 0;
                   end if;
                end loop;
             end loop;
       end case;
    end;
 
-   procedure Feed(C: in out Context; b: Bit_array; Count_size: Boolean:= true) 
+   procedure Feed(C: in out Context; b: Bit_array; Count_size: Boolean:= true)
    is
       Original_size: constant Message_length:= C.Length;
    begin
@@ -224,7 +229,7 @@ package body Sha1 is
             raise Constraint_error;
          end if;
       end if;
-      case C.Kind is 
+      case C.Kind is
          when Byte_context =>
             -- Only 8-multiple bit sequences allowed:
             if b'length mod 8 /= 0 then
@@ -233,7 +238,7 @@ package body Sha1 is
             -- Convert to bytes and feed them:
             for i in 0..b'length / 8 - 1 loop
                Feed(
-                  C, 
+                  C,
                   Byte_array'(1 => Byte_bit.To_number_BE(b(i * 8..i * 8 + 7))),
                   Count_size => false);
             end loop;
@@ -263,9 +268,9 @@ package body Sha1 is
          case C.Kind is
             when Byte_context =>
                Feed(C, Byte_array'(1 => 16#80#), Count_size => false);
-               if C.Pos + 8 > C.Byte_data'length then 
+               if C.Pos + 8 > C.Byte_data'length then
                   -- Not enough room for padding
-                  Void:= C.Byte_data'length + 
+                  Void:= C.Byte_data'length +
                         (C.Byte_data'last - C.Pos + 1) - 8;
                else
                   -- Enough room for padding:
@@ -289,9 +294,9 @@ package body Sha1 is
                end loop;
             when Bit_context =>
                Feed(C, Bit_array'(1 => true), Count_size => false);
-               if C.Pos + 64 > C.Bit_data'length then 
+               if C.Pos + 64 > C.Bit_data'length then
                   -- Not enough room for padding
-                  Void:= C.Bit_data'length + 
+                  Void:= C.Bit_data'length +
                         (C.Bit_data'last - C.Pos + 1) - 64;
                else
                   -- Enough room for padding:
@@ -362,7 +367,7 @@ package body Sha1 is
 
    -- And their converse
    hex_values : constant array (Character) of Interfaces.Unsigned_32:= (
-      '0' => 0, '1' => 1, '2' => 2, '3' => 3, '4' => 4, '5' => 5, '6' => 6, '7' => 7 , '8' => 8, '9' => 9, 
+      '0' => 0, '1' => 1, '2' => 2, '3' => 3, '4' => 4, '5' => 5, '6' => 6, '7' => 7 , '8' => 8, '9' => 9,
       'a' => 10, 'b' => 11, 'c' => 12, 'd' => 13, 'e' => 14, 'f' => 15,
       'A' => 10, 'B' => 11, 'C' => 12, 'D' => 13, 'E' => 14, 'F' => 15, others => 0);
    function From_Hex (S : in String) return Digest is
@@ -432,7 +437,7 @@ package body Sha1 is
    end To_char_array;
 
    function From_char_array (S : in String) return Digest is
-      D : Digest; 
+      D : Digest;
       use Interfaces;
       Pos : Natural := S'First;
    begin
@@ -450,5 +455,5 @@ package body Sha1 is
       end loop;
       return D;
    end From_char_array;
-   
+
 end Sha1;

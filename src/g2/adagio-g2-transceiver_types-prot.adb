@@ -32,27 +32,31 @@
 ------------------------------------------------------------------------------
 --  $Id: adagio-g2-transceiver_types-prot.adb,v 1.18 2004/03/29 19:13:30 Jano Exp $
 
-with Adagio.Chronos;
-with Adagio.G2.Packet;
-with Adagio.G2.Packet.Parsing;
-with Adagio.Globals.Options;
-with Adagio.Memory_stream_constrained;
-with Adagio.Misc;
-with Adagio.Network_Settings;
-with Adagio.Security;
-with Adagio.Socket.Ip;
-with Adagio.Statistics;
-with Adagio.Statistics.Integers;
-with Adagio.Traffic;
-with Adagio.Zutil;
+With
+Ada.Exceptions,
+Ada.Streams,
+Ada.Unchecked_conversion,
+Adagio.Trace,
+Adagio.Chronos,
+Adagio.G2.Packet,
+Adagio.G2.Packet.Parsing,
+Adagio.Globals.Options,
+Adagio.Memory_stream_constrained,
+Adagio.Misc,
+Adagio.Network_Settings,
+Adagio.Security,
+Adagio.Socket.IP,
+Adagio.Statistics,
+Adagio.Statistics.Integers,
+Adagio.Traffic,
+Adagio.Zutil,
+Zlib;
 
 
-with Zlib;
-
-with Ada.Streams;  use Ada.Streams;
-with Ada.Unchecked_conversion;
 use  Ada;
-with Adagio.Trace;
+use Ada.Exceptions;
+use Ada.Streams;
+
 
 package body Adagio.G2.Transceiver_types.Prot is
 
@@ -176,7 +180,9 @@ package body Adagio.G2.Transceiver_types.Prot is
                Fragment_list.Key (J)));
             I := Fragment_list.Succ (I);
          end loop;
-      end Debug_out;
+	end Debug_out;
+
+	Pragma Unreferenced( Debug_Out );
       ---------------------
       -- Add_safe_packet --
       ---------------------

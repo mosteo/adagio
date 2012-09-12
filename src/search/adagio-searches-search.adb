@@ -32,16 +32,12 @@
 ------------------------------------------------------------------------------
 --  $Id: adagio-upload.ads,v 1.4 2004/01/21 21:05:51 Jano Exp $
 
-with Adagio.Hash_Dictionary;
-with Adagio.Searches.Hit.Factory;
-with Adagio.Trace;
-with Sha1;
-
-with Agpl.Magnet;
-with Agpl.Strings.Fields;
-
-with Ada.Unchecked_deallocation;
-use  Ada;
+With
+Adagio.Searches.Hit.Factory,
+Adagio.Trace,
+Agpl.Magnet,
+Agpl.Strings.Fields,
+Ada.Unchecked_deallocation;
 
 package body Adagio.Searches.Search is
 
@@ -52,10 +48,10 @@ package body Adagio.Searches.Search is
    ------------------------------------------------------------------------
    -- Add missing indexes to a family who contains a hit
    procedure Add_Hash_Indexes (
-      This : access Object; F : in Hit_Family.Object_Access; H : in Hit.Object'Class) 
+      This : access Object; F : in Hit_Family.Object_Access; H : in Hit.Object'Class)
    is
       use Hit_Family_Map;
-      Hashes : Hash_Dictionary.Pair_Array := 
+      Hashes : Hash_Dictionary.Pair_Array :=
          Hash_Dictionary.Get_Contents (Hit.Get_Hashes (H));
 
       ------------
@@ -81,7 +77,7 @@ package body Adagio.Searches.Search is
             Index : constant String := Construct_Pair (Hashes (I).Key, Hashes (I).Value);
          begin
             if not Exists (Index) then
-               -- Trace.Log ("INSERTING NEW INDEX: " & Index & " for " & Hit.Get_Name (H), 
+               -- Trace.Log ("INSERTING NEW INDEX: " & Index & " for " & Hit.Get_Name (H),
                --   Trace.Always);
                Insert (This.Hits, Index, F);
             end if;
@@ -136,11 +132,11 @@ package body Adagio.Searches.Search is
       Hash : in     Hash_Dictionary.Object;
       Id   : in     Download.Slot_Id)
    is
-      Fams : Hit_Family.Object_Access_Array := 
+      Fams : Hit_Family.Object_Access_Array :=
          Get_Families (This, Hash);
    begin
-      Trace.Log ("Searches.Search: Found" & Natural'Image (Fams'Length) & 
-         " compatible hit families for the " & 
+      Trace.Log ("Searches.Search: Found" & Natural'Image (Fams'Length) &
+         " compatible hit families for the " &
          "download " & Download.To_String (Id), Trace.Always);
       for I in Fams'Range loop
          Hit_Family.Add_Sources_To_Download (Fams (I).all, Id);
@@ -196,16 +192,16 @@ package body Adagio.Searches.Search is
             if Hash_Type = "sha1" then
                New_Search.Digest_Text := U (Magnet.Get_Hash_Value (Mg, Hash_Type));
             elsif Hash_Type = "bitprint" or else Hash_Type = "bp" then
-               New_Search.Digest_Text := 
+               New_Search.Digest_Text :=
                   U (Agpl.Strings.Fields.Select_Field (Magnet.Get_Hash_Value (Mg, Hash_Type), 1, '.'));
             elsif Hash_Type = "several" then
                if Magnet.Get_Hash_Value (Mg, "sha1") /= "" then
                   New_Search.Digest_Text := U (Magnet.Get_Hash_Value (Mg, "sha1"));
                elsif Magnet.Get_Hash_Value (Mg, "bitprint") /= "" then
-                  New_Search.Digest_Text := 
+                  New_Search.Digest_Text :=
                      U (Agpl.Strings.Fields.Select_Field (Magnet.Get_Hash_Value (Mg, "bitprint"), 1, '.'));
                elsif Magnet.Get_Hash_Value (Mg, "bp") /= "" then
-                  New_Search.Digest_Text := 
+                  New_Search.Digest_Text :=
                      U (Agpl.Strings.Fields.Select_Field (Magnet.Get_Hash_Value (Mg, "bp"), 1, '.'));
                else
                   New_Search.Digest_Text := U (Magnet.Get_Hash_Value (Mg));
@@ -214,7 +210,7 @@ package body Adagio.Searches.Search is
             New_Search.Digest := Sha1.From_Base32 (S (New_Search.Digest_Text));
             New_Search.Name   := U (Magnet.Get_Name (Mg));
             New_search.Id     := From_String (Get_Target (New_Search));
-         end; 
+         end;
       end if;
       New_search.Priority := Priority;
 
@@ -245,7 +241,7 @@ package body Adagio.Searches.Search is
             Res.Digest_Text := U (Hash);
             Res.Name        := U (Xml.Get_Attribute (Srch, "name", ""));
             Res.Id          := From_String (Get_Target (Res));
-         end; 
+         end;
       end if;
       Res.Priority := Priorities'Value (Xml.Get_Attribute (Srch, "priority", "error"));
       Res.Paused   := Boolean'Value    (Xml.Get_Attribute (Srch, "paused", "false"));
@@ -318,7 +314,7 @@ package body Adagio.Searches.Search is
    -- Without duplicate families
    -- There can be at most N! families with the same hash and being distinct ones.
    -- Hence the fixed array size of candidates.
-   function Get_Families (This : access Object; H : in Hit.Object'Class) 
+   function Get_Families (This : access Object; H : in Hit.Object'Class)
       return Hit_Family.Object_Access_Array is
    begin
       return Get_Families (This, Hit.Get_Hashes (H));
@@ -328,13 +324,13 @@ package body Adagio.Searches.Search is
    -- There can be at most N! families with the same hash and being distinct ones.
    -- Hence the fixed array size of candidates.
    function Get_Families (This : access Object; H : in Hash_Dictionary.Object)
-      return Hit_Family.Object_Access_Array 
+      return Hit_Family.Object_Access_Array
    is
       Fams : Hit_Family.Object_Access_Array (1 .. 120);
       Num  : Natural := 0;
       use Hit_Family_Map;
       First, Back : Iterator_Type;
-      Hashes      : Hash_Dictionary.Pair_Array := 
+      Hashes      : Hash_Dictionary.Pair_Array :=
          Hash_Dictionary.Get_Contents (H);
 
       -- Add if not present
@@ -398,8 +394,8 @@ package body Adagio.Searches.Search is
    -- Returns a freshly allocated and created XML node <search/>
    -- Caller should deallocate.
    function To_Xml (
-      This      : access Object; 
-      Doc       :        in Xml.Document; 
+      This      : access Object;
+      Doc       :        in Xml.Document;
       With_Hits :        in Boolean) return Xml.Node
    is
       Srch : Xml.Node := Xml.Create_Child (Doc, "search");
@@ -547,9 +543,9 @@ package body Adagio.Searches.Search is
    -- Descriptive target description:
    function Get_Target (This : access Object) return String is
    begin
-      case This.Kind is 
+      case This.Kind is
          when Keywords    => return S (This.Words);
-         when Sha1_Digest => 
+         when Sha1_Digest =>
             if This.Name /= Null_Ustring then
                return S (This.Digest_Text) & " [" & S (This.Name) & "]";
             else
@@ -562,7 +558,7 @@ package body Adagio.Searches.Search is
    -- Set_Expanded                                                       --
    ------------------------------------------------------------------------
    procedure Set_Expanded (
-      This : access Object; Family : in String; Expanded : in Boolean := true) 
+      This : access Object; Family : in String; Expanded : in Boolean := true)
    is
       use Hit_Family_Map;
       I : Iterator_Type := Find (This.Ids, Family);

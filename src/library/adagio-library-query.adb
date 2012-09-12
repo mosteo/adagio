@@ -32,12 +32,12 @@
 ------------------------------------------------------------------------------
 --  $Id: adagio-library-query.adb,v 1.4 2004/01/21 21:05:28 Jano Exp $
 
-with Adagio.Misc;
-with Adagio.Trace;
-
-with Strings.Utils;
-
-with Charles.Algorithms.Generic_set_intersection;
+with
+Adagio.File,
+Adagio.Misc,
+Adagio.Trace,
+Strings.Utils,
+Charles.Algorithms.Generic_set_intersection;
 
 package body Adagio.Library.Query is
 
@@ -48,11 +48,11 @@ package body Adagio.Library.Query is
    procedure Multiple_words (
       Words : in String; Files : in out File_set.Container_type)
    is
-      Simple_words : String := 
+      Simple_words : String :=
          Strings.Utils.Simplify (
             Strings.Utils.Positivize (Words));
       Indexes   : Strings.Utils.Index_array :=
-         Strings.Utils.Tokenize (Simple_words); 
+         Strings.Utils.Tokenize (Simple_words);
       Results   : File_set.Container_type;
       Common    : File_set.Container_type;
       Intersect : File_set.Container_type;
@@ -83,18 +83,17 @@ package body Adagio.Library.Query is
       for N in Indexes'Range loop
          if Simple_words (Indexes (N).First) /= '-' and then
             Indexes (N).Last - Indexes (N).First + 1 >= 3
-         then 
+         then
 
             Library.Object.Query_word (
                Simple_words (Indexes (N).First .. Indexes (N).Last), Results);
 
             -- Remove unshared ones
             declare
-               use File_set;
                I : Iterator_type := First (Results);
             begin
                while I /= Back (Results) loop
-                  if not (File.Shared (Element (I)) and 
+                  if not (File.Shared (Element (I)) and
                           file.Folder_shared (Element (I))) then
                      Delete (Results, I);
                   else
@@ -109,12 +108,12 @@ package body Adagio.Library.Query is
             else
                File_set.Clear (Intersect);
                -- Do intersection
-               Do_intersection (First (Results), Back (Results), 
+               Do_intersection (First (Results), Back (Results),
                                 First (Common), Back (Common));
                -- Assign:
                Copy (Common, Intersect);
             end if;
-            -- There is no point in proceeding if intersection 
+            -- There is no point in proceeding if intersection
             --  is already empty:
             exit when File_set.Is_empty (Common);
 
@@ -125,7 +124,6 @@ package body Adagio.Library.Query is
       declare
          I      : File_set.Iterator_type := File_set.First (Common);
          Add    : Boolean;
-         use type File_set.Iterator_type;
       begin
          File_set.Clear (Files);
          while I /= File_set.Back (Common) loop
@@ -150,7 +148,7 @@ package body Adagio.Library.Query is
       end;
    exception
       when E : others =>
-         Trace.Log ("Library.Query.Multiple_words: " & Words & ": " & 
+         Trace.Log ("Library.Query.Multiple_words: " & Words & ": " &
             Trace.Report (E), Trace.Error);
    end Multiple_words;
 

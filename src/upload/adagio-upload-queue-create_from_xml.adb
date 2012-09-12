@@ -34,7 +34,18 @@
 
 -- Creation of a queue from Xml node
 
-procedure Adagio.Upload.Queue.Create_from_xml ( 
+With
+Adagio.Misc,
+Adagio.Upload.Client,
+Adagio.Upload.Ratings,
+Adagio.XML.Utils;
+
+Use
+Adagio,
+Adagio.Upload.Client,
+Adagio.Upload.Ratings;
+
+procedure Adagio.Upload.Queue.Create_from_xml (
    This  : out Queue.Object;
    Node  : in  Xml.Node;
    Ratio : in  Float) is
@@ -46,9 +57,9 @@ begin
    if Xml.Get_attribute ("preemption", "active", Node, "no") = "no" then
       Preempt.Kind := None;
    else
-      Preempt.Time := 
+      Preempt.Time :=
          Xml.Utils.Get_duration ("preemption", "time", Node, 0.0);
-      Preempt.Size := 
+      Preempt.Size :=
          Xml.Utils.Get_size ("preemption", "size", Node, 0);
       if Preempt.Time /= 0.0 and Preempt.Size /= 0 then
          Preempt.Kind := Both;
@@ -66,18 +77,18 @@ begin
       Xml.Get_attribute ("type", "expression", Node, "Position")));
 
    -- Ensure valid expression
-   if Order.Kind = rated and then 
-      not Ratings.Check_syntax (S (Order.Expression)) 
+   if Order.Kind = rated and then
+      not Check_syntax (S (Order.Expression))
    then
       return;
    end if;
 
    This.Create (
-      This'Unrestricted_access, 
+      This'Unrestricted_access,
       Name      => Xml.Get_attribute (Node, "name", ""),
       Length    => Xml.Utils.Get_num (Node, "length", 64),
       Uploads   => Xml.Utils.Get_num (Node, "ActiveClients", 2),
-      Bandwidth => File_size (Float (Xml.Utils.Get_speed ("uploads", 
+      Bandwidth => File_size (Float (Xml.Utils.Get_speed ("uploads",
                      "bandwidth", Globals.Config, File_size'Last)) * Ratio),
       Minimum_speed => Xml.Utils.Get_speed (Node, "MinimumClientSpeed", 0),
       Average_period => Xml.Utils.Get_duration (Node, "AveragePeriod", 60.0),

@@ -32,7 +32,6 @@
 ------------------------------------------------------------------------------
 --  $Id: adagio-time_t.adb,v 1.3 2004/01/21 21:05:36 Jano Exp $
 
-with Ada.Calendar;   use Ada;
 
 package body Adagio.Time_t is
 

@@ -32,27 +32,28 @@
 ------------------------------------------------------------------------------
 --  $Id: adagio-library-tasks.adb,v 1.8 2004/01/21 21:05:28 Jano Exp $
 
-with Adagio.File;
-with Adagio.Globals.Options;
-with Adagio.Hash;
-with Adagio.Misc;
-with Adagio.Statistics;
-with Adagio.Statistics.Strings;
-with Adagio.Trace;
-with Sha1;
-with TigerTree;
+with
+Adagio.File,
+Adagio.Globals.Options,
+Adagio.Hash,
+Adagio.Misc,
+Adagio.Statistics,
+Adagio.Statistics.Strings,
+Adagio.Trace,
+Sha1,
+TigerTree,
+Acf.Hash.Message_Digests,
+Acf.Types,
+Ada.Real_time;
 
-with Acf.Hash.Message_digests;
-with Acf.Types;
-
-with Ada.Real_time;  use Ada.Real_time;
+use
+Ada.Real_time;
 
 package body Adagio.Library.Tasks is
 
    Stat_current_hash : constant String := "Library - Currently hashing";
 
    task body Folder_maintenance is
-      use Real_time;
       P: Real_time.Time_span;
       Next_start    : Real_time.Time:= Real_time.Clock;
       Last_save     : Real_time.Time := Real_time.Clock;
@@ -115,7 +116,7 @@ package body Adagio.Library.Tasks is
                Library.Object.Get_pending_file (F);
                if F = File.Null_file then
                   Statistics.Object.Set (
-                     Stat_current_hash, 
+                     Stat_current_hash,
                      Statistics.Strings.Create ("None"));
                end if;
                exit Hashing when
@@ -128,7 +129,7 @@ package body Adagio.Library.Tasks is
                   Stat_current_hash,
                   Statistics.Strings.Create (File.Name (F)));
                File.Compute_hashes (F, Hash_speed);
-               
+
                -- Add to library as finished:
                File.Refresh            (F);
                Library.Object.Add_file (F);

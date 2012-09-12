@@ -32,13 +32,19 @@
 ------------------------------------------------------------------------------
 --  $Id: adagio-g2-transceiver_types-prot.ads,v 1.7 2004/03/29 19:13:31 Jano Exp $
 
-with Adagio.G2.Packet.Queue;
-with Adagio.Os.Memory;
-with Adagio.Socket;
+With
+Interfaces,
+Ada.Calendar,
+Adagio.Constants,
+Adagio.Types,
+Adagio.G2.Packet.Queue,
+Adagio.Os.Memory,
+Adagio.Socket;
 
-with Interfaces;
+Use
+Adagio.Constants,
+Adagio.Types;
 
-with Ada.Calendar;
 
 package Adagio.G2.Transceiver_types.Prot is
 

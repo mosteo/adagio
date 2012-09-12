@@ -33,12 +33,21 @@
 --  $Id: adagio-g2-chat_peer.adb,v 1.8 2004/04/01 22:11:24 Jano Exp $
 
 --  with Adagio.G2.Core;
-with Adagio.Globals.Options;
-with Adagio.GUID;
-with Adagio.Misc;
-with Adagio.Streams;
-with Adagio.Trace;
-with Adagio.Unicode;
+
+With
+SHA1,
+Adagio.Constants,
+Adagio.Globals.Options,
+Adagio.GUID,
+Adagio.Misc,
+Adagio.Streams,
+Adagio.Trace,
+Adagio.Unicode;
+
+Use
+SHA1,
+Adagio.Constants;
+
 
 package body Adagio.G2.Chat_peer is
 

@@ -32,36 +32,39 @@
 ------------------------------------------------------------------------------
 --  $Id: adagio-g2-core.ads,v 1.19 2004/03/29 19:13:30 Jano Exp $
 
-with Adagio.Chronos;
-with Adagio.G2.Listener;
-with Adagio.G2.Packet;
-with Adagio.G2.Packet.Parsing;
-with Adagio.G2.Packet.Queue;
-with Adagio.G2.Search;
-with Adagio.G2.Transceiver;
-with Adagio.Globals;
-with Adagio.Globals.Options;
-with Adagio.Http.Header;
-with Adagio.Http.Header.Parser;
-with Adagio.Network;
-with Adagio.Searches.Handler;
-with Adagio.Server;
-with Adagio.Tcp_slot;
-with Adagio.User_profile;
-with Adagio.Xml;
+Pragma Ada_2012;
 
-with Average_queue;
-with Circular_stream;
+With
+Adagio.Chronos,
+Adagio.Constants,
+Adagio.G2.Listener,
+Adagio.G2.Packet,
+Adagio.G2.Packet.Parsing,
+Adagio.G2.Packet.Queue,
+Adagio.G2.Search,
+Adagio.G2.Transceiver,
+Adagio.Globals,
+Adagio.Globals.Options,
+Adagio.Http.Header,
+Adagio.Http.Header.Parser,
+Adagio.Network,
+Adagio.Searches.Handler,
+Adagio.Server,
+Adagio.Tcp_slot,
+Adagio.User_profile,
+Adagio.Xml,
+Average_queue,
+Circular_stream,
+Agpl.Http.Server.Sort_handler,
+Zlib.Streams,
+Ada.Calendar,
+Ada.Streams,
+System,
+Charles.Maps.Sorted.Strings.Unbounded;
 
-with Agpl.Http.Server.Sort_handler;
-
-with Zlib.Streams;
-
-with Ada.Calendar;   use Ada;
-with Ada.Streams;
-with System;
-
-with Charles.Maps.Sorted.Strings.Unbounded;
+Use
+Ada,
+Adagio.Constants;
 
 pragma Elaborate_all (Average_queue);
 
@@ -110,8 +113,7 @@ package Adagio.G2.Core is
    function Id (this: in Server_type) return String;
    pragma Inline (Id);
 
-   function Describe (this: in Server_type) return String;
-   pragma Inline (Describe);
+   function Describe (this: in Server_type) return String with Inline;
 
    -- Get network it belongs:
    function Net (this: in Server_type) return String;

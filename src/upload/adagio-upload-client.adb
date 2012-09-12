@@ -33,19 +33,17 @@
 ------------------------------------------------------------------------------
 --  $Id: adagio-upload-client.adb,v 1.5 2004/01/21 21:05:49 Jano Exp $
 
-with Adagio.Statistics;
-with Adagio.Statistics.Integers;
 
 package body Adagio.Upload.Client is
 
-   Stat_alive_uploads : constant String := "Network - Allocated uploads";
-
+    Stat_alive_uploads : constant String := "Network - Allocated uploads";
+	Pragma Unreferenced(Stat_alive_uploads);
    ------------------------------------------------------------------------
    -- Queue_id                                                           --
    ------------------------------------------------------------------------
    function Queue_id (This : in Object'Class) return String is
    begin
-      return Id (This) & ":" & 
+      return Id (This) & ":" &
          Upload.Resource.Id (
             Upload.Resource.V (Requested_resource (This)).all);
    end Queue_id;

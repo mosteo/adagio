@@ -31,6 +31,12 @@
 --  harass or legally prosecute these users.                                --
 ------------------------------------------------------------------------------
 --  $Id: adagio-g2-core-sender.adb,v 1.14 2004/03/01 00:41:57 Jano Exp $
+With
+Ada.Exceptions;
+
+Use
+Ada.Exceptions;
+
 
 separate (Adagio.G2.Core)
 procedure Sender (This : access Server_type) is
@@ -64,7 +70,7 @@ procedure Sender (This : access Server_type) is
       if not Socket.Is_alive (Serv.Slot.Socket) then
          Stall := true;
          Disconnect (Serv.all);
-         Trace.Log ("G2.Core.Sender: Connection reset by peer: " 
+         Trace.Log ("G2.Core.Sender: Connection reset by peer: "
             & Id (Serv.all));
       elsif not Socket.Is_writable (Serv.Slot.Socket) then
          -- Trace.Log ("G2.Core.Sender: Packet deferred for server " &
@@ -75,7 +81,7 @@ procedure Sender (This : access Server_type) is
          -- Deflate or not deflate:
          if not Serv.Slot.Deflate then
             Success :=
-               Circular_stream.Available_write (Serv.Slot.CStream_out) 
+               Circular_stream.Available_write (Serv.Slot.CStream_out)
                >= Size;
             if Success then
                Packet.Write (Serv.Slot.CStream_out'Access, I.Packet);
@@ -108,7 +114,7 @@ procedure Sender (This : access Server_type) is
 
             Trace.Log ("  --> TCP/" & S (I.Tcp_Id) & " " &
                Packet.To_hex (I.Packet) & " (Latency:" &
-               Duration'Image (Latency) & ") (Size:" & Size'Img & ")", 
+               Duration'Image (Latency) & ") (Size:" & Size'Img & ")",
                File => S (Logfile));
             if Serv.QRT_status = Sending then
                if Packet.Is_a (I.Packet, "/QHT") then
@@ -123,11 +129,11 @@ procedure Sender (This : access Server_type) is
             Serv.Slot.Outbound.Get (Dummy);
          else
             Stall := true;
-            Serv.Last_delay := 
+            Serv.Last_delay :=
                Duration'Min (Serv.Last_delay * 1.5, 5.0);
             Serv.Delayed_send := Calendar.Clock + Serv.Last_delay;
-            Trace.Log ("G2.Core.Sender: Packet deferred for server " 
-               & Id (Serv.all) & 
+            Trace.Log ("G2.Core.Sender: Packet deferred for server "
+               & Id (Serv.all) &
                " (Socket full or cbuffer exhausted)", Trace.Debug);
          end if;
       end if;
@@ -158,10 +164,10 @@ begin
 
             if Success then
                if Item.In_response_to /= Packet.Null_packet then
-                  Latency := Calendar.Clock - 
+                  Latency := Calendar.Clock -
                      Packet.Arrival_time (Item.In_response_to);
                else
-                  Latency := Calendar.Clock - 
+                  Latency := Calendar.Clock -
                      Packet.Arrival_time (Item.Packet);
                end if;
 
@@ -185,13 +191,13 @@ begin
       exception
          when E : others =>
             Trace.Log (
-               "G2.Core.Sender: " & Trace.Report (E), 
+               "G2.Core.Sender: " & Trace.Report (E),
                Trace.Error);
       end;
    exception
       when E : others =>
          Trace.Log (
-            "G2.Core.Sender: " & Trace.Report (E), 
+            "G2.Core.Sender: " & Trace.Report (E),
             Trace.Error);
    end;
 end Sender;

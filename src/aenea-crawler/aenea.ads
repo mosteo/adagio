@@ -32,11 +32,9 @@
 ------------------------------------------------------------------------------
 --  $Id: aenea.ads,v 1.13 2004/03/22 07:14:56 Jano Exp $
 
-with Ada.Exceptions;        use Ada.Exceptions;
-with Ada.Strings.Unbounded;
-with Agpl;                  use Agpl;
-
-with Adagio.G2;
+with
+Ada.Strings.Unbounded,
+Adagio.G2;
 
 package Aenea is
 

@@ -32,7 +32,6 @@
 ------------------------------------------------------------------------------
 --  $Id: adagio-g2-packet.adb,v 1.7 2004/02/29 20:36:42 Jano Exp $
 
-with Adagio.Debug;
 with Adagio.Exceptions; use Adagio.Exceptions;
 with Adagio.Memory_stream_constrained;
 with Adagio.Misc;
@@ -41,7 +40,6 @@ with Adagio.Socket;
 with Adagio.Trace;
 with Adagio.XML;
 
-with Agpl.Protected_Values.Integers;
 with Agpl.Types.Ustrings; use Agpl.Types.Ustrings;
 
 with Ada.Unchecked_conversion;
@@ -51,9 +49,8 @@ with Adagio.Unicode;
 
 package body Adagio.G2.Packet is
 
-   use type Agpl.Types.Ustrings.Ustring;
 
-   Stat_num_children : constant String := "Network - G2 - Alive packets";
+    Stat_num_children : constant String := "Network - G2 - Alive packets";
 
    use type Safe_child.Object;
 
@@ -629,6 +626,13 @@ package body Adagio.G2.Packet is
 
       return P;
    end Create_UPROD;
+
+
+    --	UNREFERENCED ITEMS
+	Pragma Unreferenced( Stat_num_children );
+	Pragma Unreferenced( Child_vector );
+	Pragma Unreferenced( Serialize );
+	Pragma Unreferenced( Read );
 
 begin
 --   Statistics.Object.Set (

@@ -1,12 +1,14 @@
+With "Win32Ada";
+
 project Adagio is
 
    for Languages use ("Ada");
    for Object_Dir use "obj_debug";
 
    for Main use ("main.adb");
-   type Build_Type is ("Devel", "Release");
+   type Build_Type is ("Development", "Release");
 
-   Build : Build_Type := external ("Build", "Devel");
+   Build : Build_Type := external ("Build", "Development");
 
    type OS_Type is ("Linux", "Win32");
    OS : OS_Type := external ("OS", "Linux");
@@ -51,7 +53,7 @@ project Adagio is
 
    package Builder is
 
-      for Default_Switches ("ada") use ("-m", "-j2", "-g", "-gnatQ");
+      for Default_Switches ("ada") use ("-m", "-j2", "-g" ); --, "-gnatQ");
       for Executable ("main.adb") use "adagio";
 
    end Builder;

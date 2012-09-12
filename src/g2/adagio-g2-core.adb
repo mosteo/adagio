@@ -32,52 +32,51 @@
 ------------------------------------------------------------------------------
 --  $Id: adagio-g2-core.adb,v 1.26 2004/03/29 19:13:30 Jano Exp $
 
-with Adagio.Connect.Peer_Manager;
-with Adagio.Debug;
-with Adagio.G2.Bandwidth;
-with Adagio.G2.Local_query;
-with Adagio.G2.Mesh;
-with Adagio.GUID;
-with Adagio.GWCache2;
-with Adagio.Library;
-with Adagio.Mmap.Strings;
-with Adagio.Misc;
-with Adagio.Network.Endian;
-with Adagio.Network_settings;
-use  Adagio.Network_settings;
-with Adagio.Resolver_Tcp;
-with Adagio.Routing;
-with Adagio.Socket;
-with Adagio.Socket.IP;
-with Adagio.Statistics;
-with Adagio.Statistics.Booleans;
-with Adagio.Statistics.Durations;
-with Adagio.Statistics.Integers;
-with Adagio.Streams_alias;
-with Adagio.Time_t;
-with Adagio.Trace;
-with Adagio.Traffic;
-with Adagio.Unicode;
-with Adagio.Upload.Queue.Manager;
-with Adagio.Zutil;
+Pragma Ada_2012;
 
-with Agpl.Geoip;
+With
+Adagio.Connect.Peer_Manager,
+Adagio.Debug,
+Adagio.G2.Bandwidth,
+Adagio.G2.Local_query,
+Adagio.G2.Mesh,
+Adagio.GUID,
+Adagio.GWCache2,
+Adagio.Library,
+Adagio.Mmap.Strings,
+Adagio.Misc,
+Adagio.Network.Endian,
+Adagio.Network_settings,
+Adagio.Resolver_Tcp,
+Adagio.Routing,
+Adagio.Socket,
+Adagio.Socket.IP,
+Adagio.Statistics,
+Adagio.Statistics.Booleans,
+Adagio.Statistics.Durations,
+Adagio.Time_t,
+Adagio.Trace,
+Adagio.Traffic,
+Adagio.Unicode,
+Adagio.Zutil,
+Agpl.Geoip,
+Strings.Fields,
+Zlib,
+Zlib.Streams.Extra,
+Ada.Characters.Handling,
+Ada.Streams,
+Adagio.Xml.Utils;
 
-with Strings.Fields;
-with Zlib;
-with Zlib.Streams.Extra;
-
-with Ada.Characters.Handling;
-with Ada.Streams;                use Ada.Streams;
-use Ada;
-
-with Text_io;
-with Adagio.Xml.Utils;
+Use
+  Ada.Streams,
+  Adagio.Network_settings;
 
 package body Adagio.G2.Core is
 
    Stat_longest : constant String := "Servers - G2 - Longest connection";
    Stat_servers : constant String := "Servers - G2 - New servers";
+
+    Pragma Unreferenced(Stat_servers);
 
    use type Calendar.Time;
 
@@ -212,6 +211,9 @@ package body Adagio.G2.Core is
 
    -- Get description
    function Describe (this: in Server_type) return String is
+
+	function QRT_status return String with Inline;
+
       function QRT_status return String is
       begin
          if This.QRT_status = Sending then

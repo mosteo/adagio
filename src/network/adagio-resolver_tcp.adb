@@ -34,31 +34,31 @@
 
 --  Will handshake with a unknown TCP source until its purpose is know.
 
-with Adagio.Connect.Peer_Manager;
-with Adagio.G2.Browse_Peer;
-with Adagio.G2.Chat_Factory;
-with Adagio.G2.Upload_Client;
-with Adagio.Globals.Options;
-with Adagio.Guid;
-with Adagio.Socket;
-with Adagio.Trace;
-with Adagio.Upload;
-with Adagio.Upload.Client;
-with Adagio.Upload.Queue.Manager;
+With
+Adagio.Connect.Peer_Manager,
+Adagio.G2.Browse_Peer,
+Adagio.G2.Chat_Factory,
+Adagio.G2.Upload_Client,
+Adagio.Guid,
+Adagio.Trace,
+Adagio.Upload,
+Adagio.Upload.Client,
+Adagio.Upload.Queue.Manager,
+Agpl.Types.Ustrings,
+Strings.Fields,
+Ada.Exceptions;
 
-with Agpl.Types.Ustrings; use Agpl.Types.Ustrings;
-
-with Strings.Fields;
-
-with Ada.Exceptions; use Ada.Exceptions;
+Use
+Ada.Exceptions,
+Agpl.Types.Ustrings;
 
 package body Adagio.Resolver_Tcp is
 
    ------------------------------------------------------------------------
    -- Create_Pushed                                                      --
    ------------------------------------------------------------------------
-   function Create_pushed (Addr : in Socket.Sock_addr_type) 
-      return Object_access 
+   function Create_pushed (Addr : in Socket.Sock_addr_type)
+      return Object_access
    is
       This : Object_access := new Object;
    begin
@@ -66,7 +66,7 @@ package body Adagio.Resolver_Tcp is
       Socket.Set_blocking_io (This.Link, false);
       This.Pushing := true;
 
-      Connection : 
+      Connection :
       begin
          Socket.Connect (
             This.Link, Socket.Image (Addr.Addr), Natural (Addr.Port));
@@ -111,14 +111,14 @@ package body Adagio.Resolver_Tcp is
    function Id (This : in Object) return String is
    begin
       return "RESOLVER:" & Socket.Image (Socket.Get_Peer_Name (This.Link));
-   end Id; 
+   end Id;
 
    ------------------------------------------------------------------------
    -- Process                                                            --
    ------------------------------------------------------------------------
    -- Process until headers received, then create according managers.
    procedure Process (
-      This    : in out Object; 
+      This    : in out Object;
       Context : in out Connect.Peer.Context_type)
    is
    begin
@@ -134,7 +134,7 @@ package body Adagio.Resolver_Tcp is
       exception
          when Socket.Socket_error =>
             Trace.Log (
-               "Connection lost resolving request: " & Id (This), 
+               "Connection lost resolving request: " & Id (This),
                Trace.Informative);
             Context.Is_Done := true;
             return;
@@ -173,7 +173,7 @@ package body Adagio.Resolver_Tcp is
                      P := Connect.Peer.Object_access (
                         G2.Chat_Factory.Create (
                            S (Globals.Options.Chat_answer),
-                           This.Link, 
+                           This.Link,
                            Headers));
                      begin
                         Connect.Peer_manager.Object.Add (P);
@@ -232,7 +232,7 @@ package body Adagio.Resolver_Tcp is
          Response, "PUSH guid:" & Guid.To_hex (Guid.My_guid));
 
       -- Connection alive?
-      if (not Socket.Is_alive (This.Link)) or else 
+      if (not Socket.Is_alive (This.Link)) or else
          Socket.Connection_failed (This.Link)
       then
          Raise_exception (Connection_lost'Identity, "Can't connect (pushing)");
@@ -262,7 +262,7 @@ package body Adagio.Resolver_Tcp is
    -- Release all resources.
    procedure Finalize (This : in out Object) is
       pragma Unreferenced (This);
-   begin 
+   begin
       null;
       -- Nothing to do, since the socket must remain open for the resolved task.
    end Finalize;

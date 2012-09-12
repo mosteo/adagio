@@ -1,26 +1,17 @@
-
-
-with Aws.Messages;
-with Aws.Mime;
-with Aws.Parameters;
-with Aws.Response;
-with Aws.Status;
-with Templates_parser;
-
-with Agpl.Conversions;
-with Agpl.Dynamic_vector;
-with Agpl.Strings;
-
-with Charles.Maps.Sorted.Strings.Unbounded;
-with Charles.Multimaps.Sorted.Strings.Unbounded;
-
-with Ada.Streams.Stream_io;
-with Ada.Strings;
-with Ada.Strings.Fixed;
-
-with Gnat.Os_lib;
-
-with Text_Io;
+With
+Aws.Messages,
+Aws.Mime,
+Aws.Parameters,
+Agpl.Conversions,
+Agpl.Dynamic_vector,
+Agpl.Strings,
+Charles.Maps.Sorted.Strings.Unbounded,
+Charles.Multimaps.Sorted.Strings.Unbounded,
+Ada.Streams.Stream_io,
+Ada.Strings,
+Ada.Strings.Fixed,
+Gnat.Os_lib,
+Text_IO;
 
 package body Agpl.Http.Server.Sort_handler is
 
@@ -388,5 +379,8 @@ package body Agpl.Http.Server.Sort_handler is
    begin
       return RPad (Float (I), Size);
    end RPad;
+
+    --	UNREFERENCED ITEMS
+	pragma Unreferenced (Put_settings);
 
 end Agpl.Http.Server.Sort_handler;

@@ -34,13 +34,12 @@
 
 -- Types and functions to instantiate a TigerTree using HashTree.ads
 
-with Acf.Types;
+With
+Bit_arrays,
+Bit_arrays.Numbers,
+Bit_arrays.Modular;
 
-with Bit_arrays;
-with Bit_arrays.Numbers;
-with Bit_arrays.Modular;
-
-package body TigerTree is 
+package body TigerTree is
 
    package Tiger renames Acf.Hash.Algorithms.Tiger;
 
@@ -80,7 +79,7 @@ package body TigerTree is
    procedure Start_leaf_hash          (Context : in out Hash_context) is
    begin
       Tiger.Hash_update (
-         Context.Context'Access, 
+         Context.Context'Access,
          Acf.Types.Byte_array'(1 => 0));
    end Start_leaf_hash;
 
@@ -90,7 +89,7 @@ package body TigerTree is
    procedure Start_intermediate_hash  (Context : in out Hash_context) is
    begin
       Tiger.Hash_update (
-         Context.Context'Access, 
+         Context.Context'Access,
          Acf.Types.Byte_array'(1 => 1));
    end Start_intermediate_hash;
 
@@ -124,7 +123,7 @@ package body TigerTree is
    -- We must reverse the byte orders because that's the way it is done
    --    in gnutella (little endian instead of big endian)
    function To_byte_array (This : in Hash_type) return Byte_array is
-      Bytes : Byte_array := 
+      Bytes : Byte_array :=
          Acf.Hash.Message_digests.To_byte_array (This.Hash);
       B     : Byte_array (Bytes'Range);
    begin
@@ -138,7 +137,7 @@ package body TigerTree is
      for N in 16 .. 23 loop
         B (B'First + N) := Bytes (Bytes'First + 23 - N + 16);
      end loop;
-     
+
      return B;
    end To_byte_array;
 
@@ -158,7 +157,7 @@ package body TigerTree is
    function To_base32 (This : in Hash_type) return String is
       Bytes : Acf.Types.Byte_array := To_byte_array (This);
       use Bit_arrays;
-      Base32 : array (0 .. 31) of Character := 
+      Base32 : array (0 .. 31) of Character :=
          "ABCDEFGHIJKLMNOPQRSTUVWXYZ234567";
       Raw    : Bit_array (1 .. 195) := (others => false);
       Pos    : Natural := Raw'First;
@@ -174,13 +173,13 @@ package body TigerTree is
       -- Churn the base32 representation:
       Pos := Raw'First;
       for i in s'range loop
-         s (i) := 
+         s (i) :=
             Base32 (Bit_arrays.Numbers.To_number_BE (Raw (Pos .. Pos + 4)));
          Pos := Pos + 5;
       end loop;
       return s;
    end To_base32;
-   
+
    ------------------------------------------------------------------------
    -- To_char_array
    ------------------------------------------------------------------------

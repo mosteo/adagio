@@ -37,17 +37,18 @@
 --    of the hashing function.
 -- For example, a 20 bits table has a bitmap of 0 .. 2 ** 20 - 1 bits.
 
-with Adagio.Misc;
-with Bit_arrays.Strings;
+With
+Interfaces,
+Adagio.Misc,
+Bit_arrays.Strings,
+Agpl.Types.Ustrings;
 
-with Agpl.Types.Ustrings; use Agpl.Types.Ustrings;
-
-with Interfaces;
-with Text_io; use Text_io;
+Use
+Agpl.Types.Ustrings;
 
 package body Adagio.QRP is
 
-   -- Necessary because bit ordering in packed array is contrary to 
+   -- Necessary because bit ordering in packed array is contrary to
    -- that used in QRTs
    function Transform (Pos : in Natural) return Natural is
       use Interfaces;
@@ -141,7 +142,7 @@ package body Adagio.QRP is
       use Interfaces;
       nNumber  : Unsigned_64 := Unsigned_64 (Number);
       nProduct : Unsigned_64 := nNumber * 16#4F1BBCDC#;
-      nHash    : Unsigned_64 := 
+      nHash    : Unsigned_64 :=
          Shift_right (Shift_left (nProduct, 32), 32 + (32 - nBits));
    begin
       return Integer (nHash);
@@ -150,7 +151,7 @@ package body Adagio.QRP is
    ------------------------------------------------------------------------
    -- Hash_word                                                          --
    ------------------------------------------------------------------------
-   function Hash_word (Word : in String; nBits : Integer) 
+   function Hash_word (Word : in String; nBits : Integer)
       return Integer is
       use Interfaces;
       type Byte_range is mod 4;
@@ -180,10 +181,11 @@ package body Adagio.QRP is
    Test_case : UString_array := (
       U (""), U("n"), U("nd"), U("ndflaleme"));
 
+    Pragma Unreferenced( Test_case );
 begin
    -- Test the hash functions
 --   for N in test_case'Range loop
---      Put_line (S (Test_case (N)) & ": " & 
+--      Put_line (S (Test_case (N)) & ": " &
 --      Hash_word(S (Test_case (N)), 16)'img);
 --   end loop;
    null;

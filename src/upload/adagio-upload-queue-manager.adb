@@ -55,12 +55,13 @@ with Ada.Calendar; use Ada;
 with Ada.Real_time;
 with Ada.Unchecked_deallocation;
 with Interfaces;
+with Adagio.Upload.Client;
 
 package body Adagio.Upload.Queue.Manager is
 
    Share_bandwidth : Boolean renames Globals.Options.Uploads_ShareBandwidth;
    Throttle        : Float renames Globals.Options.Uploads_throttle;
-   Minimum_send_delay : Duration 
+   Minimum_send_delay : Duration
       renames Globals.Options.Uploads_MinimumSendDelay;
 
    Last_client_data_save : Calendar.Time := Calendar.Clock;
@@ -307,8 +308,8 @@ package body Adagio.Upload.Queue.Manager is
 
                -- Enqueue resolved
                if Client.Requested_resource (Current.all) /=
-                  Upload.Resource.Null_handle and then 
-                  not Context_out.Is_done 
+                  Upload.Resource.Null_handle and then
+                  not Context_out.Is_done
                then
 
                   if Client_list.Is_in(Client.Queue_id (Current.all), Clients)
@@ -418,6 +419,7 @@ package body Adagio.Upload.Queue.Manager is
       end loop;
       pragma Assert (Length (Slot.Queues) = 0);
    end Lost_from_queues;
+	pragma Unreferenced (Lost_from_queues);
 
    ------------------------------------------------------------------------
    -- Process_event                                                      --
@@ -436,15 +438,15 @@ package body Adagio.Upload.Queue.Manager is
          Name : Ustring := U (
             Upload.Resource.Name (
                Upload.Resource.V (
-                  Client.Requested_resource (This.Client.all)).all)); 
+                  Client.Requested_resource (This.Client.all)).all));
          Sname : constant String := S (Name);
       begin
          if This.Active_queue = null then
             return;
          end if;
          if Sname'Length > 6 and then
-            Sname (Sname'First .. Sname'First + 6) = "TTH of " 
-         then 
+            Sname (Sname'First .. Sname'First + 6) = "TTH of "
+         then
             Name := U (Sname (Sname'First + 7 .. Sname'Last));
          end if;
          Code := U (Agpl.Geoip.Country_code_from_addr (Addr));
@@ -542,7 +544,7 @@ package body Adagio.Upload.Queue.Manager is
          -- Defer if upload starting, process cc.
          if Slot.Is_uploading then
             Trace.Log(
-               "Upload.Queue.Manager: Starting upload of " & 
+               "Upload.Queue.Manager: Starting upload of " &
                   Upload.Resource.Name (
                      Upload.Resource.V (
                         Client.Requested_resource (Slot.Client.all)).all) &
@@ -562,25 +564,25 @@ package body Adagio.Upload.Queue.Manager is
                Upload.Client.Process (Slot.Client.all, Data_in, Data_out);
             exception
                when Upload.Client.Connection_lost | Socket.Socket_error =>
-                  Trace.Log ("Queue [waiting]: Connection lost to " & 
+                  Trace.Log ("Queue [waiting]: Connection lost to " &
                   Queue_id);
                   Lost_from_queues;
                   Remove (Queue_id);
                   return;
                when Upload.Client.Unknown_request =>
-                  Trace.Log ("Queue [waiting]: Unknown request from " & 
+                  Trace.Log ("Queue [waiting]: Unknown request from " &
                   Queue_id);
                   Lost_from_queues;
                   Remove (Queue_id);
                   return;
                when Upload.Client.Client_polled_too_soon =>
-                  Trace.Log ("Queue [waiting]: Poll too soon for " & 
+                  Trace.Log ("Queue [waiting]: Poll too soon for " &
                   Queue_id);
                   Lost_from_queues;
                   Remove (Queue_id);
                   return;
                when Upload.Client.Client_missed_poll_deadline =>
-                  Trace.Log ("Queue [waiting]: Poll too late for " & 
+                  Trace.Log ("Queue [waiting]: Poll too late for " &
                   Queue_id);
                   Lost_from_queues;
                   Remove (Queue_id);
@@ -609,7 +611,7 @@ package body Adagio.Upload.Queue.Manager is
                Remove_from_queues;
                Remove (Queue_id);
                Completed_seq.Get_next (Aux);
-               Statistics.Object.Set (Stat_session_completed, 
+               Statistics.Object.Set (Stat_session_completed,
                   Statistics.Integers.Create (Integer (Aux + 1)));
                return;
             end if;
@@ -698,17 +700,17 @@ package body Adagio.Upload.Queue.Manager is
             Upload.Client.Process (Slot.Client.all, Data_in, Data_out);
          exception
             when Upload.Client.Connection_lost | Socket.Socket_error =>
-               Trace.Log ("Queue [uploading]: Connection lost to " & 
+               Trace.Log ("Queue [uploading]: Connection lost to " &
                Queue_id);
                Register_upload_finish (Slot);
                Completed_seq.Get_next (Aux);
-               Statistics.Object.Set (Stat_session_completed, 
+               Statistics.Object.Set (Stat_session_completed,
                   Statistics.Integers.Create (Integer (Aux + 1)));
                Remove_from_queues;
                Remove (Queue_id);
                return;
             when Upload.Client.Unknown_request =>
-               Trace.Log ("Queue [uploading]: Unknown request from " & 
+               Trace.Log ("Queue [uploading]: Unknown request from " &
                Queue_id);
                Lost_from_queues;
                Remove (Queue_id);
@@ -734,7 +736,7 @@ package body Adagio.Upload.Queue.Manager is
             Remove_from_queues;
             Remove (Queue_id);
             Completed_seq.Get_next (Aux);
-            Statistics.Object.Set (Stat_session_completed, 
+            Statistics.Object.Set (Stat_session_completed,
                Statistics.Integers.Create (Integer (Aux + 1)));
             return;
          end if;
@@ -771,7 +773,7 @@ package body Adagio.Upload.Queue.Manager is
                return;
             end if;
             -- Stats
-            Object.Session_sent := 
+            Object.Session_sent :=
                Object.Session_sent + Long_long_integer (Data_out.Sent);
             Upload_stats;
          end if;
@@ -849,13 +851,13 @@ package body Adagio.Upload.Queue.Manager is
          if Slot.Is_uploading then
             Process_uploading;
             if Chronos.Elapsed (Cron) > 5.0 then
-               Trace.Log ("Upload process client too long [uploading]", 
+               Trace.Log ("Upload process client too long [uploading]",
                   Trace.Warning);
             end if;
          else
             Process_waiting;
             if Chronos.Elapsed (Cron) > 5.0 then
-               Trace.Log ("Upload process client too long [uploading]", 
+               Trace.Log ("Upload process client too long [uploading]",
                   Trace.Warning);
             end if;
          end if;
@@ -1012,7 +1014,7 @@ package body Adagio.Upload.Queue.Manager is
       Name : in String;
       From : in Natural;
       Qty  : in Natural;
-      Lost : in Boolean) return Queue.Report_array 
+      Lost : in Boolean) return Queue.Report_array
    is
       use Queue_list;
       I         : Iterator_type := Find (Queues, Name);
@@ -1031,7 +1033,7 @@ package body Adagio.Upload.Queue.Manager is
    procedure Http_report (
       Name : in  String;  -- Queue name
       Lost : in  Boolean; -- Show lost ones
-      Data : out Agpl.Http.Server.Sort_handler.Data_set) 
+      Data : out Agpl.Http.Server.Sort_handler.Data_set)
    is
       use Queue_list;
       I : Iterator_type := Find (Queues, Name);
@@ -1085,6 +1087,7 @@ package body Adagio.Upload.Queue.Manager is
       end loop;
       Trace.Log ("Adagio.Upload.Queue.Manager.Manager_update exited.");
    end Manager_Update;
+
 
 begin
    Client_data.List.Init;

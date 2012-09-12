@@ -32,6 +32,14 @@
 ------------------------------------------------------------------------------
 --  $Id: adagio-g2-core-sender_udp.adb,v 1.7 2004/01/21 21:05:26 Jano Exp $
 
+With
+SHA1,
+Ada.Exceptions;
+
+Use
+SHA1,
+Ada.Exceptions;
+
 separate (Adagio.G2.Core)
 task body Sender_udp is
    Net         : Network_access;
@@ -41,7 +49,7 @@ task body Sender_udp is
    -- To_udp --
    ------------
    procedure To_udp (
-      Network : in Network_access; 
+      Network : in Network_access;
       I       : in Packet.Queue.Item_type) is
       Dummy   : Packet.Queue.Item_type;
    begin
@@ -49,12 +57,12 @@ task body Sender_udp is
       Net.Outbound.Get (Dummy);
       -- Here it goes!
       G2.Transceiver.Send (Network.Transceiver.all, I);
-      
+
       Trace.Log ("  --> UDP/" & Socket.Image (
          I.Udp_destination) & " " &
          Packet.To_hex (I.Packet) & " (Latency:" &
          Duration'Image (Latency) & ") (Size:" &
-         Packet.Full_length (I.Packet)'Img & ")", 
+         Packet.Full_length (I.Packet)'Img & ")",
          File => S (Logfile));
    exception
       when others =>
@@ -89,13 +97,13 @@ begin
 
          if Success then
             if Item.In_response_to /= Packet.Null_packet then
-               Latency := Calendar.Clock - 
+               Latency := Calendar.Clock -
                   Packet.Arrival_time (Item.In_response_to);
             else
-               Latency := Calendar.Clock - 
+               Latency := Calendar.Clock -
                   Packet.Arrival_time (Item.Packet);
             end if;
-            
+
             case Item.Source is
                when Packet.Queue.Server =>
                   Raise_exception (Constraint_error'Identity,
@@ -109,7 +117,7 @@ begin
       exception
          when E : others =>
             Trace.Log (
-               "G2.Core.Sender_udp: " & Trace.Report (E), 
+               "G2.Core.Sender_udp: " & Trace.Report (E),
                Trace.Error);
       end;
    end loop;

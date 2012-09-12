@@ -36,7 +36,6 @@
 -- Case insensitive
 -- No duplicate items are inserted
 
-with Dynamic_vector;
 
 with Ada.Unchecked_deallocation;
 use  Ada;
@@ -64,13 +63,13 @@ package body Adagio.Dictionary is
       Free (Already);
 
       Insert (this.Data, Word, Item);
-   end Add; 
+   end Add;
 
    ------------------------------------------------------------------------
    -- Find                                                               --
    ------------------------------------------------------------------------
-   function Find (this : in Object; Word : in String) 
-      return Item_array_access 
+   function Find (this : in Object; Word : in String)
+      return Item_array_access
    is
       Pos, Back : Iterator_type;
       Result    : Item_array_access :=

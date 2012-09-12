@@ -47,6 +47,7 @@ package body Adagio.File.Safe is
       -- Add_upload --
       ----------------
       procedure Add_upload (F : in File.Object; Num : Positive) is
+	    pragma Unreferenced (Num);
       begin
          if V (F).Uploads < Natural'Last then
             V (F).Uploads := V (F).Uploads + 1;
@@ -59,6 +60,7 @@ package body Adagio.File.Safe is
       -- Add_hit --
       -------------
       procedure Add_hit (F : in File.Object; Num : Positive) is
+	    pragma Unreferenced (Num);
       begin
          if V (F).Hits_total < Natural'Last then
             V (F).Hits_total := V (F).Hits_total + 1;

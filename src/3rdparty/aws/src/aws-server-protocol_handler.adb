@@ -66,7 +66,6 @@ procedure Protocol_Handler
    Index       : in     Positive)
 is
 
-   use Ada;
    use Ada.Strings;
    use Ada.Strings.Unbounded;
 
@@ -366,6 +365,7 @@ is
          Filename        : Unbounded_String;
          Server_Filename : Unbounded_String;
          Content_Type    : Unbounded_String;
+	    pragma Unreferenced (Content_Type);
          File            : Streams.Stream_IO.File_Type;
          Is_File_Upload  : Boolean;
 
@@ -1261,7 +1261,6 @@ is
 
       procedure Send_File is
 
-         use type Ada.Streams.Stream_Element_Offset;
 
          Buffer : Streams.Stream_Element_Array (1 .. Buffer_Size);
 

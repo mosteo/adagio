@@ -1,7 +1,11 @@
-with System;
-with System.Error_reporting;
-with Win32;
-with Win32.Winuser;
+With
+System,
+Win32,
+Win32.Winuser;
+
+Pragma Warnings( Off );
+with System.Error_Reporting;
+Pragma Warnings( On );
 
 package body Adagio.Os is
 
@@ -44,10 +48,13 @@ package body Adagio.Os is
    ------------------------------------------------------------------------
    -- Kill entire process inmediately:
    procedure Kill_me is
+	Use System.Error_Reporting;
    begin
-      if System.Error_reporting.Shutdown ("Forced shutdown") then
-         null;
-      end if;
+--  	if Shutdown ("Forced shutdown") then
+--  		null;
+--  	end if;
+
+	null;
    end Kill_me;
 
 end Adagio.Os;

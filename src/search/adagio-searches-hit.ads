@@ -34,12 +34,15 @@
 
 --  Root package for all search packages
 
-with Adagio.Download.Source;
-with Adagio.Hash_Dictionary;
-with Adagio.Types; use Adagio.Types;
-with Adagio.Xml;
+With
+Adagio.Download.Source,
+Adagio.Hash_Dictionary,
+Adagio.Types,
+Adagio.Xml,
+Agpl.Types.Ustrings;
 
-with Agpl.Types.Ustrings; use Agpl.Types.Ustrings;
+Use
+Adagio.Types;
 
 package Adagio.Searches.Hit is
 
@@ -58,7 +61,7 @@ package Adagio.Searches.Hit is
    -- bp       <base32>.<base32>
    -- tth      <raw binary data in standard order (breadth first)>
    procedure Add_Hash (
-      This      : in out Object; 
+      This      : in out Object;
       Hash_Type : in     String;
       Value     : in     String);
 
@@ -131,7 +134,7 @@ package Adagio.Searches.Hit is
    -- Set_Name                                                           --
    ------------------------------------------------------------------------
    procedure Set_Name (This : in out Object; Name : in String);
-   
+
    ------------------------------------------------------------------------
    -- Set_New                                                            --
    ------------------------------------------------------------------------
@@ -141,7 +144,7 @@ package Adagio.Searches.Hit is
    -- Set_Size                                                           --
    ------------------------------------------------------------------------
    procedure Set_Size (This : in out Object; Size : in File_Size);
-   
+
    ------------------------------------------------------------------------
    -- Create_From_Xml                                                    --
    ------------------------------------------------------------------------

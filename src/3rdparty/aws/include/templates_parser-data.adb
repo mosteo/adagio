@@ -28,7 +28,6 @@
 
 --  $Id: templates_parser-data.adb,v 1.2 2004/02/24 15:40:18 Jano Exp $
 
-with Ada.Text_IO;
 
 separate (Templates_Parser)
 
@@ -126,7 +125,7 @@ package body Data is
    -------------
 
    procedure Release (D : in out Tree) is
-
+	Pragma Unreferenced( D );
       procedure Free is new Ada.Unchecked_Deallocation (Node, Tree);
 
       P : Tree;

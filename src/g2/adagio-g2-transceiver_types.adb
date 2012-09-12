@@ -121,7 +121,6 @@ package body Adagio.G2.Transceiver_types is
    -- Older & Equal for inbound packets                                  --
    -----------------------------------------------------------------------
    function Older (Left, Right : in Packet_access) return Boolean is
-      use Ada.Calendar;
    begin
       return Left.Arrived < Right.Arrived;
    end Older;
