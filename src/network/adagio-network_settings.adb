@@ -57,7 +57,7 @@ package body Adagio.Network_settings is
    begin
       return S (NATF_Address);
    end Get_NATF_Address;
-   
+
    ------------------------------------------------------------------------
    -- Set_NATF_Address                                                   --
    ------------------------------------------------------------------------
@@ -103,17 +103,18 @@ begin
                -- No public IP found, downgrading to NAT:
                Internet_route := Nat;
                Trace.Log ("Network_settings: Direct connection was specified"
-                  & " but no public IP found, switching to NAT.", 
+                  & " but no public IP found, switching to NAT.",
                   Trace.Warning);
          end;
       elsif Internet_route = Nat or else Internet_route = NatForward then
          begin
             declare
                S : String := Socket.IP.Get_IP (Public => true);
+		Pragma Unreferenced(S);
             begin
                Internet_route := Direct;
                Trace.Log ("Network_settings: NAT connection was specified " &
-               "but a public IP has been found, switching to direct.", 
+               "but a public IP has been found, switching to direct.",
                Trace.Warning);
             end;
          exception
@@ -121,8 +122,8 @@ begin
                null; -- Right, there were no public IP
          end;
       end if;
-      
-      Trace.Log ("Network_settings: Internet route = " & 
+
+      Trace.Log ("Network_settings: Internet route = " &
          Routings'Image (Internet_route));
    end;
 

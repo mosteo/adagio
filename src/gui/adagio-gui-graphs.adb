@@ -65,7 +65,7 @@ package body Adagio.Gui.Graphs is
    task body Grapher is
       Next       : Calendar.Time := Calendar.Clock;
       Period     : Duration := Globals.Options.Gui_GraphPeriod;
-      Wait_slots : Natural := 
+      Wait_slots : Natural :=
          Natural (Globals.Options.Gui_GraphPeriod) / Width;
       Current_waited : Natural := 0;
 
@@ -81,24 +81,24 @@ package body Adagio.Gui.Graphs is
       -- Prepare graphs:
       -- Uploads
       Agpl.Graph.Set_colors (
-         Queued, 
+         Queued,
          Bgcolor => Agpl.Constants.Gainsboro,
          Fgcolor => (1 => Agpl.Constants.Navy));
       Agpl.Graph.Set_scale_min (Queued, 0.0);
       Agpl.Graph.Set_YAxis (
          Queued, 10.0, Color => Agpl.Constants.White, Repeat => true);
-      -- Memory 
+      -- Memory
       Agpl.Graph.Set_colors (
-         Memory, 
+         Memory,
          Bgcolor => Agpl.Constants.Gainsboro,
          Fgcolor => (1 => Agpl.Constants.Navy));
       Agpl.Graph.Set_scale_min (Memory, 0.0);
       Agpl.Graph.Set_YAxis (
-         Memory, 
+         Memory,
          Float (8 * 2**20), Color => Agpl.Constants.White, Repeat => true);
       -- BW
       Agpl.Graph.Set_colors (
-         BW, 
+         BW,
          Bgcolor => Agpl.Constants.Gainsboro,
          Fgcolor => (
             1 => Agpl.Constants.Soft_red,
@@ -109,20 +109,20 @@ package body Adagio.Gui.Graphs is
       Agpl.Graph.Set_YAxis (BW,
          8.0 * 1024.0, Color => Agpl.Constants.White, Repeat => true);
       Agpl.Graph.Set_YAxis (BW,
-         Float (Globals.Options.Uploads_Bandwidth), 
+         Float (Globals.Options.Uploads_Bandwidth),
          Color => Agpl.Constants.Gray, Repeat => false);
       Agpl.Graph.Set_YAxis (BW,
-         Float (Globals.Options.G2_LinkBandwidth), 
+         Float (Globals.Options.G2_LinkBandwidth),
          Color => Agpl.Constants.Gray, Repeat => false);
       Agpl.Graph.Set_YAxis (BW,
-         Float (Globals.Options.Uploads_Bandwidth) + 
-         Float (Globals.Options.G2_LinkBandwidth), 
+         Float (Globals.Options.Uploads_Bandwidth) +
+         Float (Globals.Options.G2_LinkBandwidth),
          Color => Agpl.Constants.Gray, Repeat => false);
       -- Agpl.Graph.Set_scale_max (
       --   BW, Float(Globals.Options.Uploads_Bandwidth));
       -- BW_udp
       Agpl.Graph.Set_colors (
-         BW_udp, 
+         BW_udp,
          Bgcolor => Agpl.Constants.Gainsboro,
          Fgcolor => (
             1 => Agpl.Constants.Soft_red,
@@ -133,19 +133,19 @@ package body Adagio.Gui.Graphs is
       Agpl.Graph.Set_YAxis (BW_udp,
          8.0 * 1024.0, Color => Agpl.Constants.White, Repeat => true);
       Agpl.Graph.Set_YAxis (BW_udp,
-         Float (Globals.Options.G2_UdpBandwidthIn), 
+         Float (Globals.Options.G2_UdpBandwidthIn),
          Color => Agpl.Constants.Gray, Repeat => false);
       Agpl.Graph.Set_YAxis (BW_udp,
          Float (Globals.Options.G2_UdpBandwidthOut),
          Color => Agpl.Constants.Gray, Repeat => false);
 
       -- Wait for launch:
-      select 
+      select
          accept Start;
-      or 
+      or
          terminate;
       end select;
-      Trace.Log ("Grapher started, 1 update every" & Wait_slots'Img & 
+      Trace.Log ("Grapher started, 1 update every" & Wait_slots'Img &
          " seconds.", Trace.Informative);
       while not Globals.Requested_exit loop
          declare
@@ -153,11 +153,11 @@ package body Adagio.Gui.Graphs is
          begin
             -- Rendez-vouses:
             loop
-               select 
+               select
                   accept Get_graph (
                      Graph : in Available_graphs; Image : out Agpl.Bmp.Object)
                   do
-                     case Graph is 
+                     case Graph is
                         when BW_usage =>
                            Image := Agpl.Graph.Get_bmp (BW, Height * 2);
                         when BW_usage_udp =>
@@ -166,8 +166,8 @@ package body Adagio.Gui.Graphs is
                            Image := Agpl.Graph.Get_bmp (Queued, Height);
                         when Memory_usage =>
                            Image := Agpl.Graph.Get_bmp (Memory, Height);
-                        when others =>
-                           Agpl.Bmp.Create (Image, 1, 1);
+--                          when others =>
+--                             Agpl.Bmp.Create (Image, 1, 1);
                      end case;
                   end Get_graph;
                or
@@ -195,16 +195,16 @@ package body Adagio.Gui.Graphs is
                Current_waited := 0;
                -- Queued clients:
                Agpl.Graph.Add_sample (Queued, Serie => 1, Sample => Float (
-                  Adagio.Upload.Queue.Manager.Object.Num_active_uploads + 
+                  Adagio.Upload.Queue.Manager.Object.Num_active_uploads +
                   Adagio.Upload.Queue.Manager.Object.Num_waiting));
                -- Memory usage
                if Period >= 60.0 then
-                  Agpl.Graph.Add_sample (Memory, 
-                     Serie => 1, 
+                  Agpl.Graph.Add_sample (Memory,
+                     Serie => 1,
                      Sample => Float (Os.Memory.Heap_usage));
                else
-                  Agpl.Graph.Add_sample (Memory, 
-                     Serie => 1, 
+                  Agpl.Graph.Add_sample (Memory,
+                     Serie => 1,
                      Sample => Float (Os.Memory_stats.Cached_heap_usage));
                end if;
                -- Bandwidths
@@ -256,7 +256,7 @@ package body Adagio.Gui.Graphs is
       select
          Grapher.Get_graph (Graph, Result);
          return Result;
-      or 
+      or
          delay 10.0;
          Agpl.Bmp.Create (Result, Width => 1, Height => 1);
          return Result;
@@ -276,7 +276,7 @@ package body Adagio.Gui.Graphs is
    ------------------------------------------------------------------------
    procedure Set_time_range (Time_range : in Duration) is
    begin
-      select 
+      select
          Grapher.Set_time_range (Duration'Max (Duration (Width), Time_range));
       or
          delay 2.0;
@@ -288,7 +288,7 @@ package body Adagio.Gui.Graphs is
    ------------------------------------------------------------------------
    procedure Clear is
    begin
-      select 
+      select
          Grapher.Clear;
       or
          delay 2.0;

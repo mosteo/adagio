@@ -34,13 +34,14 @@
 
 -- Package with OS dependent functions.
 
-with Adagio.Convert;
-with Adagio.Globals;
-with Adagio.Misc;
-with Adagio.Os.Memory;
-with Adagio.Statistics;
-with Adagio.Statistics.Strings;
-with Adagio.Trace;
+With
+Adagio.Convert,
+Adagio.Globals,
+Adagio.Misc,
+Adagio.Os.Memory,
+Adagio.Statistics,
+Adagio.Statistics.Strings,
+Adagio.Trace;
 
 package body Adagio.Os.Memory_stats is
 
@@ -69,14 +70,14 @@ package body Adagio.Os.Memory_stats is
       Last    : Natural := 0;
       Max     : Integer := -1;
    begin
-      select 
+      select
          accept Start (Period : in Duration := 60.0) do
             P := Period;
          end Start;
       or
          terminate;
       end select;
-      Trace.Log ("Memory_task started with period " & 
+      Trace.Log ("Memory_task started with period " &
          Misc.To_string (Float (P), 3));
 
       loop
@@ -85,9 +86,9 @@ package body Adagio.Os.Memory_stats is
          begin
             Size         := Memory.Heap_usage;
             Cached_usage := Size;
-            Trace.Log ("Memory_task: Usage is " & 
+            Trace.Log ("Memory_task: Usage is " &
                Misc.To_string (Size) & " (" & Convert.To_size (Size) & ")");
-            Trace.Log ("Memory_task: Delta is " & 
+            Trace.Log ("Memory_task: Delta is " &
                Misc.To_string (Size - Last) & " (" & Convert.To_size (
                Size - Last) & ")");
 
@@ -106,7 +107,7 @@ package body Adagio.Os.Memory_stats is
 
             Last := Size;
 
-            select 
+            select
                accept Shutdown do
                   The_end := true;
                end Shutdown;

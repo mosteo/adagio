@@ -34,7 +34,6 @@
 
 -- Utility functions for strings
 
-with Strings.Fields;
 
 package Strings.Utils is
 
@@ -57,11 +56,11 @@ package Strings.Utils is
 
    -- Returns Indexes for all words inside a string, with a minimum length.
    -- String must be simplified or wrong results can occur
-   function Tokenize (S : in String; Min_len : Positive := 3) 
+   function Tokenize (S : in String; Min_len : Positive := 3)
       return Index_array;
 
    -- These return "" if nothing to be returned
-   function Head (S : in String; Separator : in Character := ' ') 
+   function Head (S : in String; Separator : in Character := ' ')
       return String;
    function Tail (S : in String; Separator : in Character := ' ')
       return String;

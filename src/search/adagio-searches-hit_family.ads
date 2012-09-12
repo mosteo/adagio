@@ -34,21 +34,21 @@
 
 --  A family is a collection of hits with the same hashes.
 
-with Adagio.Download;
-with Adagio.Download.Manager;
-with Adagio.Hash_Dictionary;
-with Adagio.Searches.Hit;
-with Adagio.Types;
-with Adagio.Xml;
+With
+Adagio.Download,
+Adagio.Download.Manager,
+Adagio.Hash_Dictionary,
+Adagio.Searches.Hit,
+Adagio.Types,
+Adagio.Xml,
+Agpl.Http.Server.Sort_Handler,
+Charles.Hash_String,
+Charles.Maps.Hashed.Strings.Unbounded,
+Ada.Finalization;
 
-with Agpl.Http.Server.Sort_Handler;
-use  Agpl.Http.Server.Sort_Handler;
-
-with Charles.Hash_String;
-with Charles.Maps.Hashed.Strings.Unbounded;
-
-with Ada.Finalization;
-use  Ada;
+Use
+Ada,
+Agpl.Http.Server.Sort_Handler;
 
 package Adagio.Searches.Hit_Family is
 

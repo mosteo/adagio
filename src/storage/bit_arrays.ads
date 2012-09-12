@@ -1,4 +1,3 @@
-with Interfaces;
 
 package Bit_arrays is
 

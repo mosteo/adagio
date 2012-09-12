@@ -119,7 +119,7 @@ package body ACF.Hash.Message_Digests is
       when ACF_Storage_Error =>
          raise;
       when others =>
-         raise;
+         --raise;
          raise ACF_Unexpected_Error;
    end To_Message_Digest;
 

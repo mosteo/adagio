@@ -34,40 +34,46 @@
 
 --  Queries received from G2
 
-with Adagio.Constants; use Adagio.Constants;
-with Adagio.Ed2k;
-with Adagio.File.Safe;
-with Adagio.G2.Mesh;
-with Adagio.Globals.Options;
-with Adagio.Guid;
-with Adagio.Library;
-with Adagio.Library.Query;
-with Adagio.Misc;
-with Adagio.Network.Endian;
-with Adagio.Network_settings;
-with Adagio.Query.Incoming;
-with Adagio.Socket.IP;
-with Adagio.Trace;
-with Adagio.Unicode;
-with Adagio.Upload;
-with Adagio.Upload.Queue.Manager;
-with Adagio.Workers;
-with Adagio.Xml;
-with Sha1;
-with Sha1.Strings;
-with Strings.Fields; use Strings.Fields;
-with Strings.Utils;  use Strings.Utils;
-with TigerTree;
+With
+Adagio.Constants,
+Adagio.Ed2k,
+Adagio.File.Safe,
+Adagio.G2.Mesh,
+Adagio.Globals.Options,
+Adagio.Guid,
+Adagio.Library,
+Adagio.Library.Query,
+Adagio.Misc,
+Adagio.Network.Endian,
+Adagio.Network_settings,
+Adagio.Query.Incoming,
+Adagio.Socket.IP,
+Adagio.Trace,
+Adagio.Unicode,
+Adagio.Upload,
+Adagio.Upload.Queue.Manager,
+Adagio.Workers,
+Adagio.Xml,
+Sha1,
+Sha1.Strings,
+--Strings.Fields,
+Agpl.Strings.Fields,
+Strings.Utils,
+TigerTree,
+Adagio.Types,
+Aenea.Countries,
+Agpl.Context_controllers,
+Agpl.Geoip,
+Dom.Core,
+Dom.Core.Nodes,
+Ada.Calendar;
 
-with Aenea.Countries;
-
-with Agpl.Context_controllers;
-with Agpl.Geoip;
-
-with Dom.Core;
-with Dom.Core.Nodes;
-
-with Ada.Calendar; use Ada;
+Use
+Ada,
+--Strings.Fields,
+Agpl.Strings.Fields,
+Strings.Utils,
+Adagio.Constants;
 
 package body Adagio.G2.Local_query is
 

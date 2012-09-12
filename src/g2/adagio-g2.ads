@@ -33,23 +33,15 @@
 --  $Id: adagio-g2.ads,v 1.4 2004/01/28 15:33:18 Jano Exp $
 
 With
-Adagio.Constants,
-Adagio.Exceptions,
 Adagio.Globals.Options,
 Adagio.Network.Endian,
 Adagio.Socket,
 Adagio.Time_t,
-Adagio.Types,
 Agpl.Types.Ustrings,
-Ada.Exceptions,
 Interfaces;
 
 Use
-Adagio.Constants,
-Adagio.Exceptions,
-Ada.Exceptions,
-Agpl.Types.Ustrings,
-Adagio.Types;
+Agpl.Types.Ustrings;
 
 package Adagio.G2 is
 

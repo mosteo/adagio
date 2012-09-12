@@ -34,17 +34,21 @@
 
 --  Uploadable resources.
 
-with Adagio.File.Criteria;
-with Adagio.File.Safe;
-with Adagio.Globals.Options;
-with Sha1;
+With
+Sha1,
+Adagio.Types,
+Adagio.File.Criteria,
+Adagio.File.Safe,
+Adagio.Globals.Options,
+Ada.Streams.Stream_io,
+Ada.Unchecked_deallocation;
 
-with Ada.Streams.Stream_io;
-with Ada.Unchecked_deallocation;
+Use
+Adagio.Types;
 
 package body Adagio.Upload.Resource.File is
 
-   Upload_buffer_size : constant File_size := 
+   Upload_buffer_size : constant File_size :=
       File_size (Globals.Options.Uploads_SendBufferSize);
 
    procedure Free is new Unchecked_deallocation (
@@ -108,7 +112,7 @@ package body Adagio.Upload.Resource.File is
    begin
       return "application/x-binary";
    end Content_type;
-      
+
    ------------------------------------------------------------------------
    -- Name                                                               --
    ------------------------------------------------------------------------
@@ -158,7 +162,7 @@ package body Adagio.Upload.Resource.File is
    -- Finalize                                                           --
    ------------------------------------------------------------------------
    procedure Finalize (This : in out Object) is
-   begin 
+   begin
       Free (This.BS);
    end Finalize;
 

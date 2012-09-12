@@ -7,7 +7,7 @@
 -- 2002 May 01     J. Carter          V1.0--Initial release
 --
 
-pragma Ada_95;
+Pragma Ada_95;
 
 with System;
 package body PragmARC.List_Bounded_Unprotected is

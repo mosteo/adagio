@@ -1,3 +1,4 @@
+with Sha1;
 ------------------------------------------------------------------------------
 --                         ADAGIO - ADALID - AENEA.                         --
 --                                                                          --
@@ -31,6 +32,11 @@
 --  harass or legally prosecute these users.                                --
 ------------------------------------------------------------------------------
 --  $Id: adagio-g2-core-process_packet.adb,v 1.8 2004/02/24 15:26:10 Jano Exp $
+With
+SHA1;
+
+Use
+  SHA1;
 
 separate (Adagio.G2.Core)
 procedure Process_packet (
@@ -68,6 +74,7 @@ procedure Process_packet (
          Net.Servers.Get_next (Serv);
       end loop;
    end Broadcast_packet;
+    pragma Unreferenced (Broadcast_packet);
 
    ------------------------------------------------------------------------
    -- Process_PI_UDP                                                     --
@@ -157,7 +164,7 @@ procedure Process_packet (
          begin
             if Address'Length /= 10 and then Address'Length /= 6 then
                exit;
-               raise Unimplemented; -- Not an IPv4 address
+               --raise Unimplemented; -- Not an IPv4 address
             end if;
             Sock := To_address (
                Address (Address'First .. Address'First + 5),

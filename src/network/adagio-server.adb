@@ -39,7 +39,6 @@ Adagio.Statistics.Integers,
 Adagio.Trace,
 Agpl.Strings,
 Agpl.Types.Ustrings,
-Ada.Calendar,
 Ada.Exceptions,
 Ada.Streams.Stream_IO,
 Ada.Unchecked_deallocation,
@@ -59,7 +58,8 @@ package body Adagio.Server is
 
    Minimum_idle_period : constant Duration := 91.0;
 
-   Stat_allocated_servers : constant String := "Network - Allocated servers";
+    Stat_allocated_servers : constant String := "Network - Allocated servers";
+    Pragma Unreferenced( Stat_allocated_servers );
 
    -- Helper function to compare Object_access:
    function Equal(Left, Right: in Server_slot) return Boolean is
@@ -231,7 +231,6 @@ package body Adagio.Server is
          F       : File_type;
          T       : Calendar.Time:= Calendar.Clock;
          Success : Boolean;
-         use type Calendar.Time;
       begin
          if Os_lib.Is_regular_file (Location & ".tmp") and not
             Os_lib.Is_regular_file (Location) then
@@ -268,7 +267,6 @@ package body Adagio.Server is
          T: Calendar.Time:= Calendar.Clock;
          Success: Boolean;
          Location: String:= S (Globals.Data_folder) & "hostcache.dat";
-         use type Calendar.Time;
       begin
          if not Dirty then
             return;
@@ -424,7 +422,6 @@ package body Adagio.Server is
             end if;
          end Copy;
          Pos: Server_list.Iterator_type:= Server_list.First(Servers);
-         use type Server_list.Iterator_type;
       begin
          -- Do sort:
          while Pos /= Server_list.Back(Servers) loop
@@ -438,7 +435,6 @@ package body Adagio.Server is
          else
             declare
                Pos: Sorted_list.Iterator_type:= Sorted_list.First(Sorted);
-               use type Sorted_list.Iterator_type;
                Result: Object_access_array(1 .. Quantity);
                Len: Natural:=
                   Natural'Min(Result'last, Sorted_list.Length(Sorted));

@@ -1,3 +1,5 @@
+With "Win32Ada";
+
 project Adagio is
 
    for Languages use ("Ada");
@@ -27,7 +29,7 @@ project Adagio is
 
    case OS is
       when "Win32" =>
-         for Source_Dirs use Sources & ("os_win", "os_win/win32");
+         for Source_Dirs use Sources & ("os_win");
 
       when "Linux" =>
          for Source_Dirs use Sources & ("os_linux");

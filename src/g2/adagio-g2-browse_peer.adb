@@ -32,17 +32,23 @@
 ------------------------------------------------------------------------------
 --  $Id: adagio-g2-browse_peer.adb,v 1.3 2004/01/21 21:05:25 Jano Exp $
 
-with Adagio.Convert;
---  with Adagio.G2.Core;
-with Adagio.G2.Local_query;
-with Adagio.G2.Packet;
-with Adagio.Globals.Options;
-with Adagio.Memory_stream_constrained;
-with Adagio.Misc;
-with Adagio.Trace;
-with Adagio.Zutil;
-with Adagio.File;
+With
+SHA1,
+Adagio.Constants,
+Adagio.Convert,
+--Adagio.G2.Core,
+Adagio.G2.Local_query,
+Adagio.G2.Packet,
+Adagio.Globals.Options,
+Adagio.Memory_stream_constrained,
+Adagio.Misc,
+Adagio.Trace,
+Adagio.Zutil,
+Adagio.File;
 
+Use
+SHA1,
+Adagio.Constants;
 
 package body Adagio.G2.Browse_peer is
 

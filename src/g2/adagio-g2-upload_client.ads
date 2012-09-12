@@ -32,21 +32,28 @@
 ------------------------------------------------------------------------------
 --  $Id: adagio-g2-upload_client.ads,v 1.6 2004/02/29 20:36:42 Jano Exp $
 
-with Adagio.Globals.Options;
-with Adagio.Http;
-with Adagio.Http.Header;
-with Adagio.Http.Header.Parser;
-with Adagio.Socket;
-with Adagio.Upload.Client;
-with Adagio.Upload.Resource;
-with Average_queue;
+With
+Adagio.Globals.Options,
+Adagio.Http,
+Adagio.Http.Header,
+Adagio.Http.Header.Parser,
+Adagio.Socket,
+Adagio.Types,
+Adagio.Upload.Client,
+Adagio.Upload.Resource,
+Average_queue,
+Ada.Calendar,
+Ada.Streams;
 
-with Ada.Calendar; use Ada;
-with Ada.Streams; use Ada.Streams;
+
+Use
+Ada,
+Ada.Streams,
+Adagio.Types;
 
 package Adagio.G2.Upload_client is
 
-   Minimum_send_delay : Duration 
+   Minimum_send_delay : Duration
       renames Globals.Options.Uploads_MinimumSendDelay;
 
    type Object is new Upload.Client.Object with private;
@@ -58,7 +65,7 @@ package Adagio.G2.Upload_client is
    ------------------------------------------------------------------------
    -- Creation with push pending (connection pending).
    -- The new object is allocated in the heap.
-   function Create_pushed (Addr : in Socket.Sock_addr_type) 
+   function Create_pushed (Addr : in Socket.Sock_addr_type)
       return Upload.Client.Object_access;
 
    ------------------------------------------------------------------------
@@ -92,7 +99,7 @@ package Adagio.G2.Upload_client is
    -- Resource                                                       --
    ------------------------------------------------------------------------
    -- Get the requested resource
-   function Requested_resource (This : in Object) return 
+   function Requested_resource (This : in Object) return
       Upload.Resource.Handle;
 
    ------------------------------------------------------------------------
@@ -117,8 +124,8 @@ package Adagio.G2.Upload_client is
    -- Reject                                                             --
    ------------------------------------------------------------------------
    procedure Reject (
-      This   : in Object; 
-      Reason : in Upload.Client.Reject_reason; 
+      This   : in Object;
+      Reason : in Upload.Client.Reject_reason;
       Done   : out Boolean);
 
    ------------------------------------------------------------------------
@@ -183,7 +190,7 @@ private
       Next_to_send   : File_size;
 
       -- Data to be sent
-      Buffer     : Stream_array_access; -- Fixed size intermediate. 
+      Buffer     : Stream_array_access; -- Fixed size intermediate.
                                         -- The true buffer is at Resource.File
       Buffer_ava : File_size := 0; -- Valid data in buffer.
       Buffer_pos : File_size := 1; -- First data to be sent.

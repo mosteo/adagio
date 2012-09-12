@@ -33,18 +33,18 @@
 --  $Id: adagio-upload-queue.adb,v 1.8 2004/02/24 15:26:14 Jano Exp $
 
 With
-Adagio.Exceptions,
+Agpl.Types,
+Agpl.Geoip,
 Adagio.File.Criteria,
 Adagio.Globals,
 Adagio.Globals.Options,
+Adagio.Misc,
 Adagio.Os,
 Adagio.Trace,
 Adagio.Unicode,
 Adagio.Upload.Active_clients,
 Adagio.Upload.Client_data,
 Adagio.Upload.Resource.File,
-Agpl.Geoip,
-Agpl.Types.Ustrings,
 Expressions_evaluator,
 Strings.Utils,
 Gnat.Heap_sort_a,
@@ -55,14 +55,11 @@ Ada.Tags,
 Ada.Unchecked_Deallocation;
 
 Use
-Ada,
 Ada.Tags,
 Ada.Streams,
-Adagio.Exceptions,
-Agpl.Types.Ustrings,
+--Agpl.Types.Ustrings,
 GNAT,
 Strings.Utils;
-with Ada.Strings.Unbounded;
 
 package body Adagio.Upload.Queue is
 
@@ -117,7 +114,7 @@ package body Adagio.Upload.Queue is
          end if;
          if Rated then
             Trace.Log ("Position" & N'img & "#" &
-               Misc.To_string (Float (This.Vector (N).Rating)) & ": " &
+               Adagio.Misc.To_string (Float (This.Vector (N).Rating)) & ": " &
                S (This.Vector (N).Queue_Id) & S (Trail));
          else
             Trace.Log ("Position" & N'img & ": " &
@@ -137,6 +134,8 @@ package body Adagio.Upload.Queue is
    begin
       return Id_list.Is_in (Queue_id, Ids);
    end Contains;
+
+	Pragma Unreferenced( Contains );
 
    ------------------------------------------------------------------------
    -- Create                                                             --
@@ -479,6 +478,7 @@ package body Adagio.Upload.Queue is
       begin
          Clients.Vector (To) := Clients.Vector (From);
       end Move;
+
       function Less (L, R : Natural) return Boolean is
          SL, SR : Queue_slot_access;
       begin
@@ -496,6 +496,9 @@ package body Adagio.Upload.Queue is
             return SL.Alive > SR.Alive ;
          end if;
       end Less;
+
+	    Function Local_Less(L, R : Natural) return Boolean Renames Less;
+
       function Less_rated (L, R: Natural) return Boolean is
          SL, SR : Queue_slot_access;
       begin
@@ -540,15 +543,15 @@ package body Adagio.Upload.Queue is
             Heap_sort_a.Sort (
                Last (Clients),
                Move'Unrestricted_access,
-               Less'Unrestricted_access);
+               Local_Less'Unrestricted_access);
          when Rated =>
             Rate_slots;
             Heap_sort_a.Sort (
                Last (Clients),
                Move'Unrestricted_access,
                Less_rated'Unrestricted_access);
-         when others =>
-            raise Unimplemented;
+--           when others =>
+--              raise Unimplemented;
       end case;
       Trace.Log ("Upload.Queue.Schedule: " & S (Name) & " sorted in " &
          Misc.To_string (Float (Clock - Start), 5) & "s");
@@ -695,8 +698,6 @@ package body Adagio.Upload.Queue is
       Name   : Ustring;
       Spd    : Float;
       use Ada.Calendar;
-      use Slot_vector;
-      use type File.Object;
 
       Pos    : Natural := From - 1;
    begin
@@ -769,7 +770,6 @@ package body Adagio.Upload.Queue is
       use Agpl.Http.Server.Sort_handler;
       use Ada.Calendar;
       use Slot_vector;
-      use type File.Object;
 
    begin
       if Globals.Requested_exit then

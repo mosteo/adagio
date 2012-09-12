@@ -270,6 +270,7 @@ package body Adagio.XML is
    -- Add child node (must be for the same doc)
    procedure Add (Parent, Child : in Node) is
       Dummy : Node := DCN.Append_Child (Parent, Child);
+	Pragma Unreferenced( Dummy );
    begin
       null;
    end Add;

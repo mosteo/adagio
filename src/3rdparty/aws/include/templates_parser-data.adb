@@ -125,7 +125,7 @@ package body Data is
    -------------
 
    procedure Release (D : in out Tree) is
-
+	Pragma Unreferenced( D );
       procedure Free is new Ada.Unchecked_Deallocation (Node, Tree);
 
       P : Tree;

@@ -34,13 +34,10 @@
 
 --  Uploadable resources.
 
-with Adagio.File;
-with Adagio.Buffered_stream;
-with Adagio.Decoupled_file_stream;
-with Adagio.Safe_access;
-
-with Ada.Finalization;
-use  Ada;
+With
+Adagio.File,
+Adagio.Buffered_stream,
+Adagio.Decoupled_file_stream;
 
 package Adagio.Upload.Resource.File is
 
@@ -80,7 +77,7 @@ package Adagio.Upload.Resource.File is
    ------------------------------------------------------------------------
    -- Get the corresponding Content-Type: http header for the resource.
    function Content_type (This : in Object) return String;
-      
+
    ------------------------------------------------------------------------
    -- Name                                                               --
    ------------------------------------------------------------------------
@@ -98,7 +95,7 @@ package Adagio.Upload.Resource.File is
    ------------------------------------------------------------------------
    -- Say if a resource qualifies according a criteria string:
    function Qualify (This : in Object; Criteria : in String) return Boolean;
-      
+
    ------------------------------------------------------------------------
    -- Add_upload                                                         --
    ------------------------------------------------------------------------
@@ -111,7 +108,7 @@ package Adagio.Upload.Resource.File is
    -- Get the boxed file.
    function File (This : in Object) return Adagio.File.object;
 
-private 
+private
 
    -- We will not allocate the buffered stream until requested to save memory.
    type Object is new Upload.Resource.Object with record
@@ -121,5 +118,5 @@ private
    end record;
 
    procedure Finalize (This : in out Object);
-   
+
 end Adagio.Upload.Resource.File;

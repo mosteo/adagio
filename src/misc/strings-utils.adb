@@ -32,13 +32,14 @@
 ------------------------------------------------------------------------------
 --  $Id: strings-utils.adb,v 1.3 2004/01/21 21:05:36 Jano Exp $
 
-with Ada.Characters.Handling;
-with Ada.Strings;
-with Ada.Strings.Fixed;
-with Ada.Strings.Maps;
-with Ada.Strings.Maps.Constants;
-with Ada.Strings.Unbounded;
-
+With
+Ada.Characters.Handling,
+Ada.Strings,
+Ada.Strings.Fixed,
+Ada.Strings.Maps,
+Ada.Strings.Maps.Constants,
+Ada.Strings.Unbounded,
+Strings.Fields;
 with Strings.Fields;
 
 package body Strings.Utils is
@@ -95,7 +96,7 @@ package body Strings.Utils is
             end if;
          end if;
       end loop;
-      
+
       return Crunch (Trim (R, Ada.Strings.Both));
    end Simplify;
 
@@ -110,7 +111,7 @@ package body Strings.Utils is
       while N <= S'Last loop
          if S (N) = '-' and then N < S'Last and then S (N + 1) = '"' then
             N := N + 2;
-            Inner: 
+            Inner:
                loop
                   N := N + 1;
                   exit Inner when N > S'Last or else S (N) = '"';
@@ -130,13 +131,13 @@ package body Strings.Utils is
    ------------------------------------------------------------------------
    -- Returns Indexes for all words inside a string, with a minimum length.
    -- String must be simplified or wrong results can occur
-   function Tokenize (S : in String; Min_len : Positive := 3) 
+   function Tokenize (S : in String; Min_len : Positive := 3)
       return Index_array is
       use Strings.Fields;
       Result : Index_array (1 .. Count_fields (S, ' '));
       Pos    : Integer := 1;
    begin
-      if S'Length < Min_len then 
+      if S'Length < Min_len then
          return Result (1 .. 0);
       end if;
       for N in S'Range loop
@@ -168,11 +169,11 @@ package body Strings.Utils is
    ------------------------------------------------------------------------
    -- Head                                                               --
    ------------------------------------------------------------------------
-   function Head (S : in String; Separator : in Character := ' ') 
+   function Head (S : in String; Separator : in Character := ' ')
    return String is
       Pos : Natural := S'First + 1;
    begin
-      if S = "" then 
+      if S = "" then
          return "";
       end if;
       while Pos <= S'Last and then S (Pos) /= Separator loop
@@ -188,7 +189,7 @@ package body Strings.Utils is
    return String is
       Pos : Natural := S'First;
    begin
-      if S = "" then 
+      if S = "" then
          return "";
       end if;
       while Pos <= S'Last and then S (Pos) /= Separator loop
@@ -215,7 +216,7 @@ package body Strings.Utils is
    ------------------------------------------------------------------------
    -- Replace all occurrences of a string by another:
    function Replace (
-      Source  : in String; 
+      Source  : in String;
       Pattern : in String;
       By      : in String) return String is
       use Ada.Strings.Fixed;
@@ -226,7 +227,7 @@ package body Strings.Utils is
          return Source;
       else
          return Replace (
-            Replace_slice (Source, Pos, Pos + Pattern'Length - 1, By), 
+            Replace_slice (Source, Pos, Pos + Pattern'Length - 1, By),
             Pattern,
             By);
       end if;
@@ -245,5 +246,8 @@ package body Strings.Utils is
    begin
       return Select_field (Select_field (S, Pos + 1, Open), 1, Close);
    end Select_field;
+
+    --	UNREFERENCED ITEMS
+	pragma Unreferenced (U);
 
 end Strings.Utils;

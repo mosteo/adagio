@@ -32,13 +32,9 @@
 ------------------------------------------------------------------------------
 --  $Id: adagio-folder.adb,v 1.7 2004/01/21 21:05:28 Jano Exp $
 
-with Adagio.Trace;
-with Dynamic_vector;
-
-with Gnat.Directory_operations;
-with Gnat.Os_lib;
-
-use Gnat;
+With
+Adagio.Trace,
+Dynamic_vector;
 
 package body Adagio.Folder is
 

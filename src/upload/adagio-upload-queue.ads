@@ -39,23 +39,21 @@
 --  once in the same queue.
 
 With
-Adagio.File,
-Adagio.Misc,
 Adagio.Types,
+Agpl.Types.Ustrings,
+Adagio.File,
 Adagio.Upload.Client,
-Adagio.Upload.Ratings,
 Adagio.Upload.Resource,
-Adagio.Xml,
-Adagio.Xml.Utils,
 Agpl.Http.Server.Sort_handler,
 Dynamic_vector,
-Agpl.Types.Ustrings,
 Charles.Maps.Sorted.Strings.Unbounded,
 Ada.Calendar,
 System;
 
 Use
+Adagio,
 Adagio.Types,
+Adagio.File,
 Agpl.Types.Ustrings,
 Ada;
 

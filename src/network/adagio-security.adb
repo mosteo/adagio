@@ -32,26 +32,28 @@
 ------------------------------------------------------------------------------
 --  $Id: adagio-security.adb,v 1.4 2004/02/29 20:36:45 Jano Exp $
 
-with Adagio.Exceptions; use Adagio.Exceptions;
-with Adagio.Globals.Options;
-with Adagio.Misc;
-with Adagio.Socket.Ip;
-with Adagio.Trace;
-with Binary_tree;
-with Bit_arrays;
-with Bit_arrays.Modular;
+With
+Adagio.Exceptions,
+Adagio.Globals.Options,
+Adagio.Misc,
+Adagio.Socket.Ip,
+Adagio.Trace,
+Binary_tree,
+Bit_arrays,
+Bit_arrays.Modular,
+Agpl.Dynamic_vector,
+Agpl.Types.Ustrings,
+Charles.Hash_string,
+Charles.Maps.Hashed.Strings.Unbounded,
+Strings.Fields,
+Gnat.Regexp,
+Gnat.Sockets;
 
-with Agpl.Dynamic_vector; use Agpl;
-with Agpl.Types.Ustrings; use Agpl.Types.Ustrings;
-
-with Charles.Hash_string;
-with Charles.Maps.Hashed.Strings.Unbounded;
-
-with Strings.Fields;
-
-with Gnat.Regexp;
-with Gnat.Sockets;
-use  Gnat;
+Use
+GNAT,
+Adagio.Exceptions,
+Agpl,
+Agpl.Types.Ustrings;
 
 package body Adagio.Security is
 

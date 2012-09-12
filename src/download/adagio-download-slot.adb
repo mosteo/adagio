@@ -40,19 +40,16 @@
 -- behavior. All genericity is encapsulated in the sources, which can be of
 -- many classes, of course.
 
--- Intended for direct use from Download.Manager body. 
+-- Intended for direct use from Download.Manager body.
 
-with Adagio.Download.Slot.Maps;
-with Adagio.Trace;
+With
+Adagio.Trace,
+Agpl.Sequence,
+Agpl.Strings,
+Ada.Unchecked_Deallocation;
 
-with Agpl.Bmp;
-with Agpl.Sequence;
-with Agpl.Strings;
-with Agpl.Types.Ustrings; use Agpl.Types.Ustrings;
-
-with Ada.Strings.Hash;
-with Ada.Unchecked_Deallocation;
-use  Ada;
+Use
+Ada;
 
 package body Adagio.Download.Slot is
 
@@ -95,7 +92,7 @@ package body Adagio.Download.Slot is
          Free (This);
          return null;
    end Create;
-   
+
    ------------------------------------------------------------------------
    -- Get_Id                                                             --
    ------------------------------------------------------------------------
@@ -153,7 +150,7 @@ package body Adagio.Download.Slot is
    -- Hash                                                               --
    ------------------------------------------------------------------------
    function Hash (Id : in Slot_Id) return Ada.Containers.Hash_Type is
-   begin 
+   begin
       return Ada.Strings.Hash (S (Ustring (Id)));
    end Hash;
 

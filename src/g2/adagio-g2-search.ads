@@ -34,21 +34,24 @@
 
 -- Now leaks the queues array, no finalization method.
 
-with Adagio.G2.Packet.Queue;
-with Adagio.G2.Transceiver;
-with Adagio.Os.Memory;
-with Adagio.Searches.Handler;
-with Adagio.Searches;
+With
+Adagio.Constants,
+Adagio.G2.Packet.Queue,
+Adagio.G2.Transceiver,
+Adagio.Os.Memory,
+Adagio.Searches.Handler,
+Adagio.Searches,
+Agpl.Event_Queues.Calendar,
+Agpl.Http.Server.Sort_Handler,
+Charles.Multimaps.Sorted.Unbounded,
+Charles.Maps.Sorted.Strings.Unbounded,
+Ada.Calendar;
 
-with Agpl.Event_Queues.Calendar;
-with Agpl.Http.Server.Sort_Handler;
-use  Agpl.Http.Server.Sort_Handler;
+Use
+Ada,
+Adagio.Constants,
+Agpl.Http.Server.Sort_Handler;
 
-with Charles.Multimaps.Sorted.Unbounded;
-with Charles.Maps.Sorted.Strings.Unbounded;
-
-with Ada.Calendar;
-use  Ada;
 
 package Adagio.G2.Search is
 

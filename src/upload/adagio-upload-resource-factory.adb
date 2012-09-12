@@ -34,19 +34,27 @@
 
 -- Obtaining resources from a request string.
 
-with Adagio.File;
-with Adagio.Library;
-with Adagio.Misc;    use Adagio.Misc;
-with Adagio.Upload.Resource.File;
-with Adagio.Upload.Resource.TTH;
-with Strings.Utils;  use Strings.Utils;
+With
+Agpl.Types.Ustrings,
+Adagio.File,
+Adagio.Library,
+Adagio.Misc,
+Adagio.Upload.Resource.File,
+Adagio.Upload.Resource.TTH,
+Strings.Utils;
+
+Use
+Agpl.Types,
+Agpl.Types.Ustrings,
+Adagio.Misc,
+Strings.Utils;
 
 package body Adagio.Upload.Resource.Factory is
 
    ------------------------------------------------------------------------
    -- Create                                                             --
    ------------------------------------------------------------------------
-   -- Returns a resource from a request string. 
+   -- Returns a resource from a request string.
    -- Can raise the exceptions in Adagio.Upload.Resource.
    function Create (Request : in String) return Resource.Object_access is
       Hash : Ustring;
@@ -56,7 +64,7 @@ package body Adagio.Upload.Resource.Factory is
       if Contains (Request, "uri-res") then
          -- FILE RESOURCES
          if Contains (Request, "sha1") then
-            -- SHA1 
+            -- SHA1
             Hash   := U (Select_field (Request, ':', ' ', 2));
             if S (Hash)'Length /= 32 then
                raise Malformed_request;

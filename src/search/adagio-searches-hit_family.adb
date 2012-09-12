@@ -36,7 +36,6 @@
 
 With
 Adagio.Convert,
-Adagio.Download.Manager,
 Adagio.Download.Source,
 Adagio.Exceptions,
 Adagio.G2.Hit,
@@ -46,7 +45,6 @@ Agpl.Counter.Multi,
 Agpl.Magnet,
 Agpl.Sequence,
 Agpl.Strings,
-Aws.Url,
 Ada.Tags,
 Ada.Unchecked_Deallocation,
 Adagio.Types;

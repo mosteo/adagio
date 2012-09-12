@@ -264,6 +264,7 @@ package body ACF.Types is
                   Order          : in     Byte_Order := Little_Endian)
       return   Byte_Array
    is
+	pragma Unreferenced (Order);
    begin
       return (1 => B);
    end To_Byte_Array;

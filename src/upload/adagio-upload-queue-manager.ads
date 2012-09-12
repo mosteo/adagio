@@ -36,7 +36,6 @@ With
 Adagio.Chronos,
 Adagio.Globals,
 Adagio.Globals.Options,
-Adagio.Types,
 Adagio.Upload.Client.Pool,
 Agpl.Http.Server.Sort_handler,
 Dynamic_vector,
@@ -45,8 +44,6 @@ Charles.Hash_string,
 Charles.Maps.Hashed.Strings.Unbounded;
 
 
-Use
-Agpl.Types.Ustrings;
 
 package Adagio.Upload.Queue.Manager is
 

@@ -40,22 +40,17 @@
 -- behavior. All genericity is encapsulated in the sources, which can be of
 -- many classes, of course, and in the data consumers.
 
--- Intended for direct use from Download.Manager body. 
+-- Intended for direct use from Download.Manager body.
 
-with Adagio.Download.Segments;
-with Adagio.Types;
-with Adagio.Xml;
-
-with Agpl.Bmp;
-with Agpl.Magnet;
-with Agpl.Segmented_Thing;
-with Agpl.Types.Ustrings; use Agpl.Types.Ustrings;
-
-with Ada.Containers;
-with Ada.Containers.Hashed_Maps;
-with Ada.Containers.Indefinite_Hashed_Maps;
-with Ada.Streams;
-with Ada.Strings.Hash;
+With
+Adagio.Download.Segments,
+Adagio.Types,
+Adagio.Xml,
+Agpl.Bmp,
+Agpl.Magnet,
+Agpl.Types.Ustrings,
+Ada.Containers,
+Ada.Strings.Hash;
 
 package Adagio.Download.Slot is
 
@@ -72,7 +67,7 @@ package Adagio.Download.Slot is
    ------------------------------------------------------------------------
    function Get_Id (This : access Object) return Slot_Id;
    pragma Inline (Get_Id);
-   
+
    ------------------------------------------------------------------------
    -- Get_Name                                                           --
    ------------------------------------------------------------------------

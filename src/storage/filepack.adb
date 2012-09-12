@@ -62,11 +62,11 @@ package body Filepack is
          raise Index_out_of_bounds;
       end if;
       Read (
-         Stream.Parent.FS.all, 
+         Stream.Parent.FS.all,
          Item (
-            Item'First .. 
+            Item'First ..
             Stream_element_offset'Min (
-               Item'Last, 
+               Item'Last,
                Item'First + Stream_element_offset (
                   Stream.Parent.Remaining - 1))),
          Last);
@@ -90,10 +90,10 @@ package body Filepack is
    ------------------------------------------------------------------------
    procedure Check_opened (This : in Object) is
    begin
-      if not This.Bound then 
+      if not This.Bound then
          raise Filepack_not_bound;
       end if;
-      if not This.Found then 
+      if not This.Found then
          raise File_not_open;
       end if;
    end Check_opened;
@@ -107,8 +107,8 @@ package body Filepack is
       procedure Read_entry is
          E      : File_entry;
       begin
---         Text_io.Put_line ("Index: " & Stream_io.Count'Image (Index (This.F))); 
---         Text_io.Put_line ("Size : " & Stream_io.Count'Image (Size (This.F))); 
+--         Text_io.Put_line ("Index: " & Stream_io.Count'Image (Index (This.F)));
+--         Text_io.Put_line ("Size : " & Stream_io.Count'Image (Size (This.F)));
          E.Header_offset := Positive (Index (This.F));
          Unbounded_string'Read (Stream, E.Name);
 --         Text_io.Put_line ("Read: " & To_string (E.Name));
@@ -125,7 +125,7 @@ package body Filepack is
          if not E.Deleted then
             Insert (This.Index, To_string (E.Name), E);
          else
-            This.Wasted_data := 
+            This.Wasted_data :=
                This.Wasted_data + E.size;
          end if;
       end Read_entry;
@@ -145,7 +145,7 @@ package body Filepack is
       Success : Boolean;
    begin
       if not Is_regular_file (Name) and then
-         Is_regular_file (Name & ".tmp") 
+         Is_regular_file (Name & ".tmp")
       then
          Rename_file (Name & ".tmp", Name, Success);
          if not Success then
@@ -192,7 +192,7 @@ package body Filepack is
       I : Iterator_type;
       use Stream_io;
    begin
-      if not This.Bound then 
+      if not This.Bound then
          raise Filepack_not_bound;
       end if;
       if This.Found then
@@ -235,7 +235,7 @@ package body Filepack is
    procedure Create (This : in out Object; Name : in String) is
       use Stream_io;
    begin
-      if not This.Bound then 
+      if not This.Bound then
          raise Filepack_not_bound;
       end if;
       -- Close another previous open.
@@ -291,7 +291,7 @@ package body Filepack is
    ------------------------------------------------------------------------
    -- Close                                                              --
    ------------------------------------------------------------------------
-   -- Commits changes in a file opened for writing. 
+   -- Commits changes in a file opened for writing.
    procedure Close (This : in out Object) is
       use Stream_io;
    begin
@@ -361,7 +361,7 @@ package body Filepack is
       use Stream_io;
    begin
       Check_opened (This);
-      return Index (This.F) > 
+      return Index (This.F) >
          Positive_count (This.Current.Offset + This.Current.Size - 1);
    end End_of_file;
 
@@ -371,7 +371,7 @@ package body Filepack is
    -- Gets an stream for the current opened file.
    -- If the file was opened, only read is allowed.
    -- If the file was created, only writing is allowed.
-   function Stream (This : in Object) return 
+   function Stream (This : in Object) return
       Ada.Streams.Stream_io.Stream_access is
    begin
       Check_opened (This);
@@ -384,7 +384,7 @@ package body Filepack is
    -- Returns the per one wasted proportion due to deleted files
    function Wasted (This : in Object) return Wasted_percent is
    begin
-      if not This.Bound then 
+      if not This.Bound then
          raise Filepack_not_bound;
       end if;
       if This.Total_data = 0 then
@@ -419,6 +419,7 @@ package body Filepack is
          E      : File_entry;
          Buffer : Stream_element_array (1 .. 1024);
          Last   : Stream_element_offset;
+		Pragma Unreferenced( F );
       begin
          if Is_regular_file (Alias_name) then
             Delete_file (Alias_name, Success);
@@ -516,8 +517,8 @@ package body Filepack is
    -- Exports a file from the filepack, giving an open for read File_type.
    -- If no name is supplied, the file will be temporary.
    procedure Export (
-      This    : in out Object; 
-      Name    : in     String; 
+      This    : in out Object;
+      Name    : in     String;
       To      : in out Stream_io.File_type;
       To_name : in String := "") is
       use Stream_io;

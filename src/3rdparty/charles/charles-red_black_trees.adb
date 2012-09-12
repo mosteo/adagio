@@ -395,6 +395,7 @@ package body Charles.Red_Black_Trees is
 
       Y : Node_Access := Right (X);
 	pragma Assert (Y /= Null_Node);
+	pragma Unreferenced( Tree );
    begin
 
       Set_Right (X, Left (Y));
@@ -428,7 +429,8 @@ package body Charles.Red_Black_Trees is
       Y    : in     Node_Access) is
 
       X : Node_Access := Left (Y);
-      pragma Assert (X /= Null_Node);
+	pragma Assert (X /= Null_Node);
+	pragma Unreferenced( Tree );
    begin
 
       Set_Left (Y, Right (X));
@@ -693,8 +695,9 @@ package body Charles.Red_Black_Trees is
      (Tree : in out Tree_Type;
       Z, Y : in     Node_Access) is
 
-      pragma Assert (Z /= Y);
-      pragma Assert (Parent (Y) /= Z);
+	pragma Assert (Z /= Y);
+	pragma Assert (Parent (Y) /= Z);
+	pragma Unreferenced( Tree );
 
       Y_Parent : constant Node_Access := Parent (Y);
       Y_Color : constant Color_Type := Color (Y);

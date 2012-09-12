@@ -32,42 +32,48 @@
 ------------------------------------------------------------------------------
 --  $Id: adagio-g2-upload_client.adb,v 1.12 2004/02/24 15:26:10 Jano Exp $
 
-with Adagio.Connect.Peer;
-with Adagio.Connect.Peer_manager;
-with Adagio.File;
-with Adagio.G2.Browse_peer;
-with Adagio.G2.Chat_factory;
-with Adagio.G2.Mesh;
-with Adagio.G2.Meshes;
-with Adagio.G2.Mesh_element;
-with Adagio.Globals.Options;
-with Adagio.Guid;
-with Adagio.Http.Header.Response;
-with Adagio.Library;
-with Adagio.Misc;
-with Adagio.Security;
-with Adagio.Socket;
-with Adagio.Socket.IP;
-with Adagio.Trace;
-with Adagio.Upload.Resource.Factory;
-with Adagio.Upload.Resource.File;
-with Strings.Fields;
-with Strings.Utils;
-with TigerTree;
+With
+SHA1,
+Adagio.Constants,
+Adagio.Connect.Peer,
+Adagio.Connect.Peer_manager,
+Adagio.File,
+Adagio.G2.Browse_peer,
+Adagio.G2.Chat_factory,
+Adagio.G2.Mesh,
+Adagio.G2.Meshes,
+Adagio.G2.Mesh_element,
+Adagio.Guid,
+Adagio.Http.Header.Response,
+Adagio.Library,
+Adagio.Misc,
+Adagio.Security,
+Adagio.Socket.IP,
+Adagio.Trace,
+Adagio.Upload.Resource.Factory,
+Adagio.Upload.Resource.File,
+Strings.Fields,
+Strings.Utils,
+TigerTree,
+Aws.Url,
+Ada.Real_time,
+Ada.Tags,
+Ada.Exceptions,
+Ada.Unchecked_deallocation;
 
-with Aws.Url;
+use
+SHA1,
+Ada.Tags,
+Ada.Exceptions,
+Adagio.Constants;
 
-with ada.Calendar;
-with Ada.Real_time; use Ada;
-with Ada.Tags;      use Ada.Tags;
-with Ada.Unchecked_deallocation;
 
 package body Adagio.G2.Upload_client is
 
    procedure Free is new Unchecked_deallocation (
       Stream_element_array, Stream_array_access);
 
-   function V (This : in Upload.Resource.Handle) return 
+   function V (This : in Upload.Resource.Handle) return
       Upload.Resource.Object_access renames Upload.Resource.V;
 
    Min_poll    : constant := 15;
@@ -82,7 +88,7 @@ package body Adagio.G2.Upload_client is
    procedure Parse_for_alternates (This : in Object; Src : in String) is
       use Strings.Fields;
    begin
-      if Src = "" then 
+      if Src = "" then
          return;
       end if;
       for N in 1 .. Count_fields (Src, ',') loop
@@ -109,7 +115,7 @@ package body Adagio.G2.Upload_client is
    -- Creation with push pending.
    -- Receives simply a connected socket with pending push to be sent
    -- The new object is allocated in the heap.
-   function Create_pushed (Addr : in Socket.Sock_addr_type) 
+   function Create_pushed (Addr : in Socket.Sock_addr_type)
       return Upload.Client.Object_access is
       This : Object_access := new Object;
    begin
@@ -118,7 +124,7 @@ package body Adagio.G2.Upload_client is
       This.Status := Push_pending;
       This.Id     := U (Socket.Image (Addr.Addr));
 
-      Connection : 
+      Connection :
       begin
          Socket.Connect (
             This.Socket, Socket.Image (Addr.Addr), Natural (Addr.Port));
@@ -147,14 +153,14 @@ package body Adagio.G2.Upload_client is
    ------------------------------------------------------------------------
    -- Creation regular. Headers are waiting to be read.
    -- The new object is allocated in the heap.
-   function Create (Sock : in Socket.Object) 
+   function Create (Sock : in Socket.Object)
       return Upload.Client.Object_access is
       This : Object_access := new Object;
    begin
       This.Socket := Sock;
       Socket.Set_blocking_io (This.Socket, false);
       This.Status := Handshaking;
-      This.Id     := 
+      This.Id     :=
          U (Socket.Image (Socket.Get_peer_name (This.Socket).Addr));
       This.Link   := Stream_access (Socket.Stream (This.Socket));
 
@@ -180,7 +186,7 @@ package body Adagio.G2.Upload_client is
    begin
       This.Request := Request;
       This.Socket  := Sock;
-      This.Id      := 
+      This.Id      :=
          U (Socket.Image (Socket.Get_peer_name (This.Socket).Addr));
       This.Link    := Stream_access (Socket.Stream (This.Socket));
       This.Status  := Resolving;
@@ -204,7 +210,7 @@ package body Adagio.G2.Upload_client is
       use Ada.Calendar;
       Now : Calendar.Time := Clock;
    begin
-      Average_speeds.Push (This.Avg_speed, 
+      Average_speeds.Push (This.Avg_speed,
         (Sent => Sent, Time => Now - This.Last_sent));
       This.Last_sent := Now;
    end Push_speed;
@@ -219,7 +225,7 @@ package body Adagio.G2.Upload_client is
       Context : in     Upload.Client.Queue_context;  -- Info for the client
       Result  : out    Upload.Client.Client_results  -- Info for the queue
       ) is
-      
+
       use Real_time;
       use type File.Object;
 
@@ -234,7 +240,7 @@ package body Adagio.G2.Upload_client is
             Guid.To_hex (Guid.My_guid));
 
          -- Connection failed?
-         if (not Socket.Is_alive (This.Socket)) or else 
+         if (not Socket.Is_alive (This.Socket)) or else
             Socket.Connection_failed (This.Socket)
          then
             Cancel (This);
@@ -282,7 +288,7 @@ package body Adagio.G2.Upload_client is
 
             This.Name   := U (Http.Header.Get (This.Request, "User-Agent"));
             if Http.Header.Get (This.Request, "X-Nick") /= "" then
-               This.Nick   := 
+               This.Nick   :=
                   U (Strings.Utils.Trim (Aws.Url.Decode (
                      Http.Header.Get (This.Request, "X-Nick"))));
             end if;
@@ -313,7 +319,7 @@ package body Adagio.G2.Upload_client is
                         P := Connect.Peer.Object_access (
                            G2.Chat_Factory.Create (
                               S (Globals.Options.Chat_answer),
-                              This.Socket, 
+                              This.Socket,
                               This.Request));
                         begin
                            Connect.Peer_manager.Object.Add (P);
@@ -329,7 +335,7 @@ package body Adagio.G2.Upload_client is
                   else
                      Trace.Log ("G2.Upload_client.Handshake: " &
                         "Unknown request: " & Response);
-                     Raise_exception (Upload.Client.Unknown_request'Identity, 
+                     Raise_exception (Upload.Client.Unknown_request'Identity,
                         "Request: " & Response);
                   end if;
                elsif Response = "GET / HTTP/1.1" then
@@ -374,7 +380,7 @@ package body Adagio.G2.Upload_client is
                      This.Status := Rejecting;
                      return;
                   when E : others =>
-                     Trace.Log ("G2.Upload_client.Process.Handshake: " & 
+                     Trace.Log ("G2.Upload_client.Process.Handshake: " &
                         Trace.Report (E), Trace.Warning);
                      This.Status := Rejecting;
                      return;
@@ -395,7 +401,7 @@ package body Adagio.G2.Upload_client is
             -- Step to deliberations of queue manager:
             This.Status := Waiting_queuing;
             Result.Awakening := Clock;
-            Trace.Log ("Received request for " & 
+            Trace.Log ("Received request for " &
                Upload.Resource.Name (V (This.Resource).all), Trace.Debug);
          end if;
       end Handshake;
@@ -409,7 +415,7 @@ package body Adagio.G2.Upload_client is
 
          This.Name   := U (Http.Header.Get (This.Request, "User-Agent"));
          if Http.Header.Get (This.Request, "X-Nick") /= "" then
-            This.Nick   := 
+            This.Nick   :=
                U (Strings.Utils.Trim (Aws.Url.Decode (
                   Http.Header.Get (This.Request, "X-Nick"))));
          end if;
@@ -429,6 +435,7 @@ package body Adagio.G2.Upload_client is
             use Strings.Utils;
             Response : String := Http.Header.Get_response (This.Request);
             Action   : String := Select_field (Response, 1);
+		Pragma Unreferenced( Action );
          begin
             This.Resource :=
                Upload.Resource.Create (
@@ -450,7 +457,7 @@ package body Adagio.G2.Upload_client is
                This.Status := Rejecting;
                return;
             when E : others =>
-               Trace.Log ("G2.Upload_client.Process.Resolving: " & 
+               Trace.Log ("G2.Upload_client.Process.Resolving: " &
                   Trace.Report (E), Trace.Warning);
                This.Status := Rejecting;
                return;
@@ -470,21 +477,21 @@ package body Adagio.G2.Upload_client is
          -- Step to deliberations of queue manager:
          This.Status := Waiting_queuing;
          Result.Awakening := Clock;
-         Trace.Log ("Received request for " & 
+         Trace.Log ("Received request for " &
             Upload.Resource.Name (V (This.Resource).all), Trace.Debug);
       end Resolve;
       ----------------------
       -- Queue resolution --
-      procedure Queue_resolution is 
+      procedure Queue_resolution is
          Response : Http.Header.Set;
          Sent     : File_size := 0;
 
          Partial  : Boolean := Http.Header.Get (This.Request, "Range") /= "";
 
-         Wait     : Natural := Natural'Max (Min_poll, Min_poll + 
+         Wait     : Natural := Natural'Max (Min_poll, Min_poll +
             Natural'Min (120 - Min_poll, Context.Position * 2));
          PollMax  : Natural := Wait + Natural (Poll_window);
-         Queuable : Boolean := 
+         Queuable : Boolean :=
             Http.Header.Get (This.Request, "X-Queue") /= "";
 
          function Get_start return File_size is
@@ -515,8 +522,8 @@ package body Adagio.G2.Upload_client is
 
             -- Create headers related with ranges:
             Http.Header.Response.Create_response (
-               Response, 
-               This.Request, 
+               Response,
+               This.Request,
                Upload.Resource.Size (V (This.Resource).all));
 
             This.Remaining_size := File_size'Value (
@@ -537,19 +544,19 @@ package body Adagio.G2.Upload_client is
             end if;
 
             Upload.Resource.Stream (
-               V (This.Resource).all, 
+               V (This.Resource).all,
                Upload.Resource.Stream_access (This.Source));
          else
             if Queuable then
                Http.Header.Set_response (Response, "HTTP/1.1 503 Queued");
                Http.Header.Add (Response, "Connection", "Keep-Alive");
-               Http.Header.Add (Response, "X-Queue", 
+               Http.Header.Add (Response, "X-Queue",
                   "position=" & Misc.To_string (Context.Position) & "," &
                   "length=" & Misc.To_string (Context.Current_slots) & "," &
                   "pollMin=" & Misc.To_string (Wait) & "," &
                   "pollMax=" & Misc.To_string (PollMax));
                Result.Awakening := Clock + To_time_span (Wait_queued);
-               
+
                This.nextPollMin := Calendar.Clock + Duration (Wait);
                This.NextPollMax := Calendar.Clock + Duration (PollMax);
             else
@@ -559,18 +566,18 @@ package body Adagio.G2.Upload_client is
          end if;
 
          -- HTTP/1.1 headers:
-         Http.Header.Add (Response, "Server", 
+         Http.Header.Add (Response, "Server",
             User_agent & " (Shareaza compatible)");
          Http.Header.Add (Response, "X-Network", "G1, G2");
          Http.Header.Add (Response, "Accept-Range", "bytes");
-         Http.Header.Add (Response, "Content-Type", 
+         Http.Header.Add (Response, "Content-Type",
             Upload.Resource.Content_type (
                Upload.Resource.V (This.Resource).all));
 
-         if Upload.Resource.V (This.Resource)'Tag = 
-            Upload.Resource.File.Object'Tag 
+         if Upload.Resource.V (This.Resource)'Tag =
+            Upload.Resource.File.Object'Tag
          then
-            Http.Header.Add (Response, "X-TigerTree-Path", 
+            Http.Header.Add (Response, "X-TigerTree-Path",
                "/gnutella/tigertree/v3?urn:tree:tiger/:" &
                TigerTree.To_base32 (File.TTH (
                   Upload.Resource.File.File (
@@ -594,7 +601,7 @@ package body Adagio.G2.Upload_client is
                for N in E'Range loop
                   if Socket.IP.Is_public (
                      Mesh_element.Location (E (N))) or else
-                     not Public 
+                     not Public
                   then
                      if Prev then
                         ASU.Append (A, ", ");
@@ -619,14 +626,14 @@ package body Adagio.G2.Upload_client is
 --         DISABLED: I don't like this Gnutella method.
 --            I'll implement it only if someday I add G1 support.
 --         if not Misc.Contains (Misc.To_lower (Name (This)), "shareaza") then
---            Http.Header.Add (Response, "X-Thex-URI", 
+--            Http.Header.Add (Response, "X-Thex-URI",
 --               "/gnutella/thex/v1?urn:tree:tiger/:" &
 --               TigerTree.To_base32 (File.TTH (This.File)));
 --         end if;
 
          begin
             Http.Header.Write (
-               Response, 
+               Response,
                This.Link.all,
                Send_response => true,
                Send_crlf     => true);
@@ -663,7 +670,7 @@ package body Adagio.G2.Upload_client is
                   when others =>
                      raise;
                end case;
-            when others => 
+            when others =>
                raise;
          end;
 
@@ -677,7 +684,7 @@ package body Adagio.G2.Upload_client is
       procedure Upload is
          -- Remaining to be sent in this processing:
          Remaining : File_size := File_size'Min (
-            This.Remaining_size + This.Buffer_ava, 
+            This.Remaining_size + This.Buffer_ava,
             File_size (Context.Allowed_up));
          Chunk     : File_size;
          Start     : Time := Clock;
@@ -686,8 +693,8 @@ package body Adagio.G2.Upload_client is
          Result.Is_uploading := true;
          loop
             -- Exit when no more to write.
-            exit when 
-               Remaining = 0 or 
+            exit when
+               Remaining = 0 or
                This.Buffer_ava + This.Remaining_size = 0;
             -- Check connection:
             if not Socket.Is_alive (This.Socket) then
@@ -712,7 +719,7 @@ package body Adagio.G2.Upload_client is
                end if;
                Chunk := File_size'Min (
                   This.Remaining_size, This.Buffer'Length);
-               Stream_element_array'Read (This.Source, This.Buffer (1 .. 
+               Stream_element_array'Read (This.Source, This.Buffer (1 ..
                   Stream_element_offset (Chunk)));
                This.Buffer_pos := 1;
                This.Buffer_Ava := Chunk;
@@ -722,7 +729,7 @@ package body Adagio.G2.Upload_client is
             Chunk := File_size'Min (Remaining, This.Buffer_Ava);
             begin
                Write (This.Link.all, This.Buffer (
-                  Stream_element_offset (This.Buffer_pos) .. 
+                  Stream_element_offset (This.Buffer_pos) ..
                   Stream_element_offset (This.Buffer_pos + Chunk) - 1));
 
                This.Buffer_pos     := This.Buffer_pos + Chunk;
@@ -759,7 +766,7 @@ package body Adagio.G2.Upload_client is
 
          -- Speeds
          Push_speed (This, Result.Sent);
-        
+
       end Upload;
 
       ------------------
@@ -769,7 +776,7 @@ package body Adagio.G2.Upload_client is
       begin
          if not Socket.Is_alive (This.Socket) then
             raise Adagio.Upload.Client.Connection_lost;
-         elsif Calendar.Clock < This.nextPollMin and then 
+         elsif Calendar.Clock < This.nextPollMin and then
             Socket.Available (This.Socket) > 0
          then
             -- Drop, polling too fast:
@@ -826,15 +833,13 @@ package body Adagio.G2.Upload_client is
          when Done =>
             Trace.Log (
                "G2.Upload_client: Event for done client", Trace.Warning);
-         when others =>
-            raise Unimplemented;
       end case;
    exception
       when Adagio.Upload.Client.User_agent_is_banned |
            Adagio.Upload.Client.Connection_lost |
            Adagio.Upload.Client.Client_polled_too_soon |
            Adagio.Upload.Client.Unknown_request |
-           Adagio.Upload.client.Client_missed_poll_deadline | 
+           Adagio.Upload.client.Client_missed_poll_deadline |
            Socket.Socket_error =>
            raise;
       when E : others =>
@@ -845,7 +850,7 @@ package body Adagio.G2.Upload_client is
    ------------------------------------------------------------------------
    -- Resource                                                       --
    ------------------------------------------------------------------------
-   function Requested_resource (This : in Object) return 
+   function Requested_resource (This : in Object) return
       Upload.Resource.Handle is
    begin
       return This.Resource;
@@ -859,7 +864,7 @@ package body Adagio.G2.Upload_client is
    -- For G2, its the source IP:port
    function Id (This : in Object) return String is
    begin
-      return S (This.Id);  
+      return S (This.Id);
    end Id;
 
    ------------------------------------------------------------------------
@@ -899,7 +904,7 @@ package body Adagio.G2.Upload_client is
    -- Cancel                                                             --
    ------------------------------------------------------------------------
    -- Should close connection and free all resources.
-   procedure Cancel (This : in out Object) is 
+   procedure Cancel (This : in out Object) is
    begin
       if This.Buffer /= null then
          Free (This.Buffer);
@@ -935,15 +940,15 @@ package body Adagio.G2.Upload_client is
    -- Reject                                                             --
    ------------------------------------------------------------------------
    procedure Reject (
-      This   : in Object; 
-      Reason : in Upload.Client.Reject_reason; 
+      This   : in Object;
+      Reason : in Upload.Client.Reject_reason;
       Done   : out Boolean) is
       use type Upload.Client.Reject_reason;
       use type Calendar.Time;
       use type Socket.Error_type;
       Resp : Http.Header.Set;
    begin
-      if Reason = Upload.Client.Busy or else 
+      if Reason = Upload.Client.Busy or else
          Library.Object.Count_pending_folders > 0
       then
          Http.Header.Set_response (Resp, "HTTP/1.1 503 Busy");

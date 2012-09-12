@@ -32,7 +32,6 @@
 ------------------------------------------------------------------------------
 --  $Id: adagio-library-query.ads,v 1.4 2004/01/21 21:05:28 Jano Exp $
 
-with Adagio.File;
 
 package Adagio.Library.Query is
 

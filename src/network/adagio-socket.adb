@@ -32,23 +32,27 @@
 ------------------------------------------------------------------------------
 --  $Id: adagio-socket.adb,v 1.14 2004/03/29 19:13:33 Jano Exp $
 
-with Adagio.BW_usage;
-with Adagio.Globals.Options;
-with Adagio.Os.Socket;
-with Adagio.Security;
-with Adagio.Statistics;
-with Adagio.Statistics.Integers;
-with Adagio.Trace;
+With
+Adagio.BW_usage,
+Adagio.Globals.Options,
+Adagio.Os.Socket,
+Adagio.Security,
+Adagio.Statistics,
+Adagio.Statistics.Integers,
+Adagio.Trace,
+Agpl.Strings.Fields,
+Strings.Fields,
+Ada.Calendar,
+Ada.Unchecked_deallocation;
 
-with Agpl.Strings.Fields;
+pragma Warnings(Off);
+with
+Gnat.Sockets,
+Gnat.Sockets.Extra;
+pragma Warnings(On);
 
-with Strings.Fields;
-
-with Gnat.Sockets; use Gnat.Sockets;
-with Gnat.Sockets.Extra;
-
-with Ada.Calendar; use Ada;
-with Ada.Unchecked_deallocation;
+Use
+Gnat.Sockets;
 
 package body Adagio.Socket is
 
@@ -497,8 +501,10 @@ package body Adagio.Socket is
    end Available_socket;
 
 begin
-   -- Initialization of the Gnat library:
-   Sockets.Initialize;
+    -- Initialization of the Gnat library:
+    Pragma Warnings( Off );
+    Sockets.Initialize;
+    Pragma Warnings( On );
 
    -- Connection throttle:
    Conn_period := Duration (1.0 / Float (

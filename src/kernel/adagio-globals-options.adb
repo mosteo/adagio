@@ -35,14 +35,15 @@
 --  Centralized facilities for all configuration options.
 --  These variables are all initialized during elaboration from the xml file.
 
-with Adagio.Misc;
---with Adagio.Statistics.Booleans;
---with Adagio.Statistics.Tpl;
-with Adagio.Xml;
-with Adagio.Xml.Utils;
+with
+Adagio.Misc,
+-- Adagio.Statistics.Booleans,
+-- Adagio.Statistics.Tpl,
+Adagio.Xml,
+Adagio.Xml.Utils,
+-- Agpl.Folders,
+Agpl.Filesystem;
 
-with Agpl.Filesystem;
--- with Agpl.Folders;
 
 package body Adagio.Globals.Options is
 
@@ -69,8 +70,11 @@ package body Adagio.Globals.Options is
    ------------------------------------------------------------------------
    procedure Set_options is
       package XUtils renames Xml.Utils;
-      Yes : constant String := "yes";
-      No  : constant String := "no";
+	Yes : constant String := "yes";
+	No  : constant String := "no";
+
+	Pragma Unreferenced( No );
+
       function S (B : in Boolean) return String is
       begin
          if B then
