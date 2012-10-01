@@ -45,8 +45,8 @@ private
 
    type Object is tagged record
       Start : Ada.Calendar.Time := Ada.Calendar.Clock;
-      --  pragma Atomic (Start);
-      pragma Warning ("Ensure this is atomic!!");
+      pragma Atomic (Start);
+      --pragma Warning ("Ensure this is atomic!!");
    end record;
 
 end Agpl.Chronos;

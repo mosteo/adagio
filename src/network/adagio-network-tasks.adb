@@ -32,9 +32,10 @@
 ------------------------------------------------------------------------------
 --  $Id: adagio-network-tasks.adb,v 1.3 2004/01/21 21:05:37 Jano Exp $
 
-with Adagio.Globals;
-with Adagio.Trace;
-with Adagio.Xml;
+With
+Adagio.Globals,
+Adagio.Trace,
+Adagio.Xml;
 
 package body Adagio.Network.Tasks is
 
@@ -43,7 +44,8 @@ package body Adagio.Network.Tasks is
    procedure Start(Period: Duration := 1.0) is
       Nodes: Xml.Node_array:=
          Xml.Get_all(Xml.Get("network", Globals.Config));
-   begin
+	Pragma Unreferenced( Period );
+    begin
       Trace.Log("Network.Tasks.Start: Initializing networks...");
       -- Try to connect to every found network:
       for i in Nodes'range loop

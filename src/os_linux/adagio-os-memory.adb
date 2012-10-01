@@ -32,12 +32,14 @@
 ------------------------------------------------------------------------------
 --  $Id: adagio-os-memory.adb,v 1.3 2004/01/21 21:05:39 Jano Exp $
 
-with Agpl.Strings;
-with Agpl.Strings.Fields;
+Pragma Ada_2012;
 
-with Helpers;
+With
+Helpers,
+Text_IO,
+Agpl.Strings,
+Agpl.Strings.Fields;
 
-with Text_IO;
 
 package body Adagio.Os.Memory is
 
@@ -47,7 +49,7 @@ package body Adagio.Os.Memory is
    -- Returns the heap memory in use in bytes
    -- This thread pid is OK, since all threads share the memory info (?)
    function Heap_usage return Natural is
-      Pid : constant Integer := Helpers.Get_Pid;
+      Pid : constant Integer := 0; --Helpers.Get_Pid;
       use Text_IO;
       File : File_Type;
       Line : String (1 .. 256);

@@ -66,6 +66,7 @@ package body Adagio.Trace is
 
    subtype Warn_Prefix is String (1 .. 4);
    type Prefix is array (All_levels) of Warn_Prefix;
+    pragma Unreferenced (Prefix);
 
    Event_equiv : constant array (All_levels) of Event_log.Levels := (
       Never       => Event_log.Debug,
@@ -83,6 +84,7 @@ package body Adagio.Trace is
       File    : String     := "")
    is
       Msg     : Ustring;
+	pragma Unreferenced (Msg);
    begin
       if not Debug_on then  -- Earliest exit
          return;

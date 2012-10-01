@@ -34,13 +34,12 @@
 
 -- Package with OS dependent functions.
 
-with Adagio.Trace;
 
 with Interfaces;
 with Interfaces.C;
 with System;
 
-with Win32; 
+with Win32;
 use  Win32;
 with Win32.Winbase;
 with Win32.Winerror;
@@ -72,8 +71,8 @@ package body Adagio.Os.Memory is
             end if;
          end if;
          Blocks := Blocks + 1;
-         if (Unsigned_32 (he.wFlags) and 
-            Unsigned_32 (PROCESS_HEAP_UNCOMMITTED_RANGE)) = 0 
+         if (Unsigned_32 (he.wFlags) and
+            Unsigned_32 (PROCESS_HEAP_UNCOMMITTED_RANGE)) = 0
          then
             Size := Size + Natural (he.cbData);
 --            Trace.Log ("UNCOMMITTED SIZE" & he.cbData'Img);
@@ -94,7 +93,7 @@ package body Adagio.Os.Memory is
       nHeaps : DWORD;
       cSize  : Natural := 0;
    begin
-      nHeaps := 
+      nHeaps :=
          GetProcessHeaps (heaps'length, heaps (heaps'first)'Unchecked_access);
 
       if Natural (nHeaps) = heaps'Last then
@@ -104,7 +103,7 @@ package body Adagio.Os.Memory is
       for N in 1 .. Natural (nHeaps) loop
          cSize := cSize + LocalHeapSize (heaps (N));
       end loop;
-         
+
       return cSize;
    end MemorySize;
 

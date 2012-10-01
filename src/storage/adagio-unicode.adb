@@ -34,14 +34,17 @@
 
 --  Helper functions to deal with unicode strings
 
-with Adagio.Network.Endian;
-with Adagio.Trace;
+With
+Agpl.Types.Ustrings,
+Unicode.CCS.Iso_8859_1,
+Unicode.CES.Utf8,
+Unicode.CES.Basic_8bit;
 
-with Agpl.Types.Ustrings; use Agpl.Types.Ustrings;
 
-with Unicode.CCS.Iso_8859_1;  use Unicode.CCS;
-with Unicode.CES.Utf8;        use Unicode.CES;
-with Unicode.CES.Basic_8bit;
+Use
+Agpl.Types.Ustrings,
+Unicode.CCS,
+Unicode.CES;
 
 package body Adagio.Unicode is
 
@@ -52,16 +55,16 @@ package body Adagio.Unicode is
          Basic_8bit.From_utf32 (
             utf8.To_Utf32 (
                utf8.To_unicode_LE (
-                  this, 
+                  this,
                   Cs => Iso_8859_1.Iso_8859_1_character_set)));
    exception
       when Invalid_code | Invalid_encoding =>
          raise Invalid_encoding;
    end From_utf8;
 
-   -- Decode a raw 16-bit unicode string: 
+   -- Decode a raw 16-bit unicode string:
    -- As we support only latin1, a high byte /= 0 raises Constraint_error
-   function From_unicode16 (this : in String; Big_endian : in Boolean) 
+   function From_unicode16 (this : in String; Big_endian : in Boolean)
       return String is
       Pos    : Integer := this'First;
       Result : Ustring;
@@ -93,7 +96,7 @@ package body Adagio.Unicode is
    -- 16 bit (endianness applies then) raw unicode character string.
    -- The 16#ff# selector must be the first character in that case.
    -- May raise exception if Latin1 can't hold the resulting string.
-   function G2_to_string (this : in String; Big_endian : in Boolean) 
+   function G2_to_string (this : in String; Big_endian : in Boolean)
       return String is
    begin
       if This'Length = 0 then
@@ -108,7 +111,6 @@ package body Adagio.Unicode is
 
    -- Returns a Utf8 encoded string from Latin1 (Ada default)
    function To_utf8 (this : in String) return String is
-      Result : Ustring;
    begin
       return Utf8.From_Utf32 (
          Basic_8bit.To_Utf32 (

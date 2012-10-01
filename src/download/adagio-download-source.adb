@@ -31,7 +31,6 @@
 --  harass or legally prosecute these users.                                --
 ------------------------------------------------------------------------------
 
-with Adagio.Download.Manager;
 
 with Ada.Strings.Hash;
 
@@ -50,7 +49,7 @@ package body Adagio.Download.Source is
    -- Hash                                                               --
    ------------------------------------------------------------------------
    function Hash (Id : in Source_Id) return Ada.Containers.Hash_Type is
-   begin 
+   begin
       return Ada.Strings.Hash (S (Ustring (Id)));
    end Hash;
 

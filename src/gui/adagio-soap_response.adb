@@ -32,32 +32,33 @@
 ------------------------------------------------------------------------------
 --  $Id: adagio-soap_response.adb,v 1.3 2004/01/21 21:05:27 Jano Exp $
 
-with Adagio.Debug;
-with Adagio.G2.Core;
-with Adagio.Globals;
-with Adagio.Library;
-with Adagio.Misc;
-with Adagio.Network;
-with Adagio.OS;
-with Adagio.Statistics;
-with Adagio.Trace;
-with Adagio.Upload.Queue;
-with Adagio.Upload.Queue.Manager;
+With
+Ada.Calendar,
+Adagio.Debug,
+Adagio.G2.Core,
+Adagio.Globals,
+Adagio.Library,
+Adagio.Misc,
+Adagio.Network,
+Adagio.OS,
+Adagio.Statistics,
+Adagio.Trace,
+Adagio.Upload.Queue,
+Adagio.Upload.Queue.Manager,
+Agpl.Types.Ustrings,
+SOAP.Message.Payload,
+SOAP.Message.Response,
+SOAP.Message.Response.Error,
+SOAP.Message.XML,
+SOAP.Parameters,
+SOAP.Types;
 
-with Agpl.Types.Ustrings; use Agpl.Types.Ustrings;
+Use
+SOAP.Parameters,
+SOAP.Types,
+Agpl.Types.Ustrings,
+Ada.Calendar;
 
-with AWS.Status;
-with SOAP.Message.Payload;
-with SOAP.Message.Response;
-with SOAP.Message.Response.Error;
-with SOAP.Message.XML;
-with SOAP.Parameters;
-with SOAP.Types;
-
-use SOAP.Parameters;
-use SOAP.Types;
-
-with Ada.Calendar; use Ada.Calendar;
 
 package body Adagio.SOAP_response is
 
@@ -151,11 +152,11 @@ package body Adagio.SOAP_response is
       pragma Unreferenced (Create_profile);
    begin
       if Name_space /= Adagio.Soap_response.Namespace then
-         -- Return a error response 
+         -- Return a error response
          declare
             package SMRE renames Soap.Message.Response.Error;
             Resp : SMRE.Object := SMRE.Build (
-               SMRE.Client, 
+               SMRE.Client,
                "Wrong namespace, must be: " & Namespace);
          begin
             Trace.Log( "Soap call: Wrong namespace: " & Name_space);
@@ -234,7 +235,7 @@ package body Adagio.SOAP_response is
                for N in OA'Range loop
                   OA (N) := +R ((
                      +S (S (Stats (N).Key), "key"),
-                     +S (S (Stats (N).Value), "value")), 
+                     +S (S (Stats (N).Value), "value")),
                      "statistic");
                end loop;
                Resp_params := +A (OA, "statistics");

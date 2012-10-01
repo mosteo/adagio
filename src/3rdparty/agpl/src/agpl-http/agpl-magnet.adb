@@ -1,4 +1,4 @@
- 
+
 
 with Agpl.Conversions;
 with Agpl.Strings;
@@ -78,12 +78,12 @@ package body Agpl.Magnet is
       This.Original_Url := U (Url);
       while Pos /= 0 loop
          Fin      := Strings.Pos (Url (Pos .. Url'Last), "=");
-         if Fin = 0 then 
+         if Fin = 0 then
             Fin := Url'Last + 1;
          end if;
          Attr.Key := U (Url (Pos + 1 .. Fin - 1));
          Fin2     := Strings.Pos (Url (Fin + 1 .. Url'Last), "&");
-         if Fin2 = 0 then 
+         if Fin2 = 0 then
             Fin2 := Url'Last + 1;
             Pos  := 0;
          else
@@ -115,8 +115,8 @@ package body Agpl.Magnet is
    ------------------------------------------------------------------------
    -- Get any attribute of the magnet:
    function Get_Attribute (
-      This : in Object; 
-      Attr : in String   := ""; 
+      This : in Object;
+      Attr : in String   := "";
       Pos  : in Positive := 1) return String
    is
       C    : Cursor   := First (This.Attrs);
@@ -144,7 +144,7 @@ package body Agpl.Magnet is
       if Get_Num_Attributes (This, Uri_Attr) > 0 then
          return "several";
       else
-         return 
+         return
             Strings.Fields.Select_Field (Get_Attribute (This, Uri_Attr), 2, ':');
       end if;
    end Get_Hash_Type;
@@ -154,7 +154,7 @@ package body Agpl.Magnet is
       if Get_Num_Attributes (This, Uri_Attr) < Pos then
          raise Constraint_Error;
       else
-         return 
+         return
             Strings.Fields.Select_Field (
                Get_Attribute (This, Uri_Attr, Pos), 2, ':');
       end if;
@@ -183,7 +183,7 @@ package body Agpl.Magnet is
    ------------------------------------------------------------------------
    -- Get_Hash_Value                                                     --
    ------------------------------------------------------------------------
-   function Get_Hash_Value (This : in Object; Kind : in String := "") 
+   function Get_Hash_Value (This : in Object; Kind : in String := "")
       return String
    is
    begin
@@ -216,15 +216,21 @@ package body Agpl.Magnet is
    ------------------------------------------------------------------------
    -- Says if a string is a Magnet link
    function Is_Magnet (This : in String) return Boolean is
+
+	Magnet_Ref	: Constant String:= "magnet:";
+	First		: Constant Positive := This'First;
+
+	Subtype Protocol is Positive Range First .. First+Magnet_Ref'Length-1;
    begin
-      if This'Length >= 8 and then This (This'First .. This'First + 7) = "magnet:" then
-         declare
-            Dummy : constant Object := Create (This);
-            pragma Unreferenced (Dummy);
-         begin
-            return true; -- Created OK!
-         end;
-      end if;
+	if This'Length > Magnet_Ref'Length and then
+	   This (Protocol) = Magnet_Ref then
+	    declare
+		Dummy : constant Object := Create (This);
+		pragma Unreferenced (Dummy);
+	    begin
+		return true; -- Created OK!
+	    end;
+	end if;
 
       return false;
    exception
@@ -237,7 +243,6 @@ package body Agpl.Magnet is
    ------------------------------------------------------------------------
    -- Returns the string form of the magnet
    function To_String (This : in Object) return String is
-      use Attr_List;
       I   : Cursor  := First (This.Attrs);
       Url : Ustring := U ("magnet:?");
    begin

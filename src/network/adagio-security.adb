@@ -32,26 +32,28 @@
 ------------------------------------------------------------------------------
 --  $Id: adagio-security.adb,v 1.4 2004/02/29 20:36:45 Jano Exp $
 
-with Adagio.Exceptions; use Adagio.Exceptions;
-with Adagio.Globals.Options;
-with Adagio.Misc;
-with Adagio.Socket.Ip;
-with Adagio.Trace;
-with Binary_tree;
-with Bit_arrays;
-with Bit_arrays.Modular;
+With
+Adagio.Exceptions,
+Adagio.Globals.Options,
+Adagio.Misc,
+Adagio.Socket.Ip,
+Adagio.Trace,
+Binary_tree,
+Bit_arrays,
+Bit_arrays.Modular,
+Agpl.Dynamic_vector,
+Agpl.Types.Ustrings,
+Charles.Hash_string,
+Charles.Maps.Hashed.Strings.Unbounded,
+Strings.Fields,
+Gnat.Regexp,
+Gnat.Sockets;
 
-with Agpl.Dynamic_vector; use Agpl;
-with Agpl.Types.Ustrings; use Agpl.Types.Ustrings;
-
-with Charles.Hash_string;
-with Charles.Maps.Hashed.Strings.Unbounded;
-
-with Strings.Fields;
-
-with Gnat.Regexp;
-with Gnat.Sockets;
-use  Gnat;
+Use
+GNAT,
+Adagio.Exceptions,
+Agpl,
+Agpl.Types.Ustrings;
 
 package body Adagio.Security is
 
@@ -98,10 +100,10 @@ package body Adagio.Security is
 
    package Mask_trees is new Binary_tree (Node_data);
 
-   Mask_tree : Mask_trees.Tree := 
+   Mask_tree : Mask_trees.Tree :=
       Mask_trees.Add_child (null, Mask_trees.Left, (Mask_end => false));
 
-   Side_chooser : array (Boolean) of Mask_trees.Sides := 
+   Side_chooser : array (Boolean) of Mask_trees.Sides :=
       (false => Mask_trees.Left, true => Mask_trees.Right);
 
    ------------------
@@ -113,7 +115,7 @@ package body Adagio.Security is
    begin
       case This.Family is
          when Sockets.Family_inet =>
-            return 
+            return
                Byte_to_bit.To_bit_array_BE (This.Data (1)) &
                Byte_to_bit.To_bit_array_BE (This.Data (2)) &
                Byte_to_bit.To_bit_array_BE (This.Data (3)) &
@@ -128,7 +130,7 @@ package body Adagio.Security is
    -- Add_ban_to_tree --
    ---------------------
    procedure Add_ban_to_tree (
-      This : in out Mask_trees.Tree; Addr, Mask : in Binary_address) 
+      This : in out Mask_trees.Tree; Addr, Mask : in Binary_address)
    is
       use Bit_arrays;
       BA   : Bit_array := To_bit_array (Addr);
@@ -138,7 +140,7 @@ package body Adagio.Security is
       Side : Mask_trees.Sides;
       use Mask_trees;
    begin
-      if BA'First /= MA'First then 
+      if BA'First /= MA'First then
          raise Constraint_error;
       end if;
       for N in MA'Range loop
@@ -306,20 +308,20 @@ package body Adagio.Security is
    -- Is_banned --
    ---------------
    function Is_banned (Address : in Ip_address.Inet_addr_type)
-      return Boolean 
+      return Boolean
    is
       Addr   : Binary_address := To_binary_address (Address);
       Img    : String         := Sockets.Image     (Address);
       Banned : Boolean;
    begin
       if Socket.Ip.Is_public (Img) and then
-         Is_country_banned (Agpl.Geoip.Country_code_from_addr (Img)) 
+         Is_country_banned (Agpl.Geoip.Country_code_from_addr (Img))
       then
          return true;
       else
          Banned := Is_banned (Mask_tree, Addr);
          if Banned then
-            Trace.Log ("Adagio.Security.Is_banned: IP ban detected", 
+            Trace.Log ("Adagio.Security.Is_banned: IP ban detected",
                Trace.Debug);
          end if;
          return Banned;
@@ -393,12 +395,12 @@ package body Adagio.Security is
    procedure Add_country_ban (
       Country : in Agpl.Geoip.Country_code; Allow : in Boolean := false)
    is
-      Pass : constant array (Boolean) of String (1 .. 7) := 
+      Pass : constant array (Boolean) of String (1 .. 7) :=
          (true => "allowed", false => "denied ");
    begin
       Insert (Country_bans, Misc.To_lower (Country), Allow);
       Trace.Log ("Adding country rule for " &
-         Misc.To_upper (Country) & ": pass is " & Pass (Allow), 
+         Misc.To_upper (Country) & ": pass is " & Pass (Allow),
          Trace.Informative);
    end Add_country_ban;
 
@@ -406,7 +408,7 @@ package body Adagio.Security is
    -- Is_country_banned --
    -----------------------
    function Is_country_banned (
-      Country : in Agpl.Geoip.Country_code) return Boolean 
+      Country : in Agpl.Geoip.Country_code) return Boolean
    is
       I : Iterator_type := Find (Country_bans, Misc.To_lower (Country));
    begin
@@ -431,4 +433,7 @@ package body Adagio.Security is
       end if;
    end Is_country_banned;
 
+
+    --	UNREFERENCED ITEMS
+	Pragma Unreferenced( Image );
 end Adagio.Security;

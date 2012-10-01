@@ -34,26 +34,24 @@
 
 -- Package with OS dependent functions.
 
-with Adagio.Globals;
-with Adagio.Trace;
-
-with Win32;
-with Win32.Wincon;
-use  Win32;
+with
+Adagio.Globals,
+Adagio.Trace,
+Win32.WinCon;
 
 package body Adagio.Os.Shutdown is
 
-   function Handler (Ctrl : Win32.DWORD) return Win32.BOOL is
-      use Wincon;
+    function Handler (Ctrl : Win32.DWORD) return Win32.BOOL is
+      use win32.Wincon;
    begin
       case Ctrl is
-         when 
-            CTRL_C_EVENT | 
+         when
+            CTRL_C_EVENT |
             CTRL_BREAK_EVENT |
             CTRL_CLOSE_EVENT |
             CTRL_LOGOFF_EVENT |
             CTRL_SHUTDOWN_EVENT =>
-            Trace.Log ("Shutdown request received, exiting...", 
+            Trace.Log ("Shutdown request received, exiting...",
                Trace.Informative);
             Globals.Requested_exit := true;
          when others =>
@@ -62,10 +60,12 @@ package body Adagio.Os.Shutdown is
       return Win32.TRUE;
    end Handler;
 
+    Use Win32.WinCon;
+
 begin
-   if Wincon.SetConsoleCtrlHandler (Handler'Access, Win32.TRUE) /= Win32.TRUE
+   if SetConsoleCtrlHandler( Handler'Access, Win32.TRUE ) /= Win32.TRUE
    then
-      Trace.Log ("Os.Shutdown: Console handler installation failed.", 
+      Trace.Log ("Os.Shutdown: Console handler installation failed.",
          Trace.Error);
    else
       Trace.Log ("Os.Shutdown: Console handler installation successful.");

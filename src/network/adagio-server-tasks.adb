@@ -1,9 +1,11 @@
-with Adagio.Chronos;
-with Adagio.Globals.Options;
-with Adagio.Misc;
-with Adagio.Trace;
+With
+Adagio.Chronos,
+Adagio.Globals.Options,
+Adagio.Trace,
+Ada.Calendar;
 
-with Ada.Calendar; use Ada.Calendar;
+Use
+Ada.Calendar;
 
 package body Adagio.Server.Tasks is
 
@@ -11,14 +13,16 @@ package body Adagio.Server.Tasks is
    -- And save every 30 min.
    task body Maintenance is
       Startup        : Time := Clock;
-      Exit_requested : Boolean:= false; 
-      Purge_P        : Duration 
+      Exit_requested : Boolean:= false;
+      Purge_P        : Duration
          renames Globals.Options.Hostcache_purge_period;
       Save_P         : Duration renames Globals.Options.Hostcache_save_period;
       Purge_B        : Boolean renames Globals.Options.Hostcache_purge;
       Save_B         : Boolean renames Globals.Options.Hostcache_save;
       Purge_cron,
       Save_cron      : Chronos.Object;
+
+	Pragma Unreferenced( Startup );
    begin
       select
          accept Start;
@@ -33,9 +37,9 @@ package body Adagio.Server.Tasks is
                Chronos.Reset (Purge_cron);
                Server.List.Purge;
                -- Ad hoc, purge networks:
-               Server.List.Purge("Gnutella2", 
+               Server.List.Purge("Gnutella2",
                   Globals.Options.G2_CachedServers);
-               Server.List.Purge("GWebCache2", 
+               Server.List.Purge("GWebCache2",
                   Globals.Options.GWC2_CachedServers);
             end if;
             -- SAVE

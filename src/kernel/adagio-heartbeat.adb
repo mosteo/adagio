@@ -32,16 +32,17 @@
 ------------------------------------------------------------------------------
 --  $Id: adagio-heartbeat.adb,v 1.4 2004/01/21 21:05:27 Jano Exp $
 
-with Adagio.Debug;
-with Adagio.Globals.Options;
-with Adagio.Statistics;
-with Adagio.Statistics.Booleans;
-with Adagio.Statistics.Durations;
-with Adagio.Trace;
+With
+Adagio.Debug,
+Adagio.Globals.Options,
+Adagio.Statistics,
+Adagio.Statistics.Booleans,
+Adagio.Statistics.Durations,
+Adagio.Trace,
+Ada.Calendar;
 
-with Ada.Calendar;   use Ada.Calendar;
-with Ada.Exceptions; use Ada.Exceptions;
-with Text_io; use Text_io;
+use
+Ada.Calendar;
 
 package body Adagio.HeartBeat is
 
@@ -52,7 +53,7 @@ package body Adagio.HeartBeat is
       while not Globals.Requested_exit loop
          if Debug.Debug_statistics_enabled then
             Statistics.Object.Set (
-               "Misc - Uptime", 
+               "Misc - Uptime",
                Statistics.Durations.Create (Clock - Startup));
          end if;
          delay until Clock + Period;

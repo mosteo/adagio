@@ -62,12 +62,13 @@ separate (Adagio.G2.Core)
 
       -- Get a server by Id.
       procedure Get (
-         Id     : in  String; 
+         Id     : in  String;
          Status : in  Server_status;
          Server : out Server_access) is
+	pragma Unreferenced (Status);
       begin
          for N in Slots'Range loop
-            if Slots (N).In_use and then Core.Id (Slots (N).Server.all) = id 
+            if Slots (N).In_use and then Core.Id (Slots (N).Server.all) = id
             then
                Server := Slots (N).Server;
                return;
@@ -76,7 +77,7 @@ separate (Adagio.G2.Core)
          Server := null;
       end Get;
       procedure Get (
-         Id     : in  UString; 
+         Id     : in  UString;
          Status : in  Server_status;
          Server : out Server_access) is
       begin
@@ -84,11 +85,12 @@ separate (Adagio.G2.Core)
       end Get;
 
       -- Get a connected server by Id or null if not found:
-      function Get (Id : in UString; Status : in Server_status) 
+      function Get (Id : in UString; Status : in Server_status)
          return Server_access is
+	pragma Unreferenced (Status);
       begin
          for N in Slots'Range loop
-            if Slots (N).In_use and then Core.Id (Slots (N).Server.all) = id 
+            if Slots (N).In_use and then Core.Id (Slots (N).Server.all) = id
             then
                return Slots (N).Server;
             end if;
@@ -157,10 +159,10 @@ separate (Adagio.G2.Core)
       -- Will skip checked-out servers.
       procedure Get_next (Server : in out Server_access) is
       begin
-         if Server = null or else 
+         if Server = null or else
             Server.Slot = null or else
-            Server.Slot.Index not in Try_range 
-         then 
+            Server.Slot.Index not in Try_range
+         then
             Get_first (Server);
             return;
          end if;
@@ -242,7 +244,7 @@ separate (Adagio.G2.Core)
          return Result;
       end Status_count;
 
-      -- Remove a server. 
+      -- Remove a server.
       procedure Remove (Server : in out Server_access) is
          P : Natural renames Server.Slot.Index;
       begin
@@ -275,7 +277,7 @@ separate (Adagio.G2.Core)
 
       -- Set status:
       procedure Set_status (
-         Server : in Server_access; 
+         Server : in Server_access;
          Status : in Server_status) is
       begin
          Slots (Server.Slot.Index).Status := Status;
@@ -292,7 +294,7 @@ separate (Adagio.G2.Core)
       begin
          for N in Slots'Range loop
             if Slots (N).In_use and then Slots (N).Status = Connected then
-               Result (Pos) := 
+               Result (Pos) :=
                   Slots (N).Server.Address & ":" &
                   Misc.To_string (Slots (N).Server.Port);
                Pos := Pos + 1;

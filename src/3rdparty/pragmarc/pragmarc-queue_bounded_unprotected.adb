@@ -62,6 +62,7 @@ package body PragmARC.Queue_Bounded_Unprotected is
       procedure Action
          (Item : in out Element; Context : in out Context_Data; Pos : in Implementation.Position; Continue : out Boolean)
       is
+	    pragma Unreferenced (Pos);
          -- null;
       begin -- Action
          Action (Item => Item, Context => Context, Continue => Continue);

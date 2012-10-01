@@ -32,32 +32,34 @@
 ------------------------------------------------------------------------------
 --  $Id: adagio-upload-queue.adb,v 1.8 2004/02/24 15:26:14 Jano Exp $
 
-with Adagio.Exceptions; use Adagio.Exceptions;
-with Adagio.File.Criteria;
-with Adagio.Globals;
-with Adagio.Globals.Options;
-with Adagio.Misc;
-with Adagio.Os;
-with Adagio.Trace;
-with Adagio.Unicode;
-with Adagio.Upload.Active_clients;
-with Adagio.Upload.Client_data;
-with Adagio.Upload.Resource.File;
-with Adagio.Xml;
+With
+Agpl.Types,
+Agpl.Geoip,
+Adagio.File.Criteria,
+Adagio.Globals,
+Adagio.Globals.Options,
+Adagio.Misc,
+Adagio.Os,
+Adagio.Trace,
+Adagio.Unicode,
+Adagio.Upload.Active_clients,
+Adagio.Upload.Client_data,
+Adagio.Upload.Resource.File,
+Expressions_evaluator,
+Strings.Utils,
+Gnat.Heap_sort_a,
+Gnat.Os_lib,
+Ada.Streams,
+Ada.Streams.Stream_IO,
+Ada.Tags,
+Ada.Unchecked_Deallocation;
 
-with Agpl.Geoip;
-with Agpl.Types.Ustrings; use Agpl.Types.Ustrings;
-
-with Expressions_evaluator;
-with Strings.Utils;  use Strings.Utils;
-
-with Gnat.Heap_sort_a; use Gnat;
-with Gnat.Os_lib;
-
-with Ada.Streams; use Ada.Streams;
-with Ada.Streams.Stream_IO;
-with Ada.Tags; use Ada.Tags;
-with Ada.Unchecked_deallocation; use Ada;
+Use
+Ada.Tags,
+Ada.Streams,
+--Agpl.Types.Ustrings,
+GNAT,
+Strings.Utils;
 
 package body Adagio.Upload.Queue is
 
@@ -65,9 +67,9 @@ package body Adagio.Upload.Queue is
 
    use type Upload.Resource.Handle;
 
-   Remember_client_period : Duration 
+   Remember_client_period : Duration
       renames Globals.Options.Uploads_RememberClientPeriod;
-   Safe_queues            : Boolean 
+   Safe_queues            : Boolean
       renames Globals.Options.Uploads_SafeQueues;
 
    procedure Free is new Unchecked_deallocation (
@@ -112,7 +114,7 @@ package body Adagio.Upload.Queue is
          end if;
          if Rated then
             Trace.Log ("Position" & N'img & "#" &
-               Misc.To_string (Float (This.Vector (N).Rating)) & ": " &
+               Adagio.Misc.To_string (Float (This.Vector (N).Rating)) & ": " &
                S (This.Vector (N).Queue_Id) & S (Trail));
          else
             Trace.Log ("Position" & N'img & ": " &
@@ -132,6 +134,8 @@ package body Adagio.Upload.Queue is
    begin
       return Id_list.Is_in (Queue_id, Ids);
    end Contains;
+
+	Pragma Unreferenced( Contains );
 
    ------------------------------------------------------------------------
    -- Create                                                             --
@@ -201,7 +205,7 @@ package body Adagio.Upload.Queue is
                Append (Clients, Slot);
                Id_list.Insert (Ids, S (Slot.Queue_Id), Slot);
             else
-               Free (Slot);
+               Free(Slot);
             end if;
          end loop;
 
@@ -290,7 +294,7 @@ package body Adagio.Upload.Queue is
                -- Revived!
                Slot.Can_start  := false;
                Slot.Alive      := true;
-               Slot.Resource   := 
+               Slot.Resource   :=
                   Upload.Client.Requested_resource (Client.all);
 
                Success := true;
@@ -310,7 +314,7 @@ package body Adagio.Upload.Queue is
                Slot.Queue_id   := U (Upload.Client.Queue_id (Client.all));
                Slot.Can_start  := false;
                Slot.Alive      := true;
-               Slot.Resource   := 
+               Slot.Resource   :=
                   Upload.Client.Requested_resource (Client.all);
 
                -- Re-insert with correct id
@@ -389,7 +393,7 @@ package body Adagio.Upload.Queue is
             Can_start  => false,
             Alive      => true,
             Client_name => U (Upload.Client.Name (Client.all)),
-            Client_file => 
+            Client_file =>
                U (Upload.Resource.Name (
                   Upload.Resource.V (
                      Upload.Client.Requested_resource (Client.all)).all)),
@@ -474,6 +478,7 @@ package body Adagio.Upload.Queue is
       begin
          Clients.Vector (To) := Clients.Vector (From);
       end Move;
+
       function Less (L, R : Natural) return Boolean is
          SL, SR : Queue_slot_access;
       begin
@@ -491,6 +496,9 @@ package body Adagio.Upload.Queue is
             return SL.Alive > SR.Alive ;
          end if;
       end Less;
+
+	    Function Local_Less(L, R : Natural) return Boolean Renames Less;
+
       function Less_rated (L, R: Natural) return Boolean is
          SL, SR : Queue_slot_access;
       begin
@@ -535,15 +543,15 @@ package body Adagio.Upload.Queue is
             Heap_sort_a.Sort (
                Last (Clients),
                Move'Unrestricted_access,
-               Less'Unrestricted_access);
+               Local_Less'Unrestricted_access);
          when Rated =>
             Rate_slots;
             Heap_sort_a.Sort (
                Last (Clients),
                Move'Unrestricted_access,
                Less_rated'Unrestricted_access);
-         when others =>
-            raise Unimplemented;
+--           when others =>
+--              raise Unimplemented;
       end case;
       Trace.Log ("Upload.Queue.Schedule: " & S (Name) & " sorted in " &
          Misc.To_string (Float (Clock - Start), 5) & "s");
@@ -610,7 +618,7 @@ package body Adagio.Upload.Queue is
          else
             Calendar.Time'Output (Str, This.Expiration);
          end if;
-         
+
          Ustring'Output (Str, This.Client_name);
          Ustring'Output (Str, This.Client_file);
          Ustring'Output (Str, This.Client_ip);
@@ -690,8 +698,6 @@ package body Adagio.Upload.Queue is
       Name   : Ustring;
       Spd    : Float;
       use Ada.Calendar;
-      use Slot_vector;
-      use type File.Object;
 
       Pos    : Natural := From - 1;
    begin
@@ -705,8 +711,8 @@ package body Adagio.Upload.Queue is
          -- Trace.Log ("Queue: Len: " & Natural'Image (Last (Clients)));
          loop
             Pos := Pos + 1;
-            exit when 
-               Pos > Last (Clients) or else 
+            exit when
+               Pos > Last (Clients) or else
                Clients.Vector (Pos).Alive or else
                Lost;
          end loop;
@@ -764,14 +770,13 @@ package body Adagio.Upload.Queue is
       use Agpl.Http.Server.Sort_handler;
       use Ada.Calendar;
       use Slot_vector;
-      use type File.Object;
 
    begin
       if Globals.Requested_exit then
          return;
       end if;
       for N in 1 .. Last (Clients) loop
-         exit when 
+         exit when
             ((not Clients.Vector (N).Alive) and (not Lost));
 
          declare
@@ -791,11 +796,11 @@ package body Adagio.Upload.Queue is
             -- Rating
             if Slot.Alive then
                Append (Row, (
-                  U (Misc.To_string (Float (Slot.Rating))), 
+                  U (Misc.To_string (Float (Slot.Rating))),
                   Rpad (Float (Slot.Rating), 15)));
             else
                Append (Row, (
-                  U ("N/A"), 
+                  U ("N/A"),
                   Rpad (Float'Last, 15)));
             end if;
 
@@ -863,7 +868,7 @@ package body Adagio.Upload.Queue is
                Append (Row, (U ("Unknown"), U ("Unknown")));
             else
                Append (Row, (
-                  U (Agpl.Geoip.Country_name_from_code (Code)), 
+                  U (Agpl.Geoip.Country_name_from_code (Code)),
                   U (Agpl.Geoip.Country_name_from_code (Code))));
             end if;
 
@@ -998,11 +1003,11 @@ package body Adagio.Upload.Queue is
       end if;
 
       -- Get values:
-      declare 
+      declare
          F : Upload.Resource.File.Object_access;
       begin
          F := Upload.Resource.File.Object_access (+This.Resource);
-         
+
          Uploads := File.Uploads (Upload.Resource.File.File (F.all));
       exception
          when others => -- For example, incorrect tag :)

@@ -32,31 +32,27 @@
 ------------------------------------------------------------------------------
 --  $Id: adagio-g2-core.ads,v 1.19 2004/03/29 19:13:30 Jano Exp $
 
-with Adagio.Convert;
-with Adagio.Download.Source.Http.Create;
-with Adagio.G2.Packet;
-with Adagio.Misc;
-with Adagio.Network.Endian;
-with Adagio.Socket;
-with Adagio.Socket.IP;
-with Adagio.Trace;
-with Adagio.Unicode;
-with Adagio.Xml;
-with Adagio.Xml.Utils;
-
-with Sha1;
-
-with Agpl.Strings;
-
-with Aws.Translator;
-with Aws.Url;
+With
+Adagio.Convert,
+Adagio.Download.Source.Http.Create,
+Adagio.G2.Packet,
+Adagio.Misc,
+Adagio.Network.Endian,
+Adagio.Socket,
+Adagio.Socket.IP,
+Adagio.Trace,
+Adagio.Unicode,
+Adagio.Xml.Utils,
+Sha1,
+Agpl.Strings,
+Aws.Translator,
+Aws.Url;
 
 package body Adagio.G2.Hit is
 
    package Endian renames Adagio.Network.Endian;
 
    use type Types.File_Size;
-   use Type Ustring;
 
    ------------------------------------------------------------------------
    -- Create                                                             --
@@ -83,11 +79,11 @@ package body Adagio.G2.Hit is
          declare
             Pay : constant String := Packet.Payload (Packet.Get_Child (Groups (I), "SS"));
          begin
-            Group_Data (I).Id   := 
-               Endian.Convert ( 
+            Group_Data (I).Id   :=
+               Endian.Convert (
                   Endian.To_Byte_Array (Packet.Payload (Groups (I))),
                   Big_Endian);
-            Group_Data (I).Busy := 
+            Group_Data (I).Busy :=
                Endian.Convert (
                   Endian.To_Byte_Array (Pay (Pay'First .. Pay'First + 1)),
                   Big_Endian) >=
@@ -110,9 +106,9 @@ package body Adagio.G2.Hit is
             Result (Num_Hits).Sender_Addr := U (G2.To_Address (
                Packet.Payload (Packet.Get_Child (H, "NA")),
                Big_Endian));
-            if S (Result (Num_Hits).Sender_Addr) /= Socket.Image (Item.Udp_Source) 
+            if S (Result (Num_Hits).Sender_Addr) /= Socket.Image (Item.Udp_Source)
                and then not Socket.IP.Is_Public (S (Result (Num_Hits).Sender_Addr))
-               and then not (Socket.IP.Kind (S (Result (Num_Hits).Sender_Addr)) = 
+               and then not (Socket.IP.Kind (S (Result (Num_Hits).Sender_Addr)) =
                   Socket.IP.Local)
             then
                -- Mark firewalled
@@ -164,24 +160,24 @@ package body Adagio.G2.Hit is
                   Hash : String := Pay (Pay'First + Urn'Length + 1 .. Pay'Last);
                begin
                   if Urn = "sha1" then
-                     Result (Num_Hits).Sha1 := 
+                     Result (Num_Hits).Sha1 :=
                         U (Sha1.To_Base32 (Sha1.From_Char_Array (Hash)));
-                     Add_Hash (Result (Num_Hits), urn, 
+                     Add_Hash (Result (Num_Hits), urn,
                         Sha1.To_Base32 (Sha1.From_Char_Array (Hash)));
---                     Trace.Log ("G2.Hit.Create: Adding hash for family " & Urn, 
+--                     Trace.Log ("G2.Hit.Create: Adding hash for family " & Urn,
 --                        Trace.Always);
                   elsif Urn = "bp" then
-                     Result (Num_Hits).Sha1 := 
+                     Result (Num_Hits).Sha1 :=
                         U (Sha1.To_Base32 (Sha1.From_Char_Array (
                            Hash (Hash'First .. Hash'First + 19))));
-                     Add_Hash (Result (Num_Hits), "sha1", 
+                     Add_Hash (Result (Num_Hits), "sha1",
                         Sha1.To_Base32 (Sha1.From_Char_Array (
                            Hash (Hash'First .. Hash'First + 19))));
---                     Trace.Log ("G2.Hit.Create: Adding hash for family " & Urn, 
+--                     Trace.Log ("G2.Hit.Create: Adding hash for family " & Urn,
 --                        Trace.Always);
                   else
                      null;
---                     Trace.Log ("G2.Hit.Create: Discarding hash for family " & Urn, 
+--                     Trace.Log ("G2.Hit.Create: Discarding hash for family " & Urn,
 --                        Trace.Always);
                   end if;
                end;
@@ -189,7 +185,7 @@ package body Adagio.G2.Hit is
          end;
          -- Add URL if available
          if Packet.Is_A (Hits (I), "/H/URL") then
-            Result (Num_Hits).Url := 
+            Result (Num_Hits).Url :=
                U (Packet.Payload (Packet.Get_Child (Hits (I), "URL")));
 --            Trace.Log ("G2.Hit.Create: Adding URL: " & S (Result (Num_Hits).Url),
 --               Trace.Always);
@@ -262,7 +258,7 @@ package body Adagio.G2.Hit is
             begin
                Result (Num_Hits).Comment := U (Xml.Get_Attribute ("", "comment", Doc, ""));
                begin
-                  Result (Num_Hits).Rating  := 
+                  Result (Num_Hits).Rating  :=
                      Xml.Utils.Get_Num ("comment", "rating", Doc, -1);
                   Result (Num_Hits).Rated   := true;
                exception
@@ -339,7 +335,7 @@ package body Adagio.G2.Hit is
             when Constraint_Error =>
                Append (R, "BW: Unlimited;");
          end;
-      end if; 
+      end if;
       if This.Nick /= Null_Ustring then
          Append (R, This.Nick);
          if This.Vendor /= Null_Ustring then
@@ -400,7 +396,7 @@ package body Adagio.G2.Hit is
       else
          Trace.Log ("Hit has Sha1: " & S (This.Sha1), Trace.Always);
          return "/uri-res/N2R?urn:sha1:" & S (This.Sha1);
-      end if; 
+      end if;
    exception
       when E : others =>
          Trace.Log ("G2.Hit.Get_Urn: " & S (This.Url) & " is not valid URL: " &
@@ -499,7 +495,7 @@ package body Adagio.G2.Hit is
       for N in 1 .. Last (This.Firewalls) loop
          Xml.Set_Attribute (Node, "firewall" & Agpl.Strings.To_String (N), S (This.Firewalls.Vector (N)));
       end loop;
-      
+
       Xml.Set_Attribute (Node, "nick",       S (This.Nick));
       Xml.Set_Attribute (Node, "vendor",     S (This.Vendor));
       Xml.Set_Attribute (Node, "preview",    S (This.Preview));

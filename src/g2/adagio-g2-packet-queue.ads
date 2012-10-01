@@ -34,12 +34,11 @@
 
 -- Queues for inbound/outbound G2 packets:
 
-with Adagio.Globals.Options;
-with Adagio.Socket;
-
-with Ada.Finalization;           use Ada;
-
-with Charles.Lists.Double.Unbounded;
+With
+Ada.Finalization,
+Adagio.Globals.Options,
+Adagio.Socket,
+Charles.Lists.Double.Unbounded;
 
 package Adagio.G2.Packet.Queue is
 

@@ -32,26 +32,27 @@
 ------------------------------------------------------------------------------
 --  $Id: adagio-upload.ads,v 1.4 2004/01/21 21:05:51 Jano Exp $
 
-with Adagio.Chronos;
-with Adagio.Globals;
-with Adagio.Globals.Options;
-with Adagio.Misc;
-with Adagio.Network;
-with Adagio.Searches.Search;
-with Adagio.Trace;
-with Adagio.Xml;
-with Strings.Utils;
+With
+Adagio.Chronos,
+Adagio.Globals,
+Adagio.Globals.Options,
+Adagio.Misc,
+Adagio.Network,
+Adagio.Searches.Search,
+Adagio.Trace,
+Adagio.Xml,
+Strings.Utils,
+Agpl.Magnet,
+Agpl.Safe_File,
+Agpl.Strings,
+Charles.Hash_string,
+Charles.Maps.Hashed.Strings.Unbounded,
+Ada.Calendar,
+Ada.Streams.Stream_IO,
+Adagio.Constants;
 
-with Agpl.Magnet;
-with Agpl.Safe_File;
-with Agpl.Strings;
-
-with Charles.Hash_string;
-with Charles.Maps.Hashed.Strings.Unbounded;
-
-with Ada.Calendar;
-with Ada.Streams.Stream_IO;
-use  Ada;
+Use
+Ada;
 
 package body Adagio.Searches.Manager is
 
@@ -80,7 +81,7 @@ package body Adagio.Searches.Manager is
    ------------------------------------------------------------------------
    -- Object                                                             --
    ------------------------------------------------------------------------
-   protected Object is 
+   protected Object is
       -------------
       -- Add_Hit --
       -------------
@@ -188,10 +189,10 @@ package body Adagio.Searches.Manager is
    private
       List      : Search_list.Container_type;
       Target    : Search_Id;
-      Last_Save : Calendar.Time := Past_Aeons;
+      Last_Save : Calendar.Time := Adagio.Constants.Past_Aeons;
    end Object;
 
-   protected body Object is 
+   protected body Object is
 
       -------------
       -- Add_Hit --
@@ -211,7 +212,7 @@ package body Adagio.Searches.Manager is
       -----------------------------
       procedure Add_Sources_To_Download (
          Hashes : in Hash_Dictionary.Object;
-         Id     : in Download.Slot_Id) 
+         Id     : in Download.Slot_Id)
       is
          I : Iterator_Type := First (List);
       begin
@@ -235,7 +236,7 @@ package body Adagio.Searches.Manager is
       -------------------
       procedure Create_search (Target : in String; Priority : in Searches.Priorities; Id : out Search_Id)
       is
-         New_Search : Searches.Search.Object_access := 
+         New_Search : Searches.Search.Object_access :=
                Searches.Search.Create (Target, Priority);
       begin
          if not Contains (Target) then
@@ -418,19 +419,18 @@ package body Adagio.Searches.Manager is
       -- Report --
       ------------
       procedure Report (Data : out Sort_Handler.Data_Set) is
-         use Search_List;
          use Sort_Handler;
          I : Iterator_type := First (List);
       begin
          while I /= Back (List) loop
-            declare 
-               Row  : Data_Row; 
+            declare
+               Row  : Data_Row;
                Srch : Searches.Search.Object_access renames Element (I);
                use Searches.Search;
             begin
                -- Target
                Append (Row, (U (Get_Target (Srch)), U (Get_Target (Srch))));
-               
+
                -- Hits
                Append (Row, (
                   U (Misc.To_string (Get_Hits (Srch))),
@@ -508,7 +508,6 @@ package body Adagio.Searches.Manager is
       ---------------
       -- Get_Running_Searches --
       function Get_Running_Searches return Natural is
-         use Search_List;
          I : Iterator_Type := First (List);
          N : Natural       := 0;
       begin
@@ -527,7 +526,6 @@ package body Adagio.Searches.Manager is
       end Get_Paused_Searches;
       -- Get_New_Hits --
       function Get_New_Hits         return Natural is
-         use Search_List;
          I : Iterator_Type := First (List);
          N : Natural       := 0;
       begin
@@ -545,7 +543,7 @@ package body Adagio.Searches.Manager is
    task Hits_Saver;
 
    task body Hits_Saver is
-      Last_Save : Calendar.Time := Past_Aeons;
+      Last_Save : Calendar.Time := Adagio.Constants.Past_Aeons;
    begin
       loop
          exit when Globals.Requested_Exit;
@@ -595,9 +593,9 @@ package body Adagio.Searches.Manager is
    ------------------------------------------------------------------------
    procedure Create_search (
       Target   : in String;
-      Priority : in Priorities := Searches.Auto) 
+      Priority : in Priorities := Searches.Auto)
    is
-      New_Target : constant String := 
+      New_Target : constant String :=
          Agpl.Strings.To_Lower (Strings.Utils.Simplify (Target));
       Id         : Search_Id;
    begin
@@ -634,7 +632,7 @@ package body Adagio.Searches.Manager is
    begin
       return Object.Get_Hits (Id);
    end Get_Hits;
-   
+
    ------------------------------------------------------------------------
    -- Get_Magnet                                                         --
    ------------------------------------------------------------------------

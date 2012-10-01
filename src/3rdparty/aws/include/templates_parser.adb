@@ -28,22 +28,21 @@
 
 --  $Id: templates_parser.adb,v 1.3 2004/02/24 15:49:33 Jano Exp $
 
-with Ada.Exceptions;
-with Ada.Characters.Handling;
-with Ada.Calendar;
-with Ada.IO_Exceptions;
-with Ada.Strings.Fixed;
-with Ada.Strings.Maps.Constants;
-with Ada.Strings.Unbounded;
-with Ada.Unchecked_Deallocation;
+with
+Ada.Exceptions,
+Ada.Characters.Handling,
+Ada.Calendar,
+Ada.Strings.Fixed,
+Ada.Strings.Maps.Constants,
+Ada.Unchecked_Deallocation,
+GNAT.Calendar.Time_IO,
+GNAT.OS_Lib,
+GNAT.Regexp,
+Templates_Parser.Input,
+Text_IO;
 
-with GNAT.Calendar.Time_IO;
-with GNAT.OS_Lib;
-with GNAT.Regexp;
-
-with Templates_Parser.Input;
-
-with Text_io; use Text_io;
+use
+Text_IO;
 
 package body Templates_Parser is
 
@@ -562,7 +561,6 @@ package body Templates_Parser is
 
          function Name_Parameter (Filter : in String) return
            Templates_Parser.Filter.Routine is
-            use Strings;
 
             package F renames Templates_Parser.Filter;
 

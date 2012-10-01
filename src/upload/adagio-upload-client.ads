@@ -34,15 +34,16 @@
 
 --  Abstract base class for upload clients
 
-with Adagio.File;
-with Adagio.Safe_access;
-with Adagio.Types; use Adagio.Types;
-with Adagio.Upload.Resource;
+With
+Adagio.Types,
+Adagio.Upload.Resource,
+Ada.Finalization,
+Ada.Real_time,
+Ada.Unchecked_deallocation;
 
-with Ada.Finalization;
-with Ada.Real_time; use Ada;
-with Ada.Streams;   use Ada.Streams;
-with Ada.Unchecked_deallocation;
+Use
+Ada,
+Adagio.Types;
 
 package Adagio.Upload.Client is
 
@@ -55,7 +56,7 @@ package Adagio.Upload.Client is
    Client_missed_poll_deadline : exception;
    User_agent_is_banned        : exception;
 
-   type Object is abstract new 
+   type Object is abstract new
       Finalization.Limited_controlled with null record;
    type Object_access is access all Object'Class;
 
@@ -83,7 +84,7 @@ package Adagio.Upload.Client is
       Sent          : File_size := 0;   -- Bytes sent in this iteration.
       Received      : File_size := 0;   -- Bytes received in this iteration.
 
-      Awakening     : Real_time.Time; 
+      Awakening     : Real_time.Time;
                                  -- Next time this client wants to we run.
    end record;
 
@@ -109,7 +110,7 @@ package Adagio.Upload.Client is
    ------------------------------------------------------------------------
    -- Get the requested resource
    -- Should return Null_handle until it's known
-   function Requested_resource (This : in Object) 
+   function Requested_resource (This : in Object)
       return Upload.Resource.Handle is abstract;
 
    ------------------------------------------------------------------------
@@ -140,10 +141,10 @@ package Adagio.Upload.Client is
    type Reject_reason is (Busy, Unavailable);
 
    procedure Reject (
-      This   : in Object; 
-      Reason : in Reject_reason; 
+      This   : in Object;
+      Reason : in Reject_reason;
       Done   : out Boolean) is abstract;
-      
+
    ------------------------------------------------------------------------
    -- Cancel                                                             --
    ------------------------------------------------------------------------
@@ -176,7 +177,7 @@ package Adagio.Upload.Client is
    ------------------------------------------------------------------------
    -- Free                                                               --
    ------------------------------------------------------------------------
-   procedure Free is new 
+   procedure Free is new
       Unchecked_deallocation (Object'Class, Object_access);
 
 end Adagio.Upload.Client;

@@ -37,13 +37,11 @@ with Adagio.Download.Consumer.Sets;
 with Adagio.Download.Slot;
 with Adagio.Download.Source.Factory;
 with Adagio.Download.Source.Maps;
-with Adagio.Exceptions;
 with Adagio.Globals;
 with Adagio.Globals.Options;
 with Adagio.Misc;
 with Adagio.Trace;
 with Adagio.Xml;
-with Adagio.Xml.Utils;
 
 with Agpl.Safe_File;
 with Agpl.Strings;
@@ -55,7 +53,6 @@ with Ada.Containers.Hashed_Maps;
 with Ada.Finalization;
 with Ada.Streams;
 with Ada.Streams.Stream_Io;
-with Ada.Strings.Hash;
 use  Ada;
 
 package body Adagio.Download.Manager is
@@ -137,7 +134,6 @@ package body Adagio.Download.Manager is
       procedure Add_Source (Id : in Slot_Id; Source : in Download.Source.Object_Access) is
          use Aggregator_Maps;
          use Download.Source.Maps;
-         use type Download.Source.Object_Access;
          I      : constant Aggregator_Maps.Cursor := Find (Slots, Id);
          Aux    : Download.Source.Object_Access   := Source;
          Src    : Download.Source.Object_Access   := Source;
@@ -178,7 +174,8 @@ package body Adagio.Download.Manager is
          Hash   : in     Agpl.Magnet.Object;
          Secure : in     Boolean;
          Id     :    out Slot_Id)
-      is
+	is
+		pragma Unreferenced( Secure );
          use Aggregator_Maps;
          New_Agg  : Aggregator_Access  := new Aggregator;
          I        : Cursor;
@@ -378,6 +375,8 @@ package body Adagio.Download.Manager is
          use type Xml.Node;
          Num : Natural := 0;
          procedure Restore_One (Item : in String; Index : in Positive; Quit : in out Boolean) is
+		pragma Unreferenced( Index );
+		pragma Unreferenced( Quit );
             Doc : Xml.Document;
             Agg : Aggregator_Access;
             Ok  : Boolean;
@@ -674,7 +673,7 @@ package body Adagio.Download.Manager is
    task type Source_Checker (Priority : Source_Check_Priorities);
    type Source_Checker_Access is access all Source_Checker;
    Checkers : array (Source_Check_Priorities) of Source_Checker_Access;
-
+	pragma Unreferenced( Checkers );
    task body Source_Checker is
       Current_Delay        : Duration := 0.1;
       Repetitions          : Natural  := 0;  -- Times to do delay before processing.

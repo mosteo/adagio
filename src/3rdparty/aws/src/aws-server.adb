@@ -30,8 +30,6 @@
 
 --  $Id: aws-server.adb,v 1.1 2003/10/05 19:59:59 Jano Exp $
 
-with Ada.Calendar;
-with Ada.Exceptions;
 with Ada.Strings.Fixed;
 with Ada.Strings.Maps;
 with Ada.Text_IO;
@@ -39,7 +37,6 @@ with Ada.Unchecked_Deallocation;
 
 with AWS.Config.Set;
 with AWS.Dispatchers.Callback;
-with AWS.Log;
 with AWS.Messages;
 with AWS.MIME;
 with AWS.Net.Buffered;

@@ -32,14 +32,15 @@
 ------------------------------------------------------------------------------
 --  $Id: adagio-misc.adb,v 1.6 2004/02/03 22:52:15 Jano Exp $
 
-with Adagio.Constants; use Adagio.Constants;
+With
+Interfaces,
+Adagio.Constants,
+Ada.Strings,
+Ada.Strings.Fixed,
+Text_io;
 
-with Ada.Characters.Handling;
-with Ada.Strings;
-with Ada.Strings.Fixed;
-
-with Interfaces;
-with Text_io;
+Use
+Adagio.Constants;
 
 package body Adagio.Misc is
 

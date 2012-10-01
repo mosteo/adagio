@@ -32,7 +32,6 @@
 ------------------------------------------------------------------------------
 --  $Id: adagio-ed2k.adb,v 1.3 2004/01/21 21:05:25 Jano Exp $
 
-with Acf.Types;
 
 package body Adagio.Ed2k is
 
@@ -40,7 +39,7 @@ package body Adagio.Ed2k is
    -- Hash_as_hex                                                        --
    ------------------------------------------------------------------------
    -- Convert a ed2k hash to its Hex representation:
-   function Hash_as_hex (Hash : in Hash_type) return String is 
+   function Hash_as_hex (Hash : in Hash_type) return String is
    begin
       return Acf.Hash.Message_digests.To_hex_string (
          Hash, Acf.Types.Lower_case);
@@ -51,7 +50,7 @@ package body Adagio.Ed2k is
    ------------------------------------------------------------------------
    -- Convert a ed2k hash to a String containing its bytes.
    function Hash_as_char_array (Hash : in Hash_type) return String is
-      B : Acf.Types.Byte_array := 
+      B : Acf.Types.Byte_array :=
          Acf.Hash.Message_digests.To_byte_array (Hash);
       S : String (B'range);
    begin

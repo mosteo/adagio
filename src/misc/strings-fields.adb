@@ -1,5 +1,8 @@
-with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
-with Text_IO;               use Text_IO;
+with
+Ada.Strings.Unbounded;
+
+use
+Ada.Strings.Unbounded;
 
 package body Strings.Fields is
 
@@ -19,10 +22,10 @@ package body Strings.Fields is
 
    --  Returns a string that represents the nth string in the field.
    --  The 'first of the return string is always set to one
-   --  
+   --
 
     function Select_Field (
-      Item            : String; 
+      Item            : String;
       Field_No        : Integer;
       Field_Separator : Character) return String
    is
@@ -31,7 +34,6 @@ package body Strings.Fields is
 
       Start  : Natural;
       Finish : Natural;
-      Field  : Natural := 1;
 
 
       ----------------------
@@ -46,7 +48,7 @@ package body Strings.Fields is
          Field : Natural := 1;
       begin
          --  find the start of the field
-         --  Post condition : Start points at the char following 
+         --  Post condition : Start points at the char following
          --  the n-1th sep. char, or past the last char in the string
 
          loop
@@ -86,7 +88,7 @@ package body Strings.Fields is
          Field : Natural := 1;
       begin
          --  find the start of the field
-         --  Post condition : Start points at the char following 
+         --  Post condition : Start points at the char following
          --  the n-1th sep. char, or past the last char in the string
 
          loop
@@ -168,14 +170,14 @@ package body Strings.Fields is
       return Count;
 
    end Count_Fields;
-         
+
 
    ------------------
    -- Select_Field --
    ------------------
 
    function Select_Field (
-      Item     : String; 
+      Item     : String;
       Field_No : Integer) return String
 
    is
@@ -313,7 +315,7 @@ package body Strings.Fields is
       else
          raise Constraint_Error;
       end if;
-        
+
 
       --  Make a subtype conversion to a string with diff.
       --  bounds. Forces the 'first to be 1, which makes life
@@ -338,7 +340,7 @@ package body Strings.Fields is
       Format : String) return String is
 
       Result : Unbounded_String;
-    
+
       Count  : Positive := 1;
    begin
       -- extract each number from the format string.
@@ -368,8 +370,8 @@ package body Strings.Fields is
             Count := Count + 1;
          end;
       end loop;
-         
-         
+
+
 
       return To_String (Result);
    end Select_Fields;
@@ -391,7 +393,7 @@ package body Strings.Fields is
    --
    --  Written with global variables and pragma Inline to ensure
    --  that the code is as fast as it can get. As this routine
-   --  is likely to sit inside loops (typically through processing 
+   --  is likely to sit inside loops (typically through processing
    --  a file) this is quite important.
 
 
@@ -406,7 +408,7 @@ package body Strings.Fields is
       First  : constant Natural := Format'First;
       Last   : constant Natural := Format'Last;
       Result : Unbounded_String;
-    
+
       Start  : Positive := First;
       Count  : Positive := Start;
 
@@ -529,13 +531,13 @@ package body Strings.Fields is
                      when others =>
                         raise Format_Error;
                   end;
-         
+
             end case;
          end if;
       end loop;
 
       return To_String (Result);
    end Build_String;
-         
-         
+
+
 end Strings.Fields;

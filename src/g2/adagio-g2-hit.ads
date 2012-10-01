@@ -32,11 +32,16 @@
 ------------------------------------------------------------------------------
 --  $Id: adagio-g2-core.ads,v 1.19 2004/03/29 19:13:30 Jano Exp $
 
-with Adagio.Download.Source;
-with Adagio.G2.Packet.Queue;
-with Adagio.Globals.Options;
-with Adagio.Searches.Hit;
-with Adagio.Xml;
+With
+Adagio.Download.Source,
+Adagio.G2.Packet.Queue,
+Adagio.Globals.Options,
+Adagio.Searches.Hit,
+Adagio.Xml,
+Adagio.Types;
+
+Use
+Adagio.Types;
 
 package Adagio.G2.Hit is
 
@@ -128,7 +133,7 @@ private
       Firewalled  : Boolean := false;
       Sender_Guid : Guid_String;
       Sender_Addr : Ustring;
-      Firewalls   : Agpl.Types.Ustrings.Ustring_Vector.Object (First => 1); 
+      Firewalls   : Agpl.Types.Ustrings.Ustring_Vector.Object (First => 1);
          -- Addresses of the nodes that can be used to send a push to the hit.
       Nick        : Ustring;
       Vendor      : Ustring;

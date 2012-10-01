@@ -49,7 +49,8 @@ package body Adagio.Bandwidth_manager is
       pragma Inline (Refresh);
 
       procedure Report;
-      pragma Inline (Report);
+	pragma Inline (Report);
+	pragma Unreferenced( Report );
 
       ---------------
       -- Available --
@@ -72,12 +73,12 @@ package body Adagio.Bandwidth_manager is
       -- Issue a bandwidth petition. Awarded can be less that solicited.
       -- Extra flag requests bandwidth from unused past cycles.
       procedure Commit (
-         Desired : in  Natural; 
+         Desired : in  Natural;
          Awarded : out Natural;
          Extra   : in  Boolean := false) is
       begin
          Refresh;
-         if Extra then 
+         if Extra then
             Awarded  := Natural'Min (Desired, Natural'Min (Unused, Safe_Maximum));
             Unused   := Unused - Awarded;
          else
@@ -85,7 +86,7 @@ package body Adagio.Bandwidth_manager is
             Remanent := Remanent - Awarded;
          end if;
       end Commit;
-   
+
       -------------
       -- Refresh --
       -------------
@@ -107,7 +108,7 @@ package body Adagio.Bandwidth_manager is
             end;
             -- Update clock:
             declare
-               Gaps : Natural := 
+               Gaps : Natural :=
                   Natural (Float'Floor (Float (Elapsed) / Float (Gap)));
             begin
                Last_req := Last_req + Gap * Duration (Gaps);
@@ -121,7 +122,7 @@ package body Adagio.Bandwidth_manager is
       -- Debug reports
       procedure Report is
       begin
-         Trace.Log ("Rem:" & Remanent'Img & "; Unu:" & Unused'Img, 
+         Trace.Log ("Rem:" & Remanent'Img & "; Unu:" & Unused'Img,
             Trace.Always);
       end Report;
 

@@ -31,17 +31,24 @@
 --  harass or legally prosecute these users.                                --
 ------------------------------------------------------------------------------
 --  $Id: adagio-os-shutdown.ads,v 1.3 2004/01/21 21:05:40 Jano Exp $
-
 -- Package with OS dependent functions.
+
+pragma Warnings (Off);
+with
+Win32;
+pragma Warnings (On);
+
+use
+Win32;
 
 package Adagio.Os.Shutdown is
 
-   -- This package manages the reception of shutdown/logoff signals from 
+   -- This package manages the reception of shutdown/logoff signals from
    -- windows console to start an orderly shutdown.
 
 private
-   
-   function Handler (Ctrl : Win32.DWORD) return Win32.BOOL;
+
+    function Handler (Ctrl : Win32.DWORD) return Win32.BOOL;
    pragma Convention (Stdcall, Handler);
 
 end Adagio.Os.Shutdown;

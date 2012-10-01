@@ -43,7 +43,8 @@ package body Adagio.Download.Source.Factory is
    ------------------------------------------------------------------------
    -- The node must have a "tag" attribute with the class'tag string.
    function From_Xml (Node : in Xml.Node) return Object_Access is
-      pragma Unimplemented;
+	pragma Unreferenced( Node );
+	pragma Unimplemented;
    begin
       return null;
    end From_Xml;

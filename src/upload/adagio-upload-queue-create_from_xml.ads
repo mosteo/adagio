@@ -34,9 +34,11 @@
 
 -- Creation of a queue from Xml node
 
-procedure Adagio.Upload.Queue.Create_from_xml ( 
+with Adagio.XML;
+
+procedure Adagio.Upload.Queue.Create_from_xml (
    This  : out Queue.Object;
-   Node  : in  Xml.Node;
+   Node  : in  Adagio.Xml.Node;
    Ratio : in  Float);
 
 

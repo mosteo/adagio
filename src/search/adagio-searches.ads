@@ -34,11 +34,11 @@
 
 --  Root package for all search packages
 
-with Adagio.Constants; use Adagio.Constants;
-with Adagio.Types; use Adagio.Types;
-with Sha1;
+with
+Sha1,
+Agpl.Types.Ustrings;
 
-with Agpl.Types.Ustrings; use Agpl.Types.Ustrings;
+use Agpl.Types.Ustrings;
 
 package Adagio.Searches is
 
@@ -61,27 +61,27 @@ package Adagio.Searches is
    type Payload_Access is access all Payload;
 
    type Priorities is (
-      Auto, 
-      Idle, 
-      Low, 
-      Medium, 
-      High, 
-      Exclusive5m, 
+      Auto,
+      Idle,
+      Low,
+      Medium,
+      High,
+      Exclusive5m,
       Exclusive15m,
       Exclusive30m,
-      Exclusive60m, 
+      Exclusive60m,
       Exclusive_Forever);
 
    Priority_Delays : array (Priorities) of Duration := (
       Auto              => 0.0,
       Idle              => 0.0,
       Low               => 0.0,
-      Medium            => 0.0, 
-      High              => 0.0, 
-      Exclusive5m       => 60.0 * 5.0, 
+      Medium            => 0.0,
+      High              => 0.0,
+      Exclusive5m       => 60.0 * 5.0,
       Exclusive15m      => 60.0 * 15.0,
       Exclusive30m      => 60.0 * 30.0,
-      Exclusive60m      => 60.0 * 60.0, 
+      Exclusive60m      => 60.0 * 60.0,
       Exclusive_Forever => Duration'Last);
 
    ------------------------------------------------------------------------

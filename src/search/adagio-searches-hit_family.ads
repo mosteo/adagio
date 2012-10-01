@@ -34,25 +34,25 @@
 
 --  A family is a collection of hits with the same hashes.
 
-with Adagio.Download;
-with Adagio.Download.Manager;
-with Adagio.Hash_Dictionary;
-with Adagio.Searches.Hit;
-with Adagio.Types;
-with Adagio.Xml;
+With
+Adagio.Download,
+Adagio.Download.Manager,
+Adagio.Hash_Dictionary,
+Adagio.Searches.Hit,
+Adagio.Types,
+Adagio.Xml,
+Agpl.Http.Server.Sort_Handler,
+Charles.Hash_String,
+Charles.Maps.Hashed.Strings.Unbounded,
+Ada.Finalization;
 
-with Agpl.Http.Server.Sort_Handler;
-use  Agpl.Http.Server.Sort_Handler;
-
-with Charles.Hash_String;
-with Charles.Maps.Hashed.Strings.Unbounded;
-
-with Ada.Finalization;
-use  Ada;
+Use
+Ada,
+Agpl.Http.Server.Sort_Handler;
 
 package Adagio.Searches.Hit_Family is
 
-   No_Such_Hash : exception; 
+   No_Such_Hash : exception;
 
    ------------------------------------------------------------------------
    -- Object                                                             --
@@ -86,7 +86,7 @@ package Adagio.Searches.Hit_Family is
    -- Create                                                             --
    ------------------------------------------------------------------------
    -- A seed hit is needed
-   procedure Create (This : out object; From : in Hit.Object'Class);  
+   procedure Create (This : out object; From : in Hit.Object'Class);
 
    ------------------------------------------------------------------------
    -- Equal                                                              --
@@ -170,7 +170,7 @@ package Adagio.Searches.Hit_Family is
    -- Num_Secure_Hits                                                    --
    ------------------------------------------------------------------------
    function Num_Secure_Hits (This : in Object) return Natural;
-   
+
    ------------------------------------------------------------------------
    -- Set_Expanded                                                       --
    ------------------------------------------------------------------------
@@ -198,7 +198,7 @@ private
    type Object is new Finalization.Limited_Controlled with record
       Id       : Family_Id;  -- Unique ID
       Name     : Ustring;  -- The most used name between all hits belonging to this family.
-      Size     : File_Size; -- Most seen size (should be only one if no buggy clients!)
+      Size     : Adagio.Types.File_Size; -- Most seen size (should be only one if no buggy clients!)
       Hashes   : Hash_Dictionary.Object;
       Hits     : Hit_Map.Container_Type;
       Expanded : Boolean := false; -- Just for the GUI
